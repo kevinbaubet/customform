@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>CustomForm</title>
+        <link rel="stylesheet" href="demo.css" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
+        <!-- <script src="../test/JSLitmus.js"></script> -->
+        <script src="../dist/customform.min.js"></script>
+        <script src="../dist/customform-check.min.js"></script>
+        <script src="../dist/customform-select.min.js"></script>
+        <script src="../dist/customform-label.min.js"></script>
+        <link rel="stylesheet" href="../dist/customform.css" />
+        <script>
+            jQuery(document).ready(function($) {
+                // DEMO
+                $('form').customForm();
+                $('.form-labels').customFormLabel();
+
+                // TEST
+                // JSLitmus.test('customForm', function() {
+                //   $('form').customForm();
+                // });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="page">
+            <h1>Formulaires personnalisés</h1>
+
+            <div class="demo-item">
+                <h2>Cheboxs / Radios</h2>
+                <form>
+                    <div class="form-col">
+                        <div class="form-item">
+                            <input class="form-checkbox" type="checkbox" id="checkbox1-1" name="checkbox1-1" value="" />
+                            <label for="checkbox1-1">Checkbox 1</label>
+                        </div>
+                        <div class="form-item">
+                            <input class="form-checkbox" type="checkbox" id="checkbox1-2" name="checkbox1-2" value="" checked />
+                            <label for="checkbox1-2">Checkbox 2</label>
+                        </div>
+                        <div class="form-item">
+                            <input class="form-checkbox" type="checkbox" id="checkbox1-3" name="checkbox1-3" value="" disabled />
+                            <label for="checkbox1-3">Désactivée</label>
+                        </div>
+                        <div class="form-item">
+                            <input class="form-checkbox" type="checkbox" id="checkbox1-4" name="checkbox1-4" value="" checked disabled />
+                            <label for="checkbox1-4">Désactivée & cochée</label>
+                        </div>
+                    </div>
+
+                    <div class="form-col">
+                        <div class="form-item">
+                            <input class="form-radio" type="radio" id="radio1-1" name="radio1" value="" />
+                            <label for="radio1-1">Bouton radio 1</label>
+                        </div>
+                        <div class="form-item">
+                            <input class="form-radio" type="radio" id="radio1-2" name="radio1" value="" checked />
+                            <label for="radio1-2">Bouton radio 2</label>
+                        </div>
+                        <div class="form-item">
+                            <input class="form-radio" type="radio" id="radio1-3" name="radio2" value="" disabled />
+                            <label for="radio1-3">Désactivé</label>
+                        </div>
+                        <div class="form-item">
+                            <input class="form-radio" type="radio" id="radio1-4" name="radio2" value="" checked disabled />
+                            <label for="radio1-4">Désactivé & coché</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <input type="reset" class="form-submit" value="Réinitialiser" />
+                    </div>
+                    <div class="clear"></div>
+                </form>
+            </div>
+
+            <div class="demo-item">
+                <h2>Selects</h2>
+                <form>
+                    <div class="form-col">
+                        <div class="form-item">
+                            <label for="select-1">Classique :</label>
+                            <select class="form-select" id="select-1" name="select-1">
+                                <option value="">Sélectionner</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3" disabled>Option 3 (désactivée)</option>
+                                <option value="4" disabled>Option 4 (désactivée)</option>
+                                <option value="5" class="class-user">Option 5 (class user)</option>
+                                <option value="6">Option 6</i></option>
+                            </select>
+                        </div>
+
+                        <div class="form-item">
+                            <label for="select-2">Option groups :</label>
+                            <select class="form-select" id="select-2" name="select-2">
+                                <option value="none">Aucun</option>
+
+                                <optgroup label="Groupe 1">
+                                    <option value="val-1">Option 1-1</option>
+                                    <option value="val-2">Option 1-2</option>
+                                    <option value="val-3">Option 1-3</option> 
+                                </optgroup>
+                                
+                                <optgroup label="Groupe 2">
+                                    <option value="val-4">Option 2-1</option>
+                                    <option value="val-5">Option 2-2</option>
+                                    <option value="val-6">Option 2-3</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-item">
+                            <label for="select-4">Désactivé :</label>
+                            <select class="form-select" id="select-4" name="select-4" disabled>
+                                <option value="">Aucun</option>
+                                <option value="1">Valeur 1</option>
+                                <option value="2">Valeur 2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-item">
+                            <label for="select-3">Multiple :</label>
+                            <select class="form-select" id="select-3" name="select-3" multiple>
+                                <option value="">Sélectionner</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                                <option value="4">Option 4</option>
+                                <option value="5">Option 5</option>
+                                <option value="6">Option 6</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="select-5">Multiple Option groups :</label>
+                            <select class="form-select" id="select-5" name="select-5" multiple>
+                                <option value="none">Aucun</option>
+
+                                <optgroup label="Groupe 1">
+                                    <option value="val-1">Option 1-1</option>
+                                    <option value="val-2">Option 1-2</option>
+                                    <option value="val-3">Option 1-3</option> 
+                                </optgroup>
+                                
+                                <optgroup label="Groupe 2">
+                                    <option value="val-4">Option 2-1</option>
+                                    <option value="val-5">Option 2-2</option>
+                                    <option value="val-6">Option 2-3</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label for="select-6">Multiple désactivé :</label>
+                            <select class="form-select" id="select-6" name="select-6" multiple disabled>
+                                <option value="">Aucun</option>
+                                <option value="1">Valeur 1</option>
+                                <option value="2">Valeur 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <input type="submit" class="form-submit" value="Envoyer" />
+                        <input type="reset" class="form-submit" value="Réinitialiser" />
+                    </div>
+                    <div class="clear"></div>
+                </form>
+            </div>
+
+            <div class="demo-item">
+                <h2>Labels</h2>
+                <form class="form-labels">
+                    <div class="form-col">
+                        <div class="form-item">
+                            <label for="label-1">Text 1</label>
+                            <input class="form-text" type="text" id="label-1" name="label-1" value="" />
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-item">
+                            <label for="label-1">Text 2</label>
+                            <input class="form-text" type="text" id="label-2" name="label-2" value="" />
+                        </div>
+                    </div>
+
+                    <div class="form-item">
+                        <label for="label-1">Textarea</label>
+                        <textarea class="form-textarea"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <input type="reset" class="form-submit" value="Réinitialiser" />
+                    </div>
+                    <div class="clear"></div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
