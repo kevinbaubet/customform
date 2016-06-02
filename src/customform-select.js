@@ -38,7 +38,7 @@
                 options         : this.settings.classes.prefix + '-selectOptions',
                 option          : this.settings.classes.prefix + '-selectOption',
                 optionGroup     : this.settings.classes.prefix + '-selectOptionGroup',
-                optionGroupLabel: this.settings.classes.prefix + '-selectOptionGroupLabel',
+                optionGroupLabel: this.settings.classes.prefix + '-selectOptionGroupLabel'
             }
         });
         $.extend(this.settings.classes.states, {
@@ -351,7 +351,13 @@
             
             // User callback
             if (self.settings.onClick !== undefined) {
-                self.settings.onClick.call(self);
+                self.settings.onClick.call({
+                    CustomForm: self,
+                    wrapper: self.getWrapper(),
+                    input: self.getInput(),
+                    wrapperLabel: self.getWrapperLabel(),
+                    options: self.getOptions()
+                });
             }
         },
 
@@ -485,7 +491,13 @@
 
                     // User callback
                     if (this.settings.onChange !== undefined) {
-                        this.settings.onChange.call(this);
+                        this.settings.onChange.call({
+                            CustomForm: this,
+                            wrapper: this.getWrapper(),
+                            input: this.getInput(),
+                            wrapperLabel: this.getWrapperLabel(),
+                            option: option
+                        });
                     }
                 }
             }
@@ -550,7 +562,13 @@
 
             // User callback
             if (self.settings.onChange !== undefined) {
-                self.settings.onChange.call(self);
+                self.settings.onChange.call({
+                    CustomForm: this,
+                    wrapper: self.getWrapper(),
+                    input: self.getInput(),
+                    wrapperLabel: self.getWrapperLabel(),
+                    options: self.element.multipleOptions
+                });
             }
         },
 
