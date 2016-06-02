@@ -59,14 +59,17 @@ Index de départ pour l'attribut _tabindex_
 Éléments supportés par CustomForm
 
 * **checkbox** _object_
+
 Objet jQuery pour les inputs de type checkbox
     Défaut : $('input:checkbox', $(this))
 
 * **radio** _object_
+
 Objet jQuery pour les inputs de type radio
     Défaut : $('input:radio', $(this))
 
 * **select** _object_
+
 Objet jQuery pour les selects
     Défaut : $('select', $(this))
 
@@ -75,6 +78,7 @@ Objet jQuery pour les selects
 
 * **beforeWrap** _function_
 Ajouter un traitement avant l'ajout des wrappers
+
     Défaut : undefined
 
     $('form').customForm({
