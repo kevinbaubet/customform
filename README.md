@@ -14,10 +14,11 @@ Compatibilité IE : 10+
 
 ### Options _object_
 
-* **classes** _object_
+#### **classes** _object_
+
 Nom des classes
 
-`Défaut :`
+**Défaut :**
 
     {
         prefix: 'customform',
@@ -25,7 +26,7 @@ Nom des classes
         states: {}
     }
 
-`Check :`
+**Check :**
 
     {
         states: {
@@ -34,7 +35,7 @@ Nom des classes
         }
     }
 
-`Select :`
+**Select :**
 
     {
         select: {
@@ -53,32 +54,42 @@ Nom des classes
         }
     }
 
-* **tabindexStart** _integer_
+#### **tabindexStart** _integer_
+
 Index de départ pour l'attribut _tabindex_
-`Défaut : 0`
+
+    Défaut : 0
 
 ### Support _object_
 
 Éléments supportés par CustomForm
 
-* **checkbox** _object_
+#### **checkbox** _object_
+
 Objet jQuery pour les inputs de type checkbox
-`Défaut : $('input:checkbox', $(this))`
 
-* **radio** _object_
+    Défaut : $('input:checkbox', $(this))
+
+#### **radio** _object_
+
 Objet jQuery pour les inputs de type radio
-`Défaut : $('input:radio', $(this))`
 
-* **select** _object_
+    Défaut : $('input:radio', $(this))
+
+#### **select** _object_
+
 Objet jQuery pour les selects
-`Défaut : $('select', $(this))`
+
+    Défaut : $('select', $(this))
 
 
 ## Callbacks
 
-* **beforeWrap** _function_
+#### **beforeWrap** _function_
+
 Ajouter un traitement avant l'ajout des wrappers
-`Défaut : undefined`
+
+    Défaut : undefined
 
     $('form').customForm({
         beforeWrap: function() {
@@ -88,9 +99,11 @@ Ajouter un traitement avant l'ajout des wrappers
         }
     });
 
-* **onLoad** _function_
+#### **onLoad** _function_
+
 Ajouter un traitement une fois que CustomForm est fini de charger
-`Défaut : undefined`
+
+    Défaut : undefined
 
     $('form').customForm({
         onLoad: function() {
@@ -98,9 +111,10 @@ Ajouter un traitement une fois que CustomForm est fini de charger
         }
     });
 
-* **onClick** _function_
+#### **onClick** _function_
 Ajouter un traitement au click sur l'input/label (onclick, keyup)
-`Défaut : undefined`
+
+    Défaut : undefined
 
     $('form').customForm({
         onClick: function() {
@@ -110,9 +124,10 @@ Ajouter un traitement au click sur l'input/label (onclick, keyup)
     });
 
 
-* **onChange** _function_
+#### **onChange** _function_
 Ajouter un traitement au changement de valeur sur un select
-`Défaut : undefined`
+
+    Défaut : undefined
 
     $('form').customForm({
         onChange: function() {
@@ -120,9 +135,10 @@ Ajouter un traitement au changement de valeur sur un select
         }
     });
 
-* **onReset** _function_
+#### **onReset** _function_
 Ajouter un traitement au reset du form
-`Défaut : undefined`
+
+    Défaut : undefined
 
     $('form').customForm({
         onReset: function() {
