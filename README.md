@@ -1,147 +1,138 @@
 # Documentation CustomForm
 
-Ce script permet de personnaliser les éléments d'un formulaire. Éléments supportés : checkbox, radio et select.
+Ce script permet de personnaliser les éléments d'un formulaire. Éléments supportés : checkbox, radio, select et file (il est possible d'ajouter d'autres éléments).
 
 Compatibilité IE : 10+
 
 
 ## Initialisation
 
-    $('context').customForm([options], [support]);
+    var CustomForm = $('context').customForm([options]);
 
 
-## Paramètres
+## Options
 
-### Options _object_
+|**Option**|**Type**|**Valeur par défaut**|**Description**|
+|classes|object|Voir ci-dessous|Objet pour les options ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;prefix|string|'customform'|Préfix de classe|
+|&nbsp;&nbsp;&nbsp;&nbsp;input|string|'{prefix}-input'|Classe autour de l'input|
+|&nbsp;&nbsp;&nbsp;&nbsp;states|object|Voir ci-dessous|Objet pour l'option ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled|string|'is-disabled'|Classe quand l'input est désactivé|
+|tabindexStart|integer|0|Valeur de l'attribut tabindex au chargement de CustomForm|
+|onSupportLoad|function|undefined|Callback au début du chargement du support|
+|onSupportComplete|function|undefined|Callback à la fin du chargement du support|
 
-#### **classes** _object_
+## Méthodes
 
-Nom des classes
+|**Méthode**|**Arguments**|**Description**|
+|setSupport|**support** _string_ Nom du support
+**[options]** _object_ Options utilisateur à passer au support|Définition d'un support|
+|setSupports|Aucun|Définition de tous les supports présent dans $.CustomForm.supports|
+|setOptions|**support** _string_ Nom du support
+**[options]** _object_ Options utilisateur à passer au support|Enregistre les options pour un support|
+|getSupportClassName|**support** _string_ Nom du support|Récupère le nom de la classe JS correspondant à l'argument|
 
-**Défaut :**
 
-    {
-        prefix: 'customform',
-        input : 'customform-input',
-        states: {}
-    }
+## Supports
 
-**Check :**
+Un _support_ correspond à un type d'input à personnaliser (checkbox, radio, select, etc). Chaque support est une classe JS à part.
 
-    {
-        states: {
-            checked : 'is-checked',
-            disabled: 'is-disabled'
+### Initialiser un support
+
+Une fois CustomForm initialisé :
+
+    CustomForm.setSupport('name', [options]);
+
+Lors de l'initialisation d'un support, CustomForm va executer une classe JS qui correspondra à **$.CustomFormName**. "Name" étant le nom du support.
+
+
+### checkbox & radio
+
+Ce support est special car il regroupe 2 supports : checkbox et radio. Pour ces 2 supports, c'est la classe JS $.CustomFormCheck qui est initialisée.
+
+#### Options
+
+|**Option**|**Type**|**Valeur par défaut**|**Description**|
+|classes|object|Voir ci-dessous|Objet pour les options ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;states|object|Voir ci-dessous|Objet pour l'option ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checked|string|'is-checked'|Classe quand l'input est coché|
+|onLoad|function|undefined|Callback au début du chargement|
+|beforeWrap|function|undefined|Callback avant l'ajout des wrappers dans le DOM|
+|afterEventsHandler|function|undefined|Callback après la déclaration des événements|
+|onComplete|function|undefined|Callback à la fin du chargement|
+|onClick|function|undefined|Callback au click sur l'input|
+|onReset|function|undefined|Callback au reset sur formulaire|
+
+
+### select
+
+Ce support permet de personnaliser les selects, multiple ou non.
+
+#### Options
+
+|**Option**|**Type**|**Valeur par défaut**|**Description**|
+|classes|object|Voir ci-dessous|Objet pour les options ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;select|object|Voir ci-dessous|Objet pour l'option ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;label|string|'{prefix}-selectLabel'|Classe pour le nom de l'option sélectionné|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options|string|'{prefix}-selectOptions'|Classe autour des options|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;option|string|'{prefix}-selectOption'|Classe autour d'une option|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optionGroup|string|'{prefix}-selectOptionGroup'|Classe autour d'un groupoption|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optionGroupLabel|string|'{prefix}-selectOptionGroupLabel'|Classe autour du nom du groupoption|
+|&nbsp;&nbsp;&nbsp;&nbsp;states|object|Voir ci-dessous|Objet pour l'option ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first|string|'is-first'|Classe quand c'est la 1ère option du select|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selected|string|'is-selected'|Classe quand une option est sélectionnée|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple|string|'is-multiple'|Classe si le select est de type multiple|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open|string|'is-open'|Classe quand la liste des options est ouverte|
+|onLoad|function|undefined|Callback au début du chargement|
+|beforeWrap|function|undefined|Callback avant l'ajout des wrappers dans le DOM|
+|afterEventsHandler|function|undefined|Callback après la déclaration des événements|
+|onComplete|function|undefined|Callback à la fin du chargement|
+|onClick|function|undefined|Callback au click sur le select pour ouvrir la liste des options|
+|onChange|function|undefined|Callback au changement d'option|
+|onReset|function|undefined|Callback au reset sur formulaire|
+
+
+### file
+
+Ce support permet de personnaliser les input de type file.
+
+#### Options
+
+|**Option**|**Type**|**Valeur par défaut**|**Description**|
+|classes|object|Voir ci-dessous|Objet pour les options ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;label|string|'{prefix}-label'|Classe pour le bouton "Parcourir..."|
+|&nbsp;&nbsp;&nbsp;&nbsp;file|string|'{prefix}-file'|Classe pour le nom du fichier sélectionné|
+|&nbsp;&nbsp;&nbsp;&nbsp;states|object|Voir ci-dessous|Objet pour l'option ci-dessous|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open|string|'is-open'|Classe quand la fenêtre de choix des fichiers est ouverte|
+|onLoad|function|undefined|Callback au début du chargement|
+|beforeWrap|function|undefined|Callback avant l'ajout des wrappers dans le DOM|
+|afterEventsHandler|function|undefined|Callback après la déclaration des événements|
+|onComplete|function|undefined|Callback à la fin du chargement|
+|onClick|function|undefined|Callback au click sur le label pour choisir un fichier|
+|onChange|function|undefined|Callback au choix du fichier|
+|onReset|function|undefined|Callback au reset sur formulaire|
+
+
+### Autre ?
+
+Il est possible d'ajouter autant de support que vous voulez.
+
+Il faut d'abord ajouter un support :
+
+    $.CustomForm.supports.name = 'input[type="name"]';
+
+
+Puis créer la classe JS associée :
+
+    $.CustomFormName(CustomForm, options) {
+        // A l'initialisation de la classe, on execute la méthode load()
+        this.load();
+    };
+    $.CustomFormName.prototype = {
+        /**
+         * Initilisation
+         */
+        load: function() {
+
         }
-    }
-
-**Select :**
-
-    {
-        select: {
-            label           : {prefix}-selectLabel',
-            options         : {prefix}-selectOptions',
-            option          : {prefix}-selectOption',
-            optionGroup     : {prefix}-selectOptionGroup',
-            optionGroupLabel: {prefix}-selectOptionGroupLabel'
-        },
-        states: {
-            first   : 'is-first',
-            selected: 'is-selected',
-            focused : 'is-focused',
-            multiple: 'is-multiple',
-            open    : 'is-open'
-        }
-    }
-
-#### **tabindexStart** _integer_
-
-Index de départ pour l'attribut _tabindex_
-
-    Défaut : 0
-
-### Support _object_
-
-Éléments supportés par CustomForm
-
-#### **checkbox** _object_
-
-Objet jQuery pour les inputs de type checkbox
-
-    Défaut : $('input:checkbox', $(this))
-
-#### **radio** _object_
-
-Objet jQuery pour les inputs de type radio
-
-    Défaut : $('input:radio', $(this))
-
-#### **select** _object_
-
-Objet jQuery pour les selects
-
-    Défaut : $('select', $(this))
-
-
-## Callbacks
-
-#### **beforeWrap** _function_
-
-Ajouter un traitement avant l'ajout des wrappers
-
-    Défaut : undefined
-
-    $('form').customForm({
-        beforeWrap: function() {
-            // this = {CustomForm, wrapper, wrapperInput}
-        
-            this.wrapper.addClass('my-custom-class');
-        }
-    });
-
-#### **onLoad** _function_
-
-Ajouter un traitement une fois que CustomForm est fini de charger
-
-    Défaut : undefined
-
-    $('form').customForm({
-        onLoad: function() {
-            // this = {CustomForm}
-        }
-    });
-
-#### **onClick** _function_
-Ajouter un traitement au click sur l'input/label (onclick, keyup)
-
-    Défaut : undefined
-
-    $('form').customForm({
-        onClick: function() {
-            // Si checkbox/radio : this = {CustomForm, wrapper, input, type, checked}
-            // Si select : this = {CustomForm, wrapper, input, wrapperLabel, options}
-        }
-    });
-
-
-#### **onChange** _function_
-Ajouter un traitement au changement de valeur sur un select
-
-    Défaut : undefined
-
-    $('form').customForm({
-        onChange: function() {
-            // this = {CustomForm, wrapper, input, wrapperLabel, option, options}
-        }
-    });
-
-#### **onReset** _function_
-Ajouter un traitement au reset du form
-
-    Défaut : undefined
-
-    $('form').customForm({
-        onReset: function() {
-            // this = {CustomForm, form}
-        }
-    });
+    };

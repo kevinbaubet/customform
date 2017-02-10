@@ -1,0 +1,59 @@
+/* ==========================================================================
+   CustomFormCheck
+   ========================================================================== */
+.customform-checkbox,
+.customform-radio {
+    .customform-input {
+        position: relative;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #9d9d9d;
+        background: #fff;
+        box-sizing: border-box;
+        transition: .3s;
+
+        .is-checked& {
+            background-color: #303748;
+            border-color: #303748;
+        }
+    }
+
+    &:hover {
+        .customform-input {
+            border-color: #303748;
+            border-width: 2px;
+        }
+    }
+
+    &.is-checked {
+        .customform-input:before,
+        &.is-disabled:hover .customform-input:before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: -4px;
+            z-index: 5;
+            color: #fff;
+            font-size: 26px;
+        }
+    }
+
+    &.is-disabled {
+        .customform-input {
+            border-width: 1px;
+            border-color: #9d9d9d;
+        }
+    }
+
+    &.is-checked.is-disabled {
+        .customform-input {
+            background-color: #9d9d9d;
+            border-color: #9d9d9d;
+        }
+    }
+}
+
+.customform-radio .customform-input {
+    border-radius: 50%;
+}

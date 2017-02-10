@@ -4,29 +4,27 @@
         <meta charset="utf-8" />
         <title>CustomForm</title>
         <link rel="stylesheet" href="demo.css" />
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
-        <!-- <script src="../test/JSLitmus.js"></script> -->
-        <script src="../dist/customform.min.js"></script>
-        <script src="../dist/customform-check.min.js"></script>
-        <script src="../dist/customform-select.min.js"></script>
-        <script src="../dist/customform-label.min.js"></script>
-        <link rel="stylesheet" href="../dist/customform.css" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
         <script>
             jQuery(document).ready(function($) {
                 // DEMO
-                $('form').customForm();
+                var CustomForm = $('form').customForm();
+                CustomForm.setSupports();
+
+                // Labels
                 $('.form-labels').customFormLabel();
 
                 // TEST
                 // JSLitmus.test('customForm', function() {
-                //   $('form').customForm();
+                //     var CustomForm = $('form').customForm();
+                //     CustomForm.setSupports();
                 // });
             });
         </script>
     </head>
     <body>
         <div class="page">
-            <h1>Formulaires personnalisés</h1>
+            <h1>Custom Form</h1>
 
             <div class="demo-item">
                 <h2>Cheboxs / Radios</h2>
@@ -68,9 +66,9 @@
                             <label for="radio1-4">Désactivé & coché</label>
                         </div>
                     </div>
-                    
+
                     <div class="form-actions">
-                        <input type="reset" class="form-submit" value="Réinitialiser" />
+                        <input type="reset" class="form-submit" value="Reset" />
                     </div>
                     <div class="clear"></div>
                 </form>
@@ -81,14 +79,14 @@
                 <form>
                     <div class="form-col">
                         <div class="form-item">
-                            <label for="select-1">Classique :</label>
+                            <label for="select-1">Classic :</label>
                             <select class="form-select" id="select-1" name="select-1">
-                                <option value="">Sélectionner</option>
+                                <option value="">Select</option>
                                 <option value="1">Option 1</option>
                                 <option value="2">Option 2</option>
-                                <option value="3" disabled>Option 3 (désactivée)</option>
-                                <option value="4" disabled>Option 4 (désactivée)</option>
-                                <option value="5" class="class-user">Option 5 (class user)</option>
+                                <option value="3" disabled>Option 3 (disabled)</option>
+                                <option value="4" disabled>Option 4 (disabled)</option>
+                                <option value="5" class="user-class">Option 5 (user class)</option>
                                 <option value="6">Option 6</i></option>
                             </select>
                         </div>
@@ -96,15 +94,15 @@
                         <div class="form-item">
                             <label for="select-2">Option groups :</label>
                             <select class="form-select" id="select-2" name="select-2">
-                                <option value="none">Aucun</option>
+                                <option value="none">None</option>
 
-                                <optgroup label="Groupe 1">
+                                <optgroup label="Group 1">
                                     <option value="val-1">Option 1-1</option>
                                     <option value="val-2">Option 1-2</option>
-                                    <option value="val-3">Option 1-3</option> 
+                                    <option value="val-3">Option 1-3</option>
                                 </optgroup>
-                                
-                                <optgroup label="Groupe 2">
+
+                                <optgroup label="Group 2">
                                     <option value="val-4">Option 2-1</option>
                                     <option value="val-5">Option 2-2</option>
                                     <option value="val-6">Option 2-3</option>
@@ -113,11 +111,11 @@
                         </div>
 
                         <div class="form-item">
-                            <label for="select-4">Désactivé :</label>
+                            <label for="select-4">Disabled :</label>
                             <select class="form-select" id="select-4" name="select-4" disabled>
-                                <option value="">Aucun</option>
-                                <option value="1">Valeur 1</option>
-                                <option value="2">Valeur 2</option>
+                                <option value="">None</option>
+                                <option value="1">Value 1</option>
+                                <option value="2">Value 2</option>
                             </select>
                         </div>
                     </div>
@@ -125,7 +123,7 @@
                         <div class="form-item">
                             <label for="select-3">Multiple :</label>
                             <select class="form-select" id="select-3" name="select-3" multiple>
-                                <option value="">Sélectionner</option>
+                                <option value="">Select</option>
                                 <option value="1">Option 1</option>
                                 <option value="2">Option 2</option>
                                 <option value="3">Option 3</option>
@@ -137,14 +135,14 @@
                         <div class="form-item">
                             <label for="select-5">Multiple Option groups :</label>
                             <select class="form-select" id="select-5" name="select-5" multiple>
-                                <option value="none">Aucun</option>
+                                <option value="none">None</option>
 
                                 <optgroup label="Groupe 1">
                                     <option value="val-1">Option 1-1</option>
                                     <option value="val-2">Option 1-2</option>
-                                    <option value="val-3">Option 1-3</option> 
+                                    <option value="val-3">Option 1-3</option>
                                 </optgroup>
-                                
+
                                 <optgroup label="Groupe 2">
                                     <option value="val-4">Option 2-1</option>
                                     <option value="val-5">Option 2-2</option>
@@ -155,16 +153,30 @@
                         <div class="form-item">
                             <label for="select-6">Multiple désactivé :</label>
                             <select class="form-select" id="select-6" name="select-6" multiple disabled>
-                                <option value="">Aucun</option>
-                                <option value="1">Valeur 1</option>
-                                <option value="2">Valeur 2</option>
+                                <option value="">None</option>
+                                <option value="2">Value 2</option>
+                                <option value="1">Value 1</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-actions">
-                        <input type="submit" class="form-submit" value="Envoyer" />
-                        <input type="reset" class="form-submit" value="Réinitialiser" />
+                        <input type="reset" class="form-submit" value="Reset" />
+                    </div>
+                    <div class="clear"></div>
+                </form>
+            </div>
+
+            <div class="demo-item">
+                <h2>Input file</h2>
+                <form enctype="multipart/form-data">
+                    <div class="form-item">
+                        <label for="file-1">Fichier :</label>
+                        <input type="file" id="file-1" name="file-1" value="" multiple />
+                    </div>
+
+                    <div class="form-actions">
+                        <input type="reset" class="form-submit" value="Reset" />
                     </div>
                     <div class="clear"></div>
                 </form>
@@ -186,17 +198,26 @@
                         </div>
                     </div>
 
+                    <div class="clear"></div>
                     <div class="form-item">
                         <label for="label-1">Textarea</label>
                         <textarea class="form-textarea"></textarea>
-                    </div>
-                    
-                    <div class="form-actions">
-                        <input type="reset" class="form-submit" value="Réinitialiser" />
                     </div>
                     <div class="clear"></div>
                 </form>
             </div>
         </div>
+
+        <!-- <script src="../test/JSLitmus.js"></script> -->
+        <script src="../src/customform.js"></script>
+        <script src="../src/customform-check.js"></script>
+        <script src="../src/customform-select.js"></script>
+        <script src="../src/customform-file.js"></script>
+        <script src="../src/customform-label.js"></script>
+        <link rel="stylesheet" href="../dist/customform.css" />
+        <link rel="stylesheet" href="../dist/customform-check.css" />
+        <link rel="stylesheet" href="../dist/customform-select.css" />
+        <link rel="stylesheet" href="../dist/customform-file.css" />
+        <link rel="stylesheet" href="../dist/customform-label.css" />
     </body>
 </html>

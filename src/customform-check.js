@@ -1,111 +1,122 @@
-/**
- * CustomForm - Checkbox/Radio
- * 
- * Permet de personnaliser les éléments d'un formulaire
- *
- * @param object        customForm -> Données de CustomForm
- * @param jQuery object context    -> Élément de contexte <form>
- * @param jQuery object element    -> Élément à customiser
- */
 (function($) {
     'use strict';
-    
-    $.CustomFormCheck = function(customForm, context, element) {
-        this.context  = context;
+
+    $.CustomFormCheck = function(CustomForm, options) {
+        // Héritage
+        this.CustomForm = CustomForm;
+
+        // Config
         this.element  = {
-            input: element,
-            type: customForm.inputType,
+            context: this.CustomForm.elementContext,
+            input: this.CustomForm.elementInput,
+            type: this.CustomForm.support.type,
+            selector: this.CustomForm.support.selector,
             wrapper: null,
             wrapperInput: null
         };
-        this.settings = customForm.settings;
-        $.extend(this.settings.classes.states, {
-            checked : 'is-checked',
-            disabled: 'is-disabled'
-        });
-        this.support = customForm.support;
+        $.extend(true, (this.settings = {}), this.CustomForm.settings, $.CustomFormCheck.defaults, options);
 
         // Init
-        this.setWrappers();
-        this.loadHandler();
+        this.load();
+    };
+
+    $.CustomFormCheck.defaults = {
+        classes: {
+            states: {
+                checked: 'is-checked'
+            }
+        },
+        onLoad: undefined,
+        beforeWrap: undefined,
+        afterEventsHandler: undefined,
+        onComplete: undefined,
+        onClick: undefined,
+        onReset: undefined
     };
 
     $.CustomFormCheck.prototype = {
         /**
-         * Création des wrappers
+         * Initialisation
          */
-        setWrappers: function() {
-            var self = this;
-            var wrapper = $('<span>');
-            var wrapperInput = $('<span>', {
-                class: self.settings.classes.input,
-                tabindex: self.settings.tabindexStart
-            });
-
+        load: function() {
             // User callback
-            if (self.settings.beforeWrap !== undefined) {
-                self.settings.beforeWrap.call({
-                    CustomForm: self,
-                    wrapper: wrapper,
-                    wrapperInput: wrapperInput
+            if (this.settings.onLoad !== undefined) {
+                this.settings.onLoad.call({
+                    CustomFormCheck: this,
+                    element: this.element
                 });
             }
-            var beforeWrapperClass = wrapper.attr('class');
 
-            // Wrapper
-            wrapper.attr('class', self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '-' + self.getInputType() + ((beforeWrapperClass) ? ' ' + beforeWrapperClass : ''));
-            self.getInput().parent().wrapInner(wrapper);
-            self.element.wrapper = self.getInput().parent();
-            
-            // Wrapper input
-            self.getInput().wrap(wrapperInput);
-            self.element.wrapperInput = self.element.input.parent();
-        },
-
-        /**
-         * Execute l'initialisation des wrapper et appel les différents handler
-         */
-        loadHandler: function() {
+            // Load
+            this.wrap();
             this.initElementsState();
-
-            // Start events
             this.eventsHandler();
             this.resetHandler();
 
             // User callback
-            if (this.settings.onLoad !== undefined) {
-                this.settings.onLoad.call({
-                    CustomForm: this
+            if (this.settings.onComplete !== undefined) {
+                this.settings.onComplete.call({
+                    CustomFormCheck: this,
+                    element: this.element
                 });
             }
+        },
+
+        /**
+         * Création des wrappers
+         */
+        wrap: function() {
+            this.element.wrapper = $('<span>', {
+                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '-' + this.getInputType()
+            });
+            this.element.wrapperInput = $('<span>', {
+                class: this.settings.classes.input,
+                tabindex: this.settings.tabindexStart
+            });
+
+            // User callback
+            if (this.settings.beforeWrap !== undefined) {
+                this.settings.beforeWrap.call({
+                    CustomFormCheck: this,
+                    wrapper: this.element.wrapper,
+                    wrapperInput: this.element.wrapperInput
+                });
+            }
+
+            // Wrapper
+            this.getInput().parent().wrapInner(this.element.wrapper);
+            this.element.wrapper = this.getInput().parent();
+
+            // Wrapper this.element.wrapperInput
+            this.getInput().wrap(this.element.wrapperInput);
+            this.element.wrapperInput = this.element.input.parent();
         },
 
         /**
          * Initialise l'état des wrappers (coché, désactivé, etc)
          */
         initElementsState: function() {
-            if (this.getInput().is(':checked')) {
+            if (this.getInput().prop('checked')) {
                 this.getWrapper().addClass(this.settings.classes.states.checked);
             }
-            if (this.getInput().is(':disabled')) {
+            if (this.getInput().prop('disabled')) {
                 this.getWrapper().addClass(this.settings.classes.states.disabled);
                 this.getInput().removeAttr('tabindex');
             }
         },
 
         /**
-         * [eventsHandler description]
-         * @return {[type]} [description]
+         * Gestionnaire d'événements
          */
         eventsHandler: function() {
             var self = this;
 
-            self.element.wrapper.on('click keyup', function(event) {
+            self.getWrapper().on('click keyup', function(event) {
                 if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 32)) {
                     event.preventDefault();
-                    var isRadio = (self.getInputType() === 'radio') ? true : false;
+                    var isRadio = (self.getInputType() === 'radio');
 
-                    if (self.getInput().is(':disabled')) {
+                    if (self.getInput().prop('disabled')) {
                         return;
                     }
 
@@ -125,15 +136,23 @@
                     // User callback
                     if (self.settings.onClick !== undefined) {
                         self.settings.onClick.call({
-                            CustomForm: self,
+                            CustomFormCheck: self,
                             wrapper: self.getWrapper(),
                             input: self.getInput(),
                             type: self.getInputType(),
-                            checked: self.getInput().is(':checked')
+                            checked: self.getInput().prop('checked')
                         });
                     }
                 }
             });
+
+            // User callback
+            if (self.settings.afterEventsHandler !== undefined) {
+                self.settings.afterEventsHandler.call({
+                    CustomFormCheck: this,
+                    element: this.element
+                });
+            }
         },
 
         /**
@@ -142,12 +161,10 @@
         resetHandler: function() {
             var self = this;
 
-            self.context.on('reset', function() {
+            self.getContext().on('reset', function() {
                 var form = $(this);
 
-                $.each(self.support, function(type, selector) {
-                    self.getWrapper(form.find(selector)).removeClass(self.settings.classes.states.checked + ' ' + self.settings.classes.states.disabled);
-                });
+                self.getWrapper().removeClass(self.settings.classes.states.checked + ' ' + self.settings.classes.states.disabled);
 
                 setTimeout(function() {
                     self.initElementsState();
@@ -155,7 +172,7 @@
                     // User callback
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
-                            CustomForm: self,
+                            CustomFormCheck: self,
                             form: form
                         });
                     }
@@ -164,25 +181,17 @@
         },
 
         /**
-         * [getInput description]
-         * @return {[type]} [description]
+         * Alias pour récupérer les éléments
          */
+        getContext: function() {
+            return this.element.context;
+        },
         getInput: function() {
             return this.element.input;
         },
-
-        /**
-         * [getInputType description]
-         * @return {[type]} [description]
-         */
         getInputType: function() {
             return this.element.type;
         },
-
-        /**
-         * [getWrapper description]
-         * @return {[type]} [description]
-         */
         getWrapper: function(children) {
             if (children !== undefined) {
                 return children.closest('.' + this.settings.classes.prefix);
@@ -190,13 +199,8 @@
                 return this.element.wrapper;
             }
         },
-
-        /**
-         * [getInputsRadio description]
-         * @return {[type]} [description]
-         */
         getInputsRadio: function() {
-            return this.context.find(this.support[this.getInputType()]).filter('[name="' + this.getInput().attr('name') + '"]');
+            return this.getContext().find(this.element.selector).filter('[name="' + this.getInput().attr('name') + '"]');
         }
     };
 })(jQuery);

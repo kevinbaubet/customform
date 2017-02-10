@@ -1,0 +1,29 @@
+.customform-file {
+  cursor: default;
+}
+.customform-file label {
+  display: block;
+  margin-bottom: 5px;
+}
+.customform-file .customform-label,
+.customform-file .customform-file {
+  display: inline-block;
+}
+.customform-file .customform-label {
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: bold;
+  background: #303748;
+  cursor: pointer;
+  transition: .3s;
+}
+.customform-file .customform-label:hover {
+  background-color: #2c3e50;
+}
+.customform-file .customform-label:focus {
+  outline: 1px dotted black;
+}
+.customform-file .customform-file {
+  margin-left: 10px;
+  font-size: 1.2em;
+}

@@ -1,0 +1,49 @@
+/* ==========================================================================
+   CustomFormCheck
+   ========================================================================== */
+.customform-checkbox .customform-input,
+.customform-radio .customform-input {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #9d9d9d;
+  background: #fff;
+  box-sizing: border-box;
+  transition: .3s;
+}
+.is-checked.customform-checkbox .customform-input,
+.is-checked.customform-radio .customform-input {
+  background-color: #303748;
+  border-color: #303748;
+}
+.customform-checkbox:hover .customform-input,
+.customform-radio:hover .customform-input {
+  border-color: #303748;
+  border-width: 2px;
+}
+.customform-checkbox.is-checked .customform-input:before,
+.customform-radio.is-checked .customform-input:before,
+.customform-checkbox.is-checked.is-disabled:hover .customform-input:before,
+.customform-radio.is-checked.is-disabled:hover .customform-input:before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: -4px;
+  z-index: 5;
+  color: #fff;
+  font-size: 26px;
+}
+.customform-checkbox.is-disabled .customform-input,
+.customform-radio.is-disabled .customform-input {
+  border-width: 1px;
+  border-color: #9d9d9d;
+}
+.customform-checkbox.is-checked.is-disabled .customform-input,
+.customform-radio.is-checked.is-disabled .customform-input {
+  background-color: #9d9d9d;
+  border-color: #9d9d9d;
+}
+.customform-radio .customform-input {
+  border-radius: 50%;
+}
