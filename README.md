@@ -27,9 +27,9 @@ Compatibilité IE : 10+
 
 | Méthode             | Arguments                                                                                          | Description                                                        |
 |---------------------|----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| setSupport          | **support** *string* Nom du support **[options]** *object* Options utilisateur à passer au support | Définition d'un support                                            |
+| setSupport          | **support** *string* Nom du support, **[options]** *object* Options utilisateur à passer au support | Définition d'un support                                            |
 | setSupports         | -                                                                                                  | Définition de tous les supports présent dans $.CustomForm.supports |
-| setOptions          | **support** *string* Nom du support **options** *object* Options utilisateur à passer au support   | Enregistre les options pour un support                             |
+| setOptions          | **support** *string* Nom du support, **options** *object* Options utilisateur à passer au support   | Enregistre les options pour un support                             |
 | getSupportClassName | **support** *string* Nom du support                                                                | Récupère le nom de la classe JS correspondant à l'argument         |
 
 
