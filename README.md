@@ -13,12 +13,12 @@ Compatibilité IE : 10+
 ## Options
 
 | Option                | Type      | Valeur par défaut     | Description                                                   |
-|-------------------    |---------- |-------------------    |-----------------------------------------------------------    |
+|:-------------------:  |---------- |-------------------    |-----------------------------------------------------------    |
 | classes               | object    | Voir ci-dessous       | Objet pour les options ci-dessous                             |
-|     prefix            | string    | 'customform'          | Préfix de classe                                              |
-|     input             | string    | '{prefix}-input'      | Classe autour de l'input                                      |
-|     states            | object    | Voir ci-dessous       | Objet pour les options ci-dessous                             |
-|         disabled      | string    | 'is-disabled'         | Classe quand l'input est désactivé                            |
+|       prefix          | string    | 'customform'          | Préfix de classe                                              |
+|       input           | string    | '{prefix}-input'      | Classe autour de l'input                                      |
+|       states          | object    | Voir ci-dessous       | Objet pour les options ci-dessous                             |
+|          disabled     | string    | 'is-disabled'         | Classe quand l'input est désactivé                            |
 | tabindexStart         | integer   | 0                     | Valeur de l'attribut tabindex au chargement de CustomForm     |
 | onSupportLoad         | function  | undefined             | Callback au début du chargement du support                    |
 | onSupportComplete     | function  | undefined             | Callback à la fin du chargement du support                    |
