@@ -1,7 +1,7 @@
 /**
  * CustomForm
  *
- * @version 4 (09/01/2016)
+ * @version 4 (01/03/2016)
  */
 (function($) {
     'use strict';
@@ -73,6 +73,8 @@
          */
         setOptions: function(support, options) {
             this.options[support] = options;
+
+            return this;
         },
 
         /**
@@ -84,6 +86,8 @@
             $.each(self.supports, function(support, selector) {
                 self.setSupport(support);
             });
+
+            return self;
         },
 
         /**
@@ -131,6 +135,8 @@
             if (self.settings.onSupportComplete !== undefined) {
                 self.settings.onSupportComplete.call(self);
             }
+
+            return self;
         },
 
         /**
