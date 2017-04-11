@@ -4,11 +4,9 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 
 Compatibilité IE : 10+
 
-
 ## Initialisation
 
     var CustomForm = $('context').customForm([options]);
-
 
 ## Options
 
@@ -32,7 +30,6 @@ Compatibilité IE : 10+
 | setOptions          | **support** *string* Nom du support, **options** *object* Options utilisateur à passer au support   | Enregistre les options pour un support                             |
 | getSupportClassName | **support** *string* Nom du support                                                                | Récupère le nom de la classe JS correspondant à l'argument         |
 
-
 ## Supports
 
 Un *support* correspond à un type d'input à personnaliser (checkbox, radio, select, etc). Chaque support est une classe JS à part.
@@ -43,12 +40,17 @@ Une fois CustomForm initialisé :
 
     CustomForm.setSupport('name', [options]);
 
-Lors de l'initialisation d'un support, CustomForm va executer une classe JS qui correspondra à **$.CustomFormName**. "Name" étant le nom du support.
+Lors de l'initialisation d'un support, CustomForm va éxecuter une classe JS qui correspondra à **$.CustomFormName**. "Name" étant le nom du support.
 
 
-### checkbox & radio
+### Checkboxs & Radios
 
-Ce support est special car il regroupe 2 supports : checkbox et radio. Pour ces 2 supports, c'est la classe JS $.CustomFormCheck qui est initialisée.
+Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces 2 supports, c'est la classe JS $.CustomFormCheck qui est initialisée.
+
+#### Initialisation
+
+    CustomForm.setSupport('checkbox', [options]);
+    CustomForm.setSupport('radio', [options]);
 
 #### Options
 
@@ -64,10 +66,13 @@ Ce support est special car il regroupe 2 supports : checkbox et radio. Pour ces 
 | onClick                                                 | function | undefined         | Callback au click sur l'input                   |
 | onReset                                                 | function | undefined         | Callback au reset du formulaire                 |
 
-
-### select
+### Sélects
 
 Ce support permet de personnaliser les selects, multiple ou non.
+
+#### Initialisation
+
+    CustomForm.setSupport('select', [options]);
 
 #### Options
 
@@ -93,10 +98,13 @@ Ce support permet de personnaliser les selects, multiple ou non.
 | onChange                                                         | function | undefined                         | Callback au changement d'option                                  |
 | onReset                                                          | function | undefined                         | Callback au reset du formulaire                                  |
 
-
-### file
+### File
 
 Ce support permet de personnaliser les input de type file.
+
+#### Initialisation
+
+    CustomForm.setSupport('file', [options]);
 
 #### Options
 
@@ -115,22 +123,21 @@ Ce support permet de personnaliser les input de type file.
 | onChange                                             | function | undefined         | Callback au choix du fichier                              |
 | onReset                                              | function | undefined         | Callback au reset du formulaire                           |
 
-
 ### Autre ?
 
 Il est possible d'ajouter autant de support que vous voulez.
 
-Il faut d'abord ajouter un support :
+Il faut d'abord ajouter un sélecteur à la liste des supports :
 
     $.CustomForm.supports.name = 'input[type="name"]';
-
 
 Puis créer la classe JS associée :
 
     $.CustomFormName(CustomForm, options) {
-        // A l'initialisation de la classe, on execute la méthode load()
+        // A l'initialisation de la classe, on éxecute la méthode load()
         this.load();
     };
+    
     $.CustomFormName.prototype = {
         /**
          * Initilisation
