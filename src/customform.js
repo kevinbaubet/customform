@@ -1,7 +1,7 @@
 /**
  * CustomForm
  *
- * @version 4 (01/03/2016)
+ * @version 4.1 (14/04/2017)
  */
 (function($) {
     'use strict';
@@ -15,7 +15,6 @@
 
         // Variables
         this.context = context;
-        this.support = {};
         this.options = {};
 
         // Retour
@@ -100,9 +99,12 @@
             var self = this;
 
             // Données du support
+            self.support = {};
             self.support.type = support;
             self.support.selector = $.CustomForm.supports[self.support.type];
             self.support.className = self.getSupportClassName(self.support.type);
+            self.support.instances = {};
+            // self.instances[self.support.type] = {};
 
             // User Callback
             if (self.settings.onSupportLoad !== undefined) {
@@ -120,10 +122,10 @@
                 self.context.each(function() {
                     self.elementContext = $(this);
 
-                    $(self.support.selector, self.elementContext).each(function() {
+                    $(self.support.selector, self.elementContext).each(function(i, n) {
                         self.elementInput = $(this);
 
-                        new $[self.support.className](self, options);
+                        self.support.instances[self.elementInput.attr('name')] = new $[self.support.className](self, options);
                     });
                 });
 
@@ -136,7 +138,7 @@
                 self.settings.onSupportComplete.call(self);
             }
 
-            return self;
+            return self.support;
         },
 
         /**
@@ -161,7 +163,7 @@
          * Utils
          */
         setLog: function(type, log) {
-            console[type](log);
+            console[type]('CustomForm: ' + log);
         },
         replacePrefixClass: function() {
             var self = this;

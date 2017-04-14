@@ -2,7 +2,8 @@
 
 Ce script permet de personnaliser les éléments d'un formulaire. Éléments supportés : checkbox, radio, select et file (il est possible d'ajouter d'autres éléments).
 
-Compatibilité IE : 10+
+* Compatibilité : IE10+
+* Dépendance : jQuery
 
 ## Initialisation
 
@@ -41,6 +42,14 @@ Une fois CustomForm initialisé :
     CustomForm.setSupport('name', [options]);
 
 Lors de l'initialisation d'un support, CustomForm va éxecuter une classe JS qui correspondra à **$.CustomFormName**. "Name" étant le nom du support.
+
+#### Instances
+
+La classe JS est instanciée pour chaque sélecteur du support dans le contexte. Pour faire des manipulations sur les supports, il faut récupérer les instances :
+
+    var instances = CustomForm.setSupport('name', [options]);
+
+Il est possible ensuite de manipuler l'instance en fonction de l'attribut **name** du sélecteur.
 
 
 ### Checkboxs & Radios
