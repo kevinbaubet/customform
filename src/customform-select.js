@@ -218,8 +218,8 @@
             var defaultValue = self.getInput().attr('data-default-value');
 
             if (self.getInput().is(':disabled')) {
-                this.getWrapper().addClass(this.settings.classes.states.disabled);
-                this.getInput().removeAttr('tabindex');
+                self.getWrapper().addClass(self.settings.classes.states.disabled);
+                self.getInput().removeAttr('tabindex');
                 self.getWrapperLabel().removeAttr('tabindex');
             }
 
@@ -319,12 +319,15 @@
         preventHandler: function() {
             var self = this;
 
+            self.closeSiblings();
+
             self.getWrapperLabel().focus().one('click.close', function() {
                 self.close.call(self);
             });
 
             self.getWrapperLabel().one('blur.close', function() {
                 var close = true;
+
                 if (self.element.isMultiple) {
                     self.getOptions().one('click.option', function() {
                         close = false;
@@ -353,6 +356,28 @@
             this.getWrapperLabel().off('click.close blur.close');
             this.getOptions().off('click.option');
             $(window).off('keydown.open');
+        },
+
+        /**
+         * Fermeture des autres selects
+         */
+        closeSiblings: function() {
+            var self = this;
+
+            if (self.element.isMultiple) {
+                var siblings = self.element.context.find('.' + self.settings.classes.prefix + '-select.' + self.settings.classes.states.multiple).not(self.element.wrapper);
+
+                if (siblings.length) {
+                    siblings.each(function() {
+                        $(this)
+                            .removeClass(self.settings.classes.states.open)
+                            .find('.' + self.settings.classes.select.label)
+                                .off('click.close blur.close').end()
+                            .find('.' + self.settings.classes.select.option)
+                                .off('click.option');
+                    });
+                }
+            }
         },
 
         /**
