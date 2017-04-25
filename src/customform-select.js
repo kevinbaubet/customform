@@ -319,15 +319,19 @@
         preventHandler: function() {
             var self = this;
 
+            // Fermeture des autres selects
             self.closeSiblings();
 
+            // Fermeture au clic sur le label
             self.getWrapperLabel().focus().one('click.close', function() {
                 self.close.call(self);
             });
 
-            self.getWrapperLabel().one('blur.close', function() {
+            // Fermeture au blur du label
+            self.getWrapperLabel().one('blur.close', function(event) {
                 var close = true;
-
+                
+                // Si multiple, on bloque la fermeture
                 if (self.element.isMultiple) {
                     self.getOptions().one('click.option', function() {
                         close = false;
@@ -363,20 +367,17 @@
          */
         closeSiblings: function() {
             var self = this;
+            var siblings = self.element.context.find('.' + self.settings.classes.prefix + '-select').not(self.element.wrapper);
 
-            if (self.element.isMultiple) {
-                var siblings = self.element.context.find('.' + self.settings.classes.prefix + '-select.' + self.settings.classes.states.multiple).not(self.element.wrapper);
-
-                if (siblings.length) {
-                    siblings.each(function() {
-                        $(this)
-                            .removeClass(self.settings.classes.states.open)
-                            .find('.' + self.settings.classes.select.label)
-                                .off('click.close blur.close').end()
-                            .find('.' + self.settings.classes.select.option)
-                                .off('click.option');
-                    });
-                }
+            if (siblings.length) {
+                siblings.each(function() {
+                    $(this)
+                        .removeClass(self.settings.classes.states.open)
+                        .find('.' + self.settings.classes.select.label)
+                            .off('click.close blur.close').end()
+                        .find('.' + self.settings.classes.select.option)
+                            .off('click.option');
+                });
             }
         },
 
