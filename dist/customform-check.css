@@ -44,6 +44,11 @@
   background-color: #9d9d9d;
   border-color: #9d9d9d;
 }
+.customform-checkbox label,
+.customform-radio label {
+  padding-left: 10px;
+  vertical-align: super;
+}
 .customform-radio .customform-input {
   border-radius: 50%;
 }

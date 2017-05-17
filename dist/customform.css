@@ -11,10 +11,6 @@
   cursor: default;
   color: graytext;
 }
-.customform label {
-  padding-left: 10px;
-  vertical-align: super;
-}
 .customform-input > input,
 .customform-input > select {
   position: absolute;

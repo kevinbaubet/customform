@@ -36,7 +36,7 @@
 }
 .customform-selectOptions {
   position: absolute;
-  top: 58px;
+  top: 54px;
   left: 0;
   z-index: -1;
   width: 100%;
@@ -49,7 +49,8 @@
 }
 .is-open .customform-selectOptions {
   z-index: 50;
-  height: 500px;
+  height: auto;
+  max-height: 250px;
   opacity: 1;
   overflow-y: auto;
 }
