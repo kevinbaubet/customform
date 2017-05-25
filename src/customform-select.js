@@ -1,7 +1,7 @@
-(function($) {
+(function ($) {
     'use strict';
 
-    $.CustomFormSelect = function(CustomForm, options) {
+    $.CustomFormSelect = function (CustomForm, options) {
         // Héritage
         this.CustomForm = CustomForm;
 
@@ -58,6 +58,7 @@
                 open: 'is-open'
             }
         },
+        multipleOptionsSeparator: ', ',
         onLoad: undefined,
         beforeWrap: undefined,
         afterEventsHandler: undefined,
@@ -73,11 +74,11 @@
          *
          * @return bool
          */
-        prepareOptions: function() {
+        prepareOptions: function () {
             var self = this;
 
             // Classes
-            $.each(self.settings.classes.select, function(key, value) {
+            $.each(self.settings.classes.select, function (key, value) {
                 self.settings.classes.select[key] = value.replace(/{prefix}/, self.settings.classes.prefix);
             });
 
@@ -87,7 +88,7 @@
         /**
          * Initialisation
          */
-        load: function() {
+        load: function () {
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
@@ -114,10 +115,10 @@
         /**
          * Création des wrappers
          */
-        wrap: function() {
+        wrap: function () {
             var self = this;
             self.element.wrapper = $('<span>', {
-                class: self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '-select'
+                class: self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--select'
             });
             self.element.wrapperInput = $('<span>', {
                 class: self.settings.classes.input,
@@ -167,7 +168,7 @@
 
             // Options
             if (self.getSourceOptions().length) {
-                $.each(self.getSourceOptions(), function(indexOption, option) {
+                $.each(self.getSourceOptions(), function (indexOption, option) {
                     option = $(option);
                     var optionClasses = option.attr('class');
 
@@ -181,7 +182,7 @@
 
             // Optgroups
             if (self.getSourceOptgroups().length) {
-                $.each(self.getSourceOptgroups(), function(indexOptgroup, optgroup) {
+                $.each(self.getSourceOptgroups(), function (indexOptgroup, optgroup) {
                     optgroup = $(optgroup);
                     var selectOptionGroup = $('<span>', {
                         class: self.settings.classes.select.optionGroup
@@ -191,7 +192,7 @@
                         html: optgroup.attr('label')
                     }).appendTo(selectOptionGroup);
 
-                    optgroup.children('option').each(function(indexOptgroupOption, option) {
+                    optgroup.children('option').each(function (indexOptgroupOption, option) {
                         option = $(option);
                         var optionClasses = option.attr('class');
 
@@ -213,7 +214,7 @@
         /**
          * Défini l'état des éléments à l'initialisation
          */
-        initElementsState: function() {
+        initElementsState: function () {
             var self = this;
             var defaultValue = self.getInput().attr('data-default-value');
 
@@ -232,7 +233,7 @@
 
                 if (defaultValue.length > 1) {
                     var defaultValues = [];
-                    $.each(defaultValue, function() {
+                    $.each(defaultValue, function () {
                         defaultValues.push($(this).val());
                     });
 
@@ -243,12 +244,12 @@
                 self.getInput().attr('data-default-value', defaultValue);
             }
 
-            self.getOptions().each(function() {
+            self.getOptions().each(function () {
                 var option = $(this);
                 var optionValue = option.attr('data-value');
 
-                if (defaultValue.indexOf(',') !== -1) {
-                    $.each(defaultValue.split(','), function(i, defaultValue) {
+                if (self.element.isMultiple) {
+                    $.each(defaultValue.split(','), function (i, defaultValue) {
                         if (optionValue === defaultValue) {
                             self.setOptions.call(self, option);
                         }
@@ -257,15 +258,17 @@
                     self.setOption.call(self, option);
                 }
             });
+
+            return self;
         },
 
         /**
          * Gestionnaire d'événements
          */
-        eventsHandler: function() {
+        eventsHandler: function () {
             var self = this;
 
-            self.getWrapperLabel().on('click.open keyup.open', function(event) {
+            self.getWrapperLabel().on('click.open keyup.open', function (event) {
                 if (self.getInput().is(':disabled')) {
                     return;
                 }
@@ -291,15 +294,15 @@
         /**
          * Initialise un event "reset" sur le sélecteur contexte
          */
-        resetHandler: function() {
+        resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset', function() {
+            self.getContext().on('reset', function () {
                 var form = $(this);
 
                 self.getWrapper().removeClass(self.settings.classes.states.disabled);
 
-                setTimeout(function() {
+                setTimeout(function () {
                     self.initElementsState();
 
                     // User callback
@@ -316,36 +319,36 @@
         /**
          * Gestionnaire de fermeture
          */
-        preventHandler: function() {
+        preventHandler: function () {
             var self = this;
 
             // Fermeture des autres selects
             self.closeSiblings();
 
             // Fermeture au clic sur le label
-            self.getWrapperLabel().focus().one('click.close', function() {
+            self.getWrapperLabel().focus().one('click.close', function () {
                 self.close.call(self);
             });
 
             // Fermeture au blur du label
-            self.getWrapperLabel().one('blur.close', function(event) {
+            self.getWrapperLabel().one('blur.close', function (event) {
                 var close = true;
                 
                 // Si multiple, on bloque la fermeture
                 if (self.element.isMultiple) {
-                    self.getOptions().one('click.option', function() {
+                    self.getOptions().one('click.option', function () {
                         close = false;
                     });
                 }
 
-                setTimeout(function() {
+                setTimeout(function () {
                     if (close) {
                         self.close.call(self);
                     }
                 }, 200);
             });
 
-            $(window).one('keydown.open', function(event) {
+            $(window).one('keydown.open', function (event) {
                 if (event.keyCode !== 9) {
                     event.preventDefault();
                 }
@@ -355,22 +358,24 @@
         /**
          * Fermeture des options
          */
-        close: function() {
+        close: function () {
             this.getWrapper().removeClass(this.settings.classes.states.open);
             this.getWrapperLabel().off('click.close blur.close');
             this.getOptions().off('click.option');
             $(window).off('keydown.open');
+
+            return this;
         },
 
         /**
          * Fermeture des autres selects
          */
-        closeSiblings: function() {
+        closeSiblings: function () {
             var self = this;
-            var siblings = self.element.context.find('.' + self.settings.classes.prefix + '-select').not(self.element.wrapper);
+            var siblings = self.element.context.find('.' + self.settings.classes.prefix + '--select').not(self.element.wrapper);
 
             if (siblings.length) {
-                siblings.each(function() {
+                siblings.each(function () {
                     $(this)
                         .removeClass(self.settings.classes.states.open)
                         .find('.' + self.settings.classes.select.label)
@@ -379,6 +384,8 @@
                             .off('click.option');
                 });
             }
+
+            return self;
         },
 
         /**
@@ -386,7 +393,7 @@
          *
          * @param object event Evenement click
          */
-        clickHandler: function(event) {
+        clickHandler: function (event) {
             var self = this;
 
             // Close handler
@@ -396,12 +403,8 @@
             self.getWrapper().addClass(self.settings.classes.states.open);
 
             // Ajout d'un événement sur les options
-            self.getOptions().on('click.option', function() {
-                if (self.element.isMultiple) {
-                    self.setOptions.call(self, $(this));
-                } else {
-                    self.setOption.call(self, $(this));
-                }
+            self.getOptions().on('click.option', function () {
+                self[(self.element.isMultiple) ? 'setOptions' : 'setOption'].call(self, $(this));
             });
 
             // Trigger click
@@ -425,7 +428,7 @@
          *
          * @param object event Evenement keyup
          */
-        keyupHandler: function(event) {
+        keyupHandler: function (event) {
             var self = this;
             var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
             var fastDirection = (event.keyCode === 35) ? 'last' : (event.keyCode === 36) ? 'first' : undefined;
@@ -444,7 +447,7 @@
             var option = null;
             var currentOptionIndex = null;
             var optionsLength = 0;
-            self.getOptions().each(function(i, selector) {
+            self.getOptions().each(function (i, selector) {
                 var option = $(selector);
                 self.keyup.options[i] = option;
 
@@ -468,14 +471,17 @@
                     clearTimeout(self.keyup.timeout);
                     self.keyup.search.push(letter);
 
-                    self.keyup.timeout = setTimeout(function() {
+                    self.keyup.timeout = setTimeout(function () {
                         self.setOption.call(self, self.getOptionOnkeyup.call(self));
                     }, 250);
                 }
             }
-            self.setOption.call(self, option, {
-                direction: direction
-            });
+
+            if (!self.element.isMultiple) {
+                self.setOption.call(self, option, {
+                    direction: direction
+                });
+            }
 
             // Trigger keyup
             self.getInput().triggerHandler('keyup');
@@ -486,18 +492,18 @@
          *
          * @return string
          */
-        getOptionOnkeyup: function() {
+        getOptionOnkeyup: function () {
             var searchString = this.keyup.search.join('', this.keyup.search);
             var out = null;
 
             var seachResults = [];
-            $.each(this.getOptions(), function(i, option) {
+            $.each(this.getOptions(), function (i, option) {
                 option = $(option);
                 seachResults.push(option.html().toLowerCase().indexOf(searchString));
             });
 
             var searchIndexResult = [];
-            $.each(seachResults, function(seachIndex, searchStringIndex) {
+            $.each(seachResults, function (seachIndex, searchStringIndex) {
                 if (searchStringIndex !== -1) {
                     searchIndexResult.push(seachIndex);
                 }
@@ -515,7 +521,7 @@
         /**
          * Sélectionne l'option définie
          */
-        setOption: function(option, settings) {
+        setOption: function (option, settings) {
             if (settings === undefined) {
                 settings = {};
             }
@@ -561,108 +567,177 @@
                     }
                 }
             }
+
+            return this;
         },
 
         /**
          * Sélectionne les options définies
          */
-        setOptions: function(option) {
+        setOptions: function (option) {
             var self = this;
             var optionsValues = [];
             var optionsNames = [];
 
-            // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
-            if (option.hasClass(self.settings.classes.states.selected)) {
-                self.element.multipleOptions = [];
-                option.removeClass(self.settings.classes.states.selected);
-                self.getOptions().filter('.' + self.settings.classes.states.selected).each(function() {
-                    self.element.multipleOptions.push($(this));
-                });
+            if (option !== null && option !== undefined) {
+                if (option.hasClass(self.settings.classes.states.disabled)) {
+                    return;
+                } else {
+                    // Si l'option "none" est cochée, on l'enlève
+                    if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass('is-first')) {
+                        self.getInput().empty();
+                        self.element.multipleOptions[0].removeClass(self.settings.classes.states.selected);
+                        self.element.multipleOptions = [];
+                    }
 
-                if (self.element.multipleOptions.length === 0) {
-                    setTimeout(function() {
-                        self.setOption.call(self, self.getOptions().filter('.' + self.settings.classes.states.first));
-                    }, 0);
+                    // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
+                    if (option.hasClass(self.settings.classes.states.selected)) {
+                        self.element.multipleOptions = [];
+                        option.removeClass(self.settings.classes.states.selected);
+                        self.getOptions('.' + self.settings.classes.states.selected).each(function () {
+                            self.element.multipleOptions.push($(this));
+                        });
+
+                        if (self.element.multipleOptions.length === 0) {
+                            setTimeout(function () {
+                                self.setOption.call(self, self.getOptions('.' + self.settings.classes.states.first));
+                            }, 0);
+                        }
+                    } else {
+                        self.element.multipleOptions.push(option);
+                    }
+
+                    // Reorder
+                    self.element.multipleOptions.sort(function (a, b) {
+                        var options = self.getOptions();
+                        a = options.index(a);
+                        b = options.index(b);
+
+                        if (a === b) {
+                            return 0;
+                        }
+                        return (a < b) ? -1 : 1;
+                    });
+
+                    // Reset
+                    self.getInput().empty();
+                    self.getOptions().removeClass(self.settings.classes.states.selected);
+
+                    // Add
+                    $.each(self.element.multipleOptions, function (i, option) {
+                        option = $(option);
+
+                        if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.states.disabled)) {
+                            var optionValue = option.attr('data-value');
+                            var optionName = option.html();
+                            optionsValues.push(optionValue);
+                            optionsNames.push(optionName);
+
+                            // <select>
+                            self.getInput().append($('<option>', {
+                                value: optionValue,
+                                html: optionName
+                            }).prop('selected', true));
+
+                            // Option
+                            option.addClass(self.settings.classes.states.selected);
+                        }
+                    });
+
+                    // Label
+                    self.getWrapperLabel().attr('data-value', optionsValues.join(',')).html(optionsNames.join(self.settings.multipleOptionsSeparator));
+
+                    // Trigger change
+                    self.getInput().triggerHandler('change');
+
+                    // User callback
+                    if (self.settings.onChange !== undefined) {
+                        self.settings.onChange.call({
+                            CustomFormSelect: this,
+                            wrapper: self.getWrapper(),
+                            input: self.getInput(),
+                            wrapperLabel: self.getWrapperLabel(),
+                            options: self.element.multipleOptions
+                        });
+                    }
                 }
-            } else {
-                self.element.multipleOptions.push(option);
             }
 
-            // Reset
-            self.getInput().empty();
-            self.getOptions().removeClass(self.settings.classes.states.selected);
+            return self;
+        },
 
-            // Add
-            $.each(self.element.multipleOptions, function(i, option) {
-                option = $(option);
+        /**
+         * Enlève la sélection des options définies
+         * 
+         * @param  string|array options Sélecteur ou liste des options
+         * @param  boolean      disable Désactiver l'option en même temps ?
+         */
+        removeOptions: function (options, disable) {
+            var self = this;
+            options = (typeof options === 'string') ? self.getOptions(options) : options;
+            disable = disable || false;
 
-                if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.states.disabled)) {
-                    var optionValue = option.attr('data-value');
-                    var optionName = option.html();
-                    optionsValues.push(optionValue);
-                    optionsNames.push(optionName);
+            if (options.length) {
+                $.each(options, function () {
+                    var option = $(this);
 
-                    // <select>
-                    self.getInput().append($('<option>', {
-                        value: optionValue,
-                        html: optionName
-                    }).prop('selected', true));
+                    self.setOptions(option);
 
-                    // Option
-                    option.addClass(self.settings.classes.states.selected);
-                }
-            });
-
-            // Label
-            self.getWrapperLabel().attr('data-value', optionsValues.join(',')).html(optionsNames.join(', '));
-
-            // Trigger change
-            self.getInput().triggerHandler('change');
-
-            // User callback
-            if (self.settings.onChange !== undefined) {
-                self.settings.onChange.call({
-                    CustomFormSelect: this,
-                    wrapper: self.getWrapper(),
-                    input: self.getInput(),
-                    wrapperLabel: self.getWrapperLabel(),
-                    options: self.element.multipleOptions
+                    if (disable) {
+                        self.disableOption(option);
+                    }
                 });
             }
+
+            return self;
+        },
+
+        /**
+         * Désactive une option
+         * 
+         * @param  jQuery object option
+         * @return bool
+         */
+        disableOption: function (option) {
+            option.addClass(this.settings.classes.states.disabled);
+
+            return this;
         },
 
         /**
          * Alias pour récupérer les éléments
          */
-        getContext: function() {
+        getContext: function () {
             return this.element.context;
         },
-        getInput: function() {
+        getInput: function () {
             return this.element.input;
         },
-        getWrapper: function(children) {
+        getWrapper: function (children) {
             if (children !== undefined) {
                 return children.closest('.' + this.settings.classes.prefix);
             } else {
                 return this.element.wrapper;
             }
         },
-        getWrapperInput: function() {
+        getWrapperInput: function () {
             return this.element.wrapperInput;
         },
-        getWrapperLabel: function() {
+        getWrapperLabel: function () {
             return this.element.wrapperLabel;
         },
-        getWrapperOptions: function() {
+        getWrapperOptions: function () {
             return this.element.wrapperOptions;
         },
-        getOptions: function() {
-            return this.getWrapperOptions().find('.' + this.settings.classes.select.option);
+        getOptions: function (filter) {
+            var options = this.getWrapperOptions().find('.' + this.settings.classes.select.option);
+
+            return (filter !== undefined) ? options.filter(filter) : options;
         },
-        getSourceOptions: function() {
+        getSourceOptions: function () {
             return this.element.source.options;
         },
-        getSourceOptgroups: function() {
+        getSourceOptgroups: function () {
             return this.element.source.optgroups;
         }
     };

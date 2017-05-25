@@ -1,7 +1,7 @@
-(function($) {
+(function ($) {
     'use strict';
 
-    $.CustomFormFile = function(CustomForm, options) {
+    $.CustomFormFile = function (CustomForm, options) {
         // Héritage
         this.CustomForm = CustomForm;
 
@@ -49,7 +49,7 @@
          *
          * @return bool
          */
-        prepareOptions: function() {
+        prepareOptions: function () {
             // Classes
             this.CustomForm.replacePrefixClass.call(this);
 
@@ -59,7 +59,7 @@
         /**
          * Initialisation
          */
-        load: function() {
+        load: function () {
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
@@ -86,9 +86,9 @@
         /**
          * Création des wrappers
          */
-        wrap: function() {
+        wrap: function () {
             this.element.wrapper = $('<span>', {
-                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '-' + this.getInputType()
+                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
             });
             this.element.wrapperInput = $('<span>', {
                 class: this.settings.classes.input
@@ -128,9 +128,9 @@
         },
 
         /**
-         * Initialise l'état des wrappers (coché, désactivé, etc)
+         * Initialise l'état des éléments
          */
-        initElementsState: function() {
+        initElementsState: function () {
             // Désactivé ?
             if (this.getInput().is(':disabled')) {
                 this.getWrapper().addClass(this.settings.classes.states.disabled);
@@ -139,21 +139,18 @@
 
             // Valeur par défaut
             if (this.getInput().val() !== '') {
-                this.setWrapperFileValue.call({
-                    CustomFormFile: this,
-                    input: this.getInput().get(0)
-                });
+                this.setWrapperFileValue(this.getInput().get(0));
             }
         },
 
         /**
          * Gestionnaire d'événements
          */
-        eventsHandler: function() {
+        eventsHandler: function () {
             var self = this;
 
             // Sélection du fichier
-            self.getWrapperLabel().on('click keyup', function(event) {
+            self.getWrapperLabel().on('click keyup', function (event) {
                 if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 32)) {
                     event.preventDefault();
 
@@ -181,17 +178,14 @@
             });
 
             // Une fois une valeur sélectionnée
-            self.getInput().on('change', function() {
+            self.getInput().on('change', function () {
                 var input = $(this);
 
                 // État
                 self.getWrapper().removeClass(self.settings.classes.states.open);
 
                 // Ajout de la valeur
-                self.setWrapperFileValue.call({
-                    CustomFormFile: self,
-                    input: this
-                });
+                self.setWrapperFileValue(this);
 
                 // User callback
                 if (self.settings.onChange !== undefined) {
@@ -215,16 +209,16 @@
         /**
          * Initialise un event "reset" sur le sélecteur contexte
          */
-        resetHandler: function() {
+        resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset', function() {
+            self.getContext().on('reset', function () {
                 var form = $(this);
 
                 self.getWrapper().removeClass(self.settings.classes.states.disabled);
                 self.getWrapperFile().text(self.settings.emptyText);
 
-                setTimeout(function() {
+                setTimeout(function () {
                     self.initElementsState();
 
                     // User callback
@@ -240,44 +234,46 @@
 
         /**
          * Ajout la valeur de l'input au wrapperFile
+         *
+         * @param object input Input type file
          */
-        setWrapperFileValue: function() {
+        setWrapperFileValue: function (input) {
             var filename = null;
 
             // Nom du fichier
-            if (this.input.files !== undefined && this.input.files.length > 1) {
-                filename = this.CustomFormFile.settings.multipleText.replace(/{count}/, this.input.files.length);
+            if (input.files !== undefined && input.files.length > 1) {
+                filename = this.settings.multipleText.replace(/{count}/, input.files.length);
             } else {
-                filename = this.input.value.split('\\').pop();
+                filename = input.value.split('\\').pop();
             }
 
             // Ajout de la valeur
-            this.CustomFormFile.getWrapperFile().text(filename);
+            this.getWrapperFile().text(filename);
         },
 
         /**
          * Alias pour récupérer les éléments
          */
-        getContext: function() {
+        getContext: function () {
             return this.element.context;
         },
-        getInput: function() {
+        getInput: function () {
             return this.element.input;
         },
-        getInputType: function() {
+        getInputType: function () {
             return this.element.type;
         },
-        getWrapper: function(children) {
+        getWrapper: function (children) {
             if (children !== undefined) {
                 return children.closest('.' + this.settings.classes.prefix);
             } else {
                 return this.element.wrapper;
             }
         },
-        getWrapperLabel: function() {
+        getWrapperLabel: function () {
             return this.element.wrapperLabel;
         },
-        getWrapperFile: function() {
+        getWrapperFile: function () {
             return this.element.wrapperFile;
         }
     };

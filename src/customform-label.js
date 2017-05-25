@@ -3,16 +3,18 @@
  *
  * Ajoute un état sur les labels quand on focus les inputs
  */
-(function($) {
+(function ($) {
     'use strict';
 
-    $.CustomFormLabel = function(context, options, support) {
-        this.context = context;
-        this.elements = {};
+    $.CustomFormLabel = function (context, options, support) {
+        // Éléments
+        this.elements = {
+            context: context
+        };
 
         // Support
         $.extend((this.support = []), $.CustomFormLabel.support, support);
-        this.elements.inputs = $(this.support.join(','), this.context);
+        this.elements.inputs = $(this.support.join(','), this.elements.context);
 
         // Config
         $.extend((this.settings = {}), $.CustomFormLabel.defaults, options);
@@ -40,25 +42,25 @@
     $.CustomFormLabel.defaults = {
         wrapper: '.form-item',
         classes: {
-            label: 'customform-label',
-            selected: 'is-selected',
-            focused : 'is-focused'
+            label: 'customform--label',
+            focused: 'is-focused',
+            filled : 'is-filled'
         },
         onLoad: undefined,
         afterEventsHandler: undefined,
         onComplete: undefined,
-        onClick: undefined,
+        onFocus: undefined,
         onBlur: undefined
     };
 
     $.CustomFormLabel.prototype = {
-        load: function() {
+        load: function () {
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
                     CustomFormLabel: this,
-                    context: this.context,
-                    inputs: this.elements.inputs
+                    context: this.getContext(),
+                    inputs: this.getInputs()
                 });
             }
 
@@ -70,8 +72,8 @@
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
                     CustomFormLabel: this,
-                    context: this.context,
-                    inputs: this.elements.inputs
+                    context: this.getContext(),
+                    inputs: this.getInputs()
                 });
             }
         },
@@ -79,17 +81,17 @@
         /**
          * Initialise l'état des éléments
          */
-        initElementsState: function() {
+        initElementsState: function () {
             var self = this;
 
-            self.elements.inputs.each(function() {
+            self.getInputs().each(function () {
                 var input = $(this);
                 var wrapper = self.getWrapper(input);
 
                 wrapper.addClass(self.settings.classes.label);
 
                 if (input.val().length > 0) {
-                    wrapper.addClass(self.settings.classes.focused);
+                    wrapper.addClass(self.settings.classes.filled);
                 }
             });
         },
@@ -97,19 +99,19 @@
         /**
          * Gestionnaire d'événements
          */
-        eventsHandler: function() {
+        eventsHandler: function () {
             var self = this;
 
-            self.elements.inputs.on({
-                'click keyup': function(event) {
+            self.getInputs().on({
+                'click keyup': function (event) {
                     var input = $(this);
                     var wrapper = self.getWrapper(input);
 
-                    wrapper.addClass(self.settings.classes.focused + ' ' + self.settings.classes.selected);
+                    wrapper.addClass(self.settings.classes.filled + ' ' + self.settings.classes.focused);
 
                     // User callback
-                    if (self.settings.onClick !== undefined) {
-                        self.settings.onClick.call({
+                    if (self.settings.onFocus !== undefined) {
+                        self.settings.onFocus.call({
                             CustomFormLabel: self,
                             event: event,
                             wrapper: wrapper,
@@ -117,14 +119,14 @@
                         });
                     }
                 },
-                blur: function(event) {
+                blur: function (event) {
                     var input = $(this);
                     var wrapper = self.getWrapper(input);
 
                     if (input.val().length > 0) {
-                        wrapper.removeClass(self.settings.classes.selected);
+                        wrapper.removeClass(self.settings.classes.focused);
                     } else {
-                        wrapper.removeClass(self.settings.classes.focused + ' ' + self.settings.classes.selected);
+                        wrapper.removeClass(self.settings.classes.filled + ' ' + self.settings.classes.focused);
                     }
 
                     // User callback
@@ -149,17 +151,20 @@
         },
 
         /**
-         * Récupère le wrapper parent depuis un élément enfant
-         *
-         * @param  jQuery object input
-         * @return l'objet jQuery wrapper global
+         * Alias pour récupérer les éléments
          */
-        getWrapper: function(input) {
+        getContext: function() {
+            return this.elements.context;
+        },
+        getWrapper: function (input) {
             return input.closest(this.settings.wrapper);
+        },
+        getInputs: function () {
+            return this.elements.inputs;
         }
     };
 
-    $.fn.customFormLabel = function(options, support) {
+    $.fn.customFormLabel = function (options, support) {
         return new $.CustomFormLabel($(this), options, support);
     };
 })(jQuery);

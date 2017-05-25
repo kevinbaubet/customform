@@ -26,12 +26,13 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 
 | Méthode             | Arguments                                                                                                       | Description                                                        |
 |---------------------|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| setSupport          | **support** *string* Nom du support, **[options]** *object* Options utilisateur à passer au support             | Définition d'un support                                            |
-| setSupports         | -                                                                                                               | Définition de tous les supports présent dans $.CustomForm.supports |
 | setOptions          | **support** *string* Nom du support, **options** *object* Options utilisateur à passer au support               | Enregistre les options pour un support                             |
+| setSupports         | -                                                                                                               | Définition de tous les supports présent dans $.CustomForm.supports |
+| setSupport          | **support** *string* Nom du support, **[options]** *object* Options utilisateur à passer au support             | Définition d'un support                                            |
 | getSupportClassName | **support** *string* Nom du support                                                                             | Récupère le nom de la classe JS correspondant à l'argument         |
 | getInstance         | **instances** *object* Retour de setSupport() ou liste des instances, **input** *jQuery object* Élément input   | Récupère l'instance via l'élément input                            |
 | getInstanceName     | **input** *jQuery object* Élément input                                                                         | Récupère le nom formaté d'une instance via l'élément input         |
+
 
 ## Supports
 
@@ -55,16 +56,20 @@ Il est possible ensuite de manipuler l'instance en fonction de l'attribut **name
 
     var instance = CustomForm.getInstance(CustomFormSelects, $('#input'));
 
-### Checkboxs & Radios
+
+---
+
+
+## Checkboxs & Radios
 
 Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces 2 supports, c'est la classe JS $.CustomFormCheck qui est initialisée.
 
-#### Initialisation
+### Initialisation
 
     CustomForm.setSupport('checkbox', [options]);
     CustomForm.setSupport('radio', [options]);
 
-#### Options
+### Options
 
 | Option                                                  | Type     | Valeur par défaut | Description                                     |
 |---------------------------------------------------------|----------|-------------------|-------------------------------------------------|
@@ -78,15 +83,31 @@ Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces
 | onClick                                                 | function | undefined         | Callback au click sur l'input                   |
 | onReset                                                 | function | undefined         | Callback au reset du formulaire                 |
 
-### Sélects
+### Méthodes
+
+| Méthode           | Arguments                                                | Description                                                                 |
+|-------------------|----------------------------------------------------------|-----------------------------------------------------------------------------|
+| initElementsState | -                                                        | Initialise l'état des éléments (coché, désactivé, etc)                      |
+| getContext        | -                                                        | Récupère l'élément de contexte                                              |
+| getInput          | -                                                        | Récupère l'élément input                                                    |
+| getInputType      | -                                                        | Récupère le type de l'élément input (radio, checbox)                        |
+| getWrapper        | **[children]** *jQuery object* Élément enfant du wrapper | Récupère l'élément wrapper créé par CustomForm                              |
+| getInputsRadio    | -                                                        | Récupère tous les éléments radios du contexte ayant le même attribut "name" |
+
+
+
+---
+
+
+## Sélects
 
 Ce support permet de personnaliser les selects, multiple ou non.
 
-#### Initialisation
+### Initialisation
 
     CustomForm.setSupport('select', [options]);
 
-#### Options
+### Options
 
 | Option                                                           | Type     | Valeur par défaut                 | Description                                                      |
 |------------------------------------------------------------------|----------|-----------------------------------|------------------------------------------------------------------|
@@ -102,6 +123,7 @@ Ce support permet de personnaliser les selects, multiple ou non.
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selected         | string   | 'is-selected'                     | Classe quand une option est sélectionnée                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple         | string   | 'is-multiple'                     | Classe si le select est de type multiple                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open             | string   | 'is-open'                         | Classe quand la liste des options est ouverte                    |
+| multipleOptionsSeparator                                         | string   | ', '                              | Séparateur entre les options affichées dans le label             |
 | onLoad                                                           | function | undefined                         | Callback au début du chargement                                  |
 | beforeWrap                                                       | function | undefined                         | Callback avant l'ajout des wrappers dans le DOM                  |
 | afterEventsHandler                                               | function | undefined                         | Callback après la déclaration des événements                     |
@@ -110,32 +132,77 @@ Ce support permet de personnaliser les selects, multiple ou non.
 | onChange                                                         | function | undefined                         | Callback au changement d'option                                  |
 | onReset                                                          | function | undefined                         | Callback au reset du formulaire                                  |
 
-### File
+### Méthodes
+
+| Méthode            | Arguments                                                                                                            | Description                                                                      |
+|--------------------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| initElementsState  | -                                                                                                                    | Défini l'état des éléments à l'initialisation                                    |
+| getContext         | -                                                                                                                    | Récupère l'élément de contexte                                                   |
+| getInput           | -                                                                                                                    | Récupère l'élément input                                                         |
+| getWrapper         | **[children]** *jQuery object* Élément enfant du wrapper                                                             | Récupère l'élément wrapper créé par CustomForm                                   |
+| getWrapperInput    | -                                                                                                                    | Récupère l'élément wrapper de l'input select                                     |
+| getWrapperLabel    | -                                                                                                                    | Récupère l'élément wrapper du label, correspond à l'option actuellement affichée |
+| getWrapperOptions  | -                                                                                                                    | Récupère l'élément wrapper de toutes les options                                 |
+| getOptions         | **[filter]** *string* Sélecteur pour filtrer le résultat                                                             | Récupère toutes les options créées par CustomForm                                |
+| getSourceOptions   | -                                                                                                                    | Récupère tous les options du select d'origine                                    |
+| getSourceOptgroups | -                                                                                                                    | Récupère tous les groupes d'options du select d'origine                          |
+| setOption          | **option** *jQuery object* Option à sélectionner                                                                     | Sélectionne une option unique                                                    |
+| setOptions         | **option** *jQuery object* Option à sélectionner                                                                     | Sélectionne une option multiple                                                  |
+| removeOptions      | **options** *string|array* Sélecteur ou liste des options, **disable** *boolean* Désactiver l'option en même temps ? | Enlève la sélection des options définies                                         |
+| disableOption      | **option** *jQuery object* Option à désactiver                                                                       | Désactive une option                                                             |
+| close              | -                                                                                                                    | Ferme l'affichage des options                                                    |
+| closeSiblings      | -                                                                                                                    | Ferme l'affichage des options des autres sélect du contexte                      |
+
+
+---
+
+
+## File
 
 Ce support permet de personnaliser les input de type file.
 
-#### Initialisation
+### Initialisation
 
     CustomForm.setSupport('file', [options]);
 
-#### Options
+### Options
 
-| Option                                               | Type     | Valeur par défaut | Description                                               |
-|------------------------------------------------------|----------|-------------------|-----------------------------------------------------------|
-| classes                                              | object   | Voir ci-dessous   | Objet pour les options ci-dessous                         |
-| &nbsp;&nbsp;&nbsp;&nbsp;label                        | string   | '{prefix}-label'  | Classe pour le bouton "Parcourir..."                      |
-| &nbsp;&nbsp;&nbsp;&nbsp;file                         | string   | '{prefix}-file'   | Classe pour le nom du fichier sélectionné                 |
-| &nbsp;&nbsp;&nbsp;&nbsp;states                       | object   | Voir ci-dessous   | Objet pour l'option ci-dessous                            |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open | string   | 'is-open'         | Classe quand la fenêtre de choix des fichiers est ouverte |
-| onLoad                                               | function | undefined         | Callback au début du chargement                           |
-| beforeWrap                                           | function | undefined         | Callback avant l'ajout des wrappers dans le DOM           |
-| afterEventsHandler                                   | function | undefined         | Callback après la déclaration des événements              |
-| onComplete                                           | function | undefined         | Callback à la fin du chargement                           |
-| onClick                                              | function | undefined         | Callback au click sur le label pour choisir un fichier    |
-| onChange                                             | function | undefined         | Callback au choix du fichier                              |
-| onReset                                              | function | undefined         | Callback au reset du formulaire                           |
+| Option                                               | Type     | Valeur par défaut               | Description                                               |
+|------------------------------------------------------|----------|---------------------------------|-----------------------------------------------------------|
+| labelText                                            | string   | 'Parcourir...'                  | Texte du bouton "parcourir"                               |
+| emptyText                                            | string   | 'Aucun fichier sélectionné.'    | Texte quand aucun fichier n'est sélectionné               |
+| multipleText                                         | string   | '{count} fichiers sélectionnés' | Texte quand plusieurs fichiers sont sélectionnés          |
+| classes                                              | object   | Voir ci-dessous                 | Objet pour les options ci-dessous                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;label                        | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;file                         | string   | '{prefix}-file'                 | Classe pour le nom du fichier sélectionné                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;states                       | object   | Voir ci-dessous                 | Objet pour l'option ci-dessous                            |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open | string   | 'is-open'                       | Classe quand la fenêtre de choix des fichiers est ouverte |
+| onLoad                                               | function | undefined                       | Callback au début du chargement                           |
+| beforeWrap                                           | function | undefined                       | Callback avant l'ajout des wrappers dans le DOM           |
+| afterEventsHandler                                   | function | undefined                       | Callback après la déclaration des événements              |
+| onComplete                                           | function | undefined                       | Callback à la fin du chargement                           |
+| onClick                                              | function | undefined                       | Callback au click sur le label pour choisir un fichier    |
+| onChange                                             | function | undefined                       | Callback au choix du fichier                              |
+| onReset                                              | function | undefined                       | Callback au reset du formulaire                           |
 
-### Autre ?
+### Méthodes
+
+| Méthode             | Arguments                                                | Description                                              |
+|---------------------|----------------------------------------------------------|----------------------------------------------------------|
+| initElementsState   | -                                                        | Initialise l'état des éléments                           |
+| getContext          | -                                                        | Récupère l'élément de contexte                           |
+| getInput            | -                                                        | Récupère l'élément input                                 |
+| getInputType        | -                                                        | Récupère le type de l'élément input                      |
+| getWrapper          | **[children]** *jQuery object* Élément enfant du wrapper | Récupère l'élément wrapper créé par CustomForm           |
+| getWrapperLabel     | -                                                        | Récupère l'élément wrapper du bouton                     |
+| getWrapperFile      | -                                                        | Récupère l'élément wrapper du nom du fichier sélectionné |
+| setWrapperFileValue | **input** *object* Input type file                       | Met à jour la valeur du fichier sélectionné              |
+
+
+---
+
+
+## Autre support ?
 
 Il est possible d'ajouter autant de support que vous voulez.
 
@@ -158,3 +225,61 @@ Puis créer la classe JS associée :
 
         }
     };
+
+
+---
+
+
+## Labels
+
+CustomFormLabel n'est pas un support mais une classe à part entière. Ce script permet d'ajouter un état au focus sur les éléments d'un formulaire.
+
+### Initialisation
+
+    $('context').customFormLabel([options], [support]);
+
+
+### Options
+
+| Option                                               | Type     | Valeur par défaut  | Description                                               |
+|------------------------------------------------------|----------|------------------- |-----------------------------------------------------------|
+| wrapper                                              | string   | '.form-item'       | Objet pour les options ci-dessous                         |
+| classes                                              | object   | Voir ci-dessous    | Objet pour les options ci-dessous                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;label                        | string   | 'customform-label' | Classe appliquée sur le wrapper                           |
+| &nbsp;&nbsp;&nbsp;&nbsp;focused                      | string   | 'is-focused'       | Classe d'état quand l'élément est actif                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;filled                       | object   | 'is-filled'        | Classe d'état quand l'élément est rempli                  |
+| onLoad                                               | function | undefined          | Callback au début du chargement                           |
+| afterEventsHandler                                   | function | undefined          | Callback après la déclaration des événements              |
+| onComplete                                           | function | undefined          | Callback à la fin du chargement                           |
+| onFocus                                              | function | undefined          | Callback au focus d'un élément                            |
+| onBlur                                               | function | undefined          | Callback au blur d'un élément                             |
+
+### Supports
+
+Il est possible d'ajouter des supports à la liste par défaut :
+
+    $.CustomFormLabel.support = [
+        'input[type="text"]',
+        'input[type="password"]',
+        'input[type="number"]',
+        'input[type="date"]',
+        'input[type="month"]',
+        'input[type="week"]',
+        'input[type="time"]',
+        'input[type="datetime"]',
+        'input[type="datetime-local"]',
+        'input[type="email"]',
+        'input[type="search"]',
+        'input[type="tel"]',
+        'input[type="url"]',
+        'textarea'
+    ];
+
+### Méthodes
+
+| Méthode           | Arguments                                                | Description                                                       |
+|-------------------|----------------------------------------------------------|-------------------------------------------------------------------|
+| initElementsState | -                                                        | Initialise l'état des éléments                                    |
+| getContext        | -                                                        | Récupère l'élément de contexte                                    |
+| getWrapper        | **input** *jQuery object* Élément input                  | Récupère l'élément wrapper                                        |
+| getInputs         | -                                                        | Récupère tous les éléments présent dans $.CustomFormLabel.support |

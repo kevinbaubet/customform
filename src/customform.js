@@ -1,7 +1,7 @@
 /**
  * CustomForm
  *
- * @version 4.3 (17/05/2017)
+ * @version 4.4 (25/05/2017)
  */
 (function ($) {
     'use strict';
@@ -169,8 +169,10 @@
             instances = instances.instances || instances;
             var name = this.getInstanceName(input);
 
-            if (instances !== undefined && instances[name] !== undefined) {
+            if (name !== false && instances !== undefined && instances[name] !== undefined) {
                 return instances[name];
+            } else {
+                this.setLog('error', 'input name attribut not found.')
             }
 
             return false;
@@ -180,13 +182,19 @@
          * Récupère le nom formaté d'une instance via l'élément input
          * 
          * @param  jQuery object input Élément input
-         * @return string
+         * @return string si attr name trouvé sinon false
          */
         getInstanceName: function (input) {
-            return input.attr('name')
-                .replace('[', '_')
-                .replace(']', '')
-                .replace('[]', '');
+            var name = input.attr('name');
+
+            if (name !== undefined) {
+                return name
+                    .replace('[', '_')
+                    .replace(']', '')
+                    .replace('[]', '');
+            }
+
+            return false;
         },
 
         /**

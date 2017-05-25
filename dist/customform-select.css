@@ -1,15 +1,15 @@
 /* ==========================================================================
    CustomFormSelect
    ========================================================================== */
-.customform-select {
+.customform--select {
   position: relative;
   display: inline-block;
   width: 250px;
 }
-.customform-select.is-disabled .customform-selectLabel:hover {
+.customform--select.is-disabled .customform-selectLabel:hover {
   border-color: #9d9d9d;
 }
-.customform-select.is-disabled .customform-selectLabel:after {
+.customform--select.is-disabled .customform-selectLabel:after {
   display: none;
 }
 .customform-selectLabel {
@@ -88,7 +88,7 @@
 }
 /* Select multiple
    ========================================================================== */
-.customform-select.is-multiple .customform-selectOption:before {
+.customform--select.is-multiple .customform-selectOption:before {
   content: "";
   position: relative;
   top: 2px;
@@ -98,18 +98,18 @@
   height: 10px;
   border: 1px solid #9d9d9d;
 }
-.customform-select.is-multiple .customform-selectOption.is-selected {
+.customform--select.is-multiple .customform-selectOption.is-selected {
   color: #000;
   background: none;
 }
-.customform-select.is-multiple .customform-selectOption.is-selected:before {
+.customform--select.is-multiple .customform-selectOption.is-selected:before {
   background: #34495e;
   border-color: #34495e;
 }
-.customform-select.is-multiple .customform-selectOption.is-first {
+.customform--select.is-multiple .customform-selectOption.is-first {
   display: none;
 }
-.customform-select.is-multiple .customform-selectLabel {
+.customform--select.is-multiple .customform-selectLabel {
   padding-right: 20px;
   overflow: hidden;
   white-space: nowrap;

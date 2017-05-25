@@ -1,7 +1,7 @@
-(function($) {
+(function ($) {
     'use strict';
 
-    $.CustomFormCheck = function(CustomForm, options) {
+    $.CustomFormCheck = function (CustomForm, options) {
         // Héritage
         this.CustomForm = CustomForm;
 
@@ -38,7 +38,7 @@
         /**
          * Initialisation
          */
-        load: function() {
+        load: function () {
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
@@ -65,9 +65,9 @@
         /**
          * Création des wrappers
          */
-        wrap: function() {
+        wrap: function () {
             this.element.wrapper = $('<span>', {
-                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '-' + this.getInputType()
+                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
             });
             this.element.wrapperInput = $('<span>', {
                 class: this.settings.classes.input,
@@ -93,9 +93,9 @@
         },
 
         /**
-         * Initialise l'état des wrappers (coché, désactivé, etc)
+         * Initialise l'état des éléments (coché, désactivé, etc)
          */
-        initElementsState: function() {
+        initElementsState: function () {
             if (this.getInput().prop('checked')) {
                 this.getWrapper().addClass(this.settings.classes.states.checked);
             }
@@ -108,10 +108,10 @@
         /**
          * Gestionnaire d'événements
          */
-        eventsHandler: function() {
+        eventsHandler: function () {
             var self = this;
 
-            self.getWrapper().on('click keyup', function(event) {
+            self.getWrapper().on('click keyup', function (event) {
                 if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 32)) {
                     event.preventDefault();
                     var isRadio = (self.getInputType() === 'radio');
@@ -123,7 +123,7 @@
                     if (isRadio) {
                         self.getInputsRadio()
                             .prop('checked', false)
-                            .each(function() {
+                            .each(function () {
                                 self.getWrapper($(this)).removeClass(self.settings.classes.states.checked);
                             });
                     }
@@ -158,15 +158,15 @@
         /**
          * Initialise un event "reset" sur le sélecteur contexte
          */
-        resetHandler: function() {
+        resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset', function() {
+            self.getContext().on('reset', function () {
                 var form = $(this);
 
                 self.getWrapper().removeClass(self.settings.classes.states.checked + ' ' + self.settings.classes.states.disabled);
 
-                setTimeout(function() {
+                setTimeout(function () {
                     self.initElementsState();
 
                     // User callback
@@ -183,23 +183,23 @@
         /**
          * Alias pour récupérer les éléments
          */
-        getContext: function() {
+        getContext: function () {
             return this.element.context;
         },
-        getInput: function() {
+        getInput: function () {
             return this.element.input;
         },
-        getInputType: function() {
+        getInputType: function () {
             return this.element.type;
         },
-        getWrapper: function(children) {
+        getWrapper: function (children) {
             if (children !== undefined) {
                 return children.closest('.' + this.settings.classes.prefix);
             } else {
                 return this.element.wrapper;
             }
         },
-        getInputsRadio: function() {
+        getInputsRadio: function () {
             return this.getContext().find(this.element.selector).filter('[name="' + this.getInput().attr('name') + '"]');
         }
     };
