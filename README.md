@@ -92,6 +92,9 @@ Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces
 | getInputType      | -                                                        | Récupère le type de l'élément input (radio, checkbox)                       |
 | getWrapper        | **[children]** *jQuery object* Élément enfant du wrapper | Récupère l'élément wrapper créé par CustomForm                              |
 | getInputsRadio    | -                                                        | Récupère tous les éléments radios du contexte ayant le même attribut "name" |
+| setOption         | -                                                        | Sélectionne une option                                                      |
+| removeOption      | -                                                        | Enlève la sélection de l'option                                             |
+| disableOption     | -                                                        | Désactive une option                                                        |
 
 
 

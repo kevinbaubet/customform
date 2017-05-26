@@ -98,9 +98,10 @@
                 this.getWrapper().addClass(this.settings.classes.checked);
             }
             if (this.getInput().prop('disabled')) {
-                this.getWrapper().addClass(this.settings.classes.disabled);
-                this.getInput().removeAttr('tabindex');
+                this.disableOption();
             }
+
+            return this;
         },
 
         /**
@@ -185,6 +186,8 @@
                     checked: self.getInput().prop('checked')
                 });
             }
+
+            return self;
         },
 
         /**
@@ -200,14 +203,20 @@
                     this.disableOption();
                 }
             }
+
+            return this;
         },
 
         /**
          * Désactive une option
          */
         disableOption: function () {
-            this.getInput().prop('disabled', true);
+            this.getInput()
+                .prop('disabled', true)
+                .removeAttr('tabindex');
             this.getWrapper().addClass(this.settings.classes.disabled);
+
+            return this;
         },
 
         /**
