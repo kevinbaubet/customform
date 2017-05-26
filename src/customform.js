@@ -1,7 +1,7 @@
 /**
  * CustomForm
  *
- * @version 4.4 (25/05/2017)
+ * @version 4.4.1 (26/05/2017)
  */
 (function ($) {
     'use strict';
@@ -42,9 +42,7 @@
         classes: {
             prefix: 'customform',
             input : '{prefix}-input',
-            states: {
-                disabled: 'is-disabled'
-            }
+            disabled: 'is-disabled'
         },
         tabindexStart: 0,
         onSupportLoad: undefined,
@@ -189,9 +187,9 @@
 
             if (name !== undefined) {
                 return name
+                    .replace('[]', '')
                     .replace('[', '_')
-                    .replace(']', '')
-                    .replace('[]', '');
+                    .replace(']', '');
             }
 
             return false;

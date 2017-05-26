@@ -44,19 +44,15 @@
 
     $.CustomFormSelect.defaults = {
         classes: {
-            select: {
-                label: '{prefix}-selectLabel',
-                options: '{prefix}-selectOptions',
-                option: '{prefix}-selectOption',
-                optionGroup: '{prefix}-selectOptionGroup',
-                optionGroupLabel: '{prefix}-selectOptionGroupLabel'
-            },
-            states: {
-                first: 'is-first',
-                selected: 'is-selected',
-                multiple: 'is-multiple',
-                open: 'is-open'
-            }
+            label: '{prefix}-selectLabel',
+            options: '{prefix}-selectOptions',
+            option: '{prefix}-selectOption',
+            optionGroup: '{prefix}-selectOptionGroup',
+            optionGroupLabel: '{prefix}-selectOptionGroupLabel',
+            first: 'is-first',
+            selected: 'is-selected',
+            multiple: 'is-multiple',
+            open: 'is-open'
         },
         multipleOptionsSeparator: ', ',
         onLoad: undefined,
@@ -75,12 +71,8 @@
          * @return bool
          */
         prepareOptions: function () {
-            var self = this;
-
             // Classes
-            $.each(self.settings.classes.select, function (key, value) {
-                self.settings.classes.select[key] = value.replace(/{prefix}/, self.settings.classes.prefix);
-            });
+            this.CustomForm.replacePrefixClass.call(this);
 
             return true;
         },
@@ -148,12 +140,12 @@
 
             // Wrappers
             self.getWrapperInput().append($('<span>', {
-                class: self.settings.classes.select.label
+                class: self.settings.classes.label
             }));
             self.element.wrapperLabel = self.getInput().next();
 
             self.getWrapperInput().append($('<span>', {
-                class: self.settings.classes.select.options
+                class: self.settings.classes.options
             }));
             self.element.wrapperOptions = self.getWrapperLabel().next();
 
@@ -163,7 +155,7 @@
 
             // Multiple
             if (self.element.isMultiple) {
-                self.getWrapper().addClass(self.settings.classes.states.multiple);
+                self.getWrapper().addClass(self.settings.classes.multiple);
             }
 
             // Options
@@ -173,7 +165,7 @@
                     var optionClasses = option.attr('class');
 
                     self.getWrapperOptions().append($('<span>', {
-                        class: self.settings.classes.select.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.states.disabled : ''),
+                        class: self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
                         'data-value': option.val(),
                         html: option.html()
                     }));
@@ -185,10 +177,10 @@
                 $.each(self.getSourceOptgroups(), function (indexOptgroup, optgroup) {
                     optgroup = $(optgroup);
                     var selectOptionGroup = $('<span>', {
-                        class: self.settings.classes.select.optionGroup
+                        class: self.settings.classes.optionGroup
                     });
                     $('<span>', {
-                        class: self.settings.classes.select.optionGroupLabel,
+                        class: self.settings.classes.optionGroupLabel,
                         html: optgroup.attr('label')
                     }).appendTo(selectOptionGroup);
 
@@ -197,7 +189,7 @@
                         var optionClasses = option.attr('class');
 
                         $('<span>', {
-                            class: self.settings.classes.select.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.states.disabled : ''),
+                            class: self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
                             'data-value': option.val(),
                             html: option.html()
                         }).appendTo(selectOptionGroup);
@@ -208,7 +200,7 @@
             }
 
             // First option
-            self.getOptions().first().addClass(self.settings.classes.states.first);
+            self.getOptions().first().addClass(self.settings.classes.first);
         },
 
         /**
@@ -219,7 +211,7 @@
             var defaultValue = self.getInput().attr('data-default-value');
 
             if (self.getInput().is(':disabled')) {
-                self.getWrapper().addClass(self.settings.classes.states.disabled);
+                self.getWrapper().addClass(self.settings.classes.disabled);
                 self.getInput().removeAttr('tabindex');
                 self.getWrapperLabel().removeAttr('tabindex');
             }
@@ -300,7 +292,7 @@
             self.getContext().on('reset', function () {
                 var form = $(this);
 
-                self.getWrapper().removeClass(self.settings.classes.states.disabled);
+                self.getWrapper().removeClass(self.settings.classes.disabled);
 
                 setTimeout(function () {
                     self.initElementsState();
@@ -359,7 +351,7 @@
          * Fermeture des options
          */
         close: function () {
-            this.getWrapper().removeClass(this.settings.classes.states.open);
+            this.getWrapper().removeClass(this.settings.classes.open);
             this.getWrapperLabel().off('click.close blur.close');
             this.getOptions().off('click.option');
             $(window).off('keydown.open');
@@ -377,10 +369,10 @@
             if (siblings.length) {
                 siblings.each(function () {
                     $(this)
-                        .removeClass(self.settings.classes.states.open)
-                        .find('.' + self.settings.classes.select.label)
+                        .removeClass(self.settings.classes.open)
+                        .find('.' + self.settings.classes.label)
                             .off('click.close blur.close').end()
-                        .find('.' + self.settings.classes.select.option)
+                        .find('.' + self.settings.classes.option)
                             .off('click.option');
                 });
             }
@@ -400,7 +392,7 @@
             self.preventHandler.call(self);
 
             // Ouverture des options
-            self.getWrapper().addClass(self.settings.classes.states.open);
+            self.getWrapper().addClass(self.settings.classes.open);
 
             // Ajout d'un événement sur les options
             self.getOptions().on('click.option', function () {
@@ -451,7 +443,7 @@
                 var option = $(selector);
                 self.keyup.options[i] = option;
 
-                if (option.hasClass(self.settings.classes.states.selected)) {
+                if (option.hasClass(self.settings.classes.selected)) {
                     currentOptionIndex = i;
                 }
 
@@ -522,12 +514,10 @@
          * Sélectionne l'option définie
          */
         setOption: function (option, settings) {
-            if (settings === undefined) {
-                settings = {};
-            }
+            settings = settings || {};
 
-            if (option !== null && option !== undefined) {
-                if (option.hasClass(this.settings.classes.states.disabled) && settings.direction !== undefined) {
+            if (option !== null && option !== undefined && option.attr('data-value') !== undefined) {
+                if (option.hasClass(this.settings.classes.disabled) && settings.direction !== undefined) {
                     option = option[(settings.direction === 'up') ? 'prev' : 'next']();
                     this.setOption.call(this, option, {
                         direction: settings.direction
@@ -535,7 +525,7 @@
                     return;
                 }
 
-                if (option.length && !option.hasClass(this.settings.classes.states.disabled)) {
+                if (option.length && !option.hasClass(this.settings.classes.disabled)) {
                     var optionValue = option.attr('data-value');
                     var optionName  = option.html();
 
@@ -549,8 +539,8 @@
                     this.getWrapperLabel().attr('data-value', optionValue).html(optionName);
 
                     // Option
-                    this.getOptions().removeClass(this.settings.classes.states.selected);
-                    option.addClass(this.settings.classes.states.selected);
+                    this.getOptions().removeClass(this.settings.classes.selected);
+                    option.addClass(this.settings.classes.selected);
 
                     // Trigger change
                     this.getInput().triggerHandler('change');
@@ -579,28 +569,28 @@
             var optionsValues = [];
             var optionsNames = [];
 
-            if (option !== null && option !== undefined) {
-                if (option.hasClass(self.settings.classes.states.disabled)) {
+            if (option !== null && option !== undefined && option.attr('data-value') !== undefined) {
+                if (option.hasClass(self.settings.classes.disabled)) {
                     return;
                 } else {
                     // Si l'option "none" est cochée, on l'enlève
                     if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass('is-first')) {
                         self.getInput().empty();
-                        self.element.multipleOptions[0].removeClass(self.settings.classes.states.selected);
+                        self.element.multipleOptions[0].removeClass(self.settings.classes.selected);
                         self.element.multipleOptions = [];
                     }
 
                     // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
-                    if (option.hasClass(self.settings.classes.states.selected)) {
+                    if (option.hasClass(self.settings.classes.selected)) {
                         self.element.multipleOptions = [];
-                        option.removeClass(self.settings.classes.states.selected);
-                        self.getOptions('.' + self.settings.classes.states.selected).each(function () {
+                        option.removeClass(self.settings.classes.selected);
+                        self.getOptions('.' + self.settings.classes.selected).each(function () {
                             self.element.multipleOptions.push($(this));
                         });
 
                         if (self.element.multipleOptions.length === 0) {
                             setTimeout(function () {
-                                self.setOption.call(self, self.getOptions('.' + self.settings.classes.states.first));
+                                self.setOption.call(self, self.getOptions('.' + self.settings.classes.first));
                             }, 0);
                         }
                     } else {
@@ -621,13 +611,13 @@
 
                     // Reset
                     self.getInput().empty();
-                    self.getOptions().removeClass(self.settings.classes.states.selected);
+                    self.getOptions().removeClass(self.settings.classes.selected);
 
                     // Add
                     $.each(self.element.multipleOptions, function (i, option) {
                         option = $(option);
 
-                        if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.states.disabled)) {
+                        if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.disabled)) {
                             var optionValue = option.attr('data-value');
                             var optionName = option.html();
                             optionsValues.push(optionValue);
@@ -640,7 +630,7 @@
                             }).prop('selected', true));
 
                             // Option
-                            option.addClass(self.settings.classes.states.selected);
+                            option.addClass(self.settings.classes.selected);
                         }
                     });
 
@@ -669,8 +659,8 @@
         /**
          * Enlève la sélection des options définies
          * 
-         * @param  string|array options Sélecteur ou liste des options
-         * @param  boolean      disable Désactiver l'option en même temps ?
+         * @param  string|jQuery object options Sélecteur ou liste des options
+         * @param  boolean              disable Désactiver l'option en même temps
          */
         removeOptions: function (options, disable) {
             var self = this;
@@ -681,7 +671,9 @@
                 $.each(options, function () {
                     var option = $(this);
 
-                    self.setOptions(option);
+                    if (option.hasClass(self.settings.classes.selected)) {
+                        self.setOptions(option);
+                    }
 
                     if (disable) {
                         self.disableOption(option);
@@ -699,7 +691,7 @@
          * @return bool
          */
         disableOption: function (option) {
-            option.addClass(this.settings.classes.states.disabled);
+            option.addClass(this.settings.classes.disabled);
 
             return this;
         },
@@ -714,11 +706,7 @@
             return this.element.input;
         },
         getWrapper: function (children) {
-            if (children !== undefined) {
-                return children.closest('.' + this.settings.classes.prefix);
-            } else {
-                return this.element.wrapper;
-            }
+            return (children !== undefined) ? children.closest('.' + this.settings.classes.prefix) : this.element.wrapper;
         },
         getWrapperInput: function () {
             return this.element.wrapperInput;
@@ -730,7 +718,7 @@
             return this.element.wrapperOptions;
         },
         getOptions: function (filter) {
-            var options = this.getWrapperOptions().find('.' + this.settings.classes.select.option);
+            var options = this.getWrapperOptions().find('.' + this.settings.classes.option);
 
             return (filter !== undefined) ? options.filter(filter) : options;
         },

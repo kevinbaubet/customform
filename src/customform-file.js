@@ -30,9 +30,7 @@
         classes: {
             label: '{prefix}-label',
             file: '{prefix}-file',
-            states: {
-                open: 'is-open'
-            }
+            open: 'is-open'
         },
         onLoad: undefined,
         beforeWrap: undefined,
@@ -133,7 +131,7 @@
         initElementsState: function () {
             // Désactivé ?
             if (this.getInput().is(':disabled')) {
-                this.getWrapper().addClass(this.settings.classes.states.disabled);
+                this.getWrapper().addClass(this.settings.classes.disabled);
                 this.getWrapperLabel().removeAttr('tabindex');
             }
 
@@ -159,7 +157,7 @@
                     }
 
                     // État
-                    self.getWrapper().addClass(self.settings.classes.states.open);
+                    self.getWrapper().addClass(self.settings.classes.open);
 
                     // Trigger click
                     self.getInput()
@@ -182,7 +180,7 @@
                 var input = $(this);
 
                 // État
-                self.getWrapper().removeClass(self.settings.classes.states.open);
+                self.getWrapper().removeClass(self.settings.classes.open);
 
                 // Ajout de la valeur
                 self.setWrapperFileValue(this);
@@ -215,7 +213,7 @@
             self.getContext().on('reset', function () {
                 var form = $(this);
 
-                self.getWrapper().removeClass(self.settings.classes.states.disabled);
+                self.getWrapper().removeClass(self.settings.classes.disabled);
                 self.getWrapperFile().text(self.settings.emptyText);
 
                 setTimeout(function () {
@@ -264,11 +262,7 @@
             return this.element.type;
         },
         getWrapper: function (children) {
-            if (children !== undefined) {
-                return children.closest('.' + this.settings.classes.prefix);
-            } else {
-                return this.element.wrapper;
-            }
+            return (children !== undefined) ? children.closest('.' + this.settings.classes.prefix) : this.element.wrapper;
         },
         getWrapperLabel: function () {
             return this.element.wrapperLabel;

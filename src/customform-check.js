@@ -22,9 +22,7 @@
 
     $.CustomFormCheck.defaults = {
         classes: {
-            states: {
-                checked: 'is-checked'
-            }
+            checked: 'is-checked'
         },
         onLoad: undefined,
         beforeWrap: undefined,
@@ -97,10 +95,10 @@
          */
         initElementsState: function () {
             if (this.getInput().prop('checked')) {
-                this.getWrapper().addClass(this.settings.classes.states.checked);
+                this.getWrapper().addClass(this.settings.classes.checked);
             }
             if (this.getInput().prop('disabled')) {
-                this.getWrapper().addClass(this.settings.classes.states.disabled);
+                this.getWrapper().addClass(this.settings.classes.disabled);
                 this.getInput().removeAttr('tabindex');
             }
         },
@@ -114,35 +112,8 @@
             self.getWrapper().on('click keyup', function (event) {
                 if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 32)) {
                     event.preventDefault();
-                    var isRadio = (self.getInputType() === 'radio');
 
-                    if (self.getInput().prop('disabled')) {
-                        return;
-                    }
-
-                    if (isRadio) {
-                        self.getInputsRadio()
-                            .prop('checked', false)
-                            .each(function () {
-                                self.getWrapper($(this)).removeClass(self.settings.classes.states.checked);
-                            });
-                    }
-                    self.getWrapper()[(isRadio) ? 'addClass' : 'toggleClass'](self.settings.classes.states.checked);
-                    self.getInput().prop('checked', (isRadio) ? true : self.getWrapper().hasClass(self.settings.classes.states.checked));
-
-                    // Trigger click
-                    self.getInput().triggerHandler('click');
-
-                    // User callback
-                    if (self.settings.onClick !== undefined) {
-                        self.settings.onClick.call({
-                            CustomFormCheck: self,
-                            wrapper: self.getWrapper(),
-                            input: self.getInput(),
-                            type: self.getInputType(),
-                            checked: self.getInput().prop('checked')
-                        });
-                    }
+                    self.setOption();
                 }
             });
 
@@ -164,7 +135,7 @@
             self.getContext().on('reset', function () {
                 var form = $(this);
 
-                self.getWrapper().removeClass(self.settings.classes.states.checked + ' ' + self.settings.classes.states.disabled);
+                self.getWrapper().removeClass(self.settings.classes.checked + ' ' + self.settings.classes.disabled);
 
                 setTimeout(function () {
                     self.initElementsState();
@@ -181,6 +152,65 @@
         },
 
         /**
+         * Sélectionne une option
+         */
+        setOption: function () {
+            var self = this;
+            var isRadio = (self.getInputType() === 'radio');
+
+            if (self.getInput().prop('disabled')) {
+                return;
+            }
+
+            if (isRadio) {
+                self.getInputsRadio()
+                    .prop('checked', false)
+                    .each(function() {
+                        self.getWrapper($(this)).removeClass(self.settings.classes.checked);
+                    });
+            }
+            self.getWrapper()[(isRadio) ? 'addClass' : 'toggleClass'](self.settings.classes.checked);
+            self.getInput().prop('checked', (isRadio) ? true : self.getWrapper().hasClass(self.settings.classes.checked));
+
+            // Trigger click
+            self.getInput().triggerHandler('click');
+
+            // User callback
+            if (self.settings.onClick !== undefined) {
+                self.settings.onClick.call({
+                    CustomFormCheck: self,
+                    wrapper: self.getWrapper(),
+                    input: self.getInput(),
+                    type: self.getInputType(),
+                    checked: self.getInput().prop('checked')
+                });
+            }
+        },
+
+        /**
+         * Enlève la sélection de l'option
+         */
+        removeOption: function (disable) {
+            disable = disable || false;
+
+            if (this.getInput().prop('checked')) {
+                this.setOption();
+
+                if (disable) {
+                    this.disableOption();
+                }
+            }
+        },
+
+        /**
+         * Désactive une option
+         */
+        disableOption: function () {
+            this.getInput().prop('disabled', true);
+            this.getWrapper().addClass(this.settings.classes.disabled);
+        },
+
+        /**
          * Alias pour récupérer les éléments
          */
         getContext: function () {
@@ -193,11 +223,7 @@
             return this.element.type;
         },
         getWrapper: function (children) {
-            if (children !== undefined) {
-                return children.closest('.' + this.settings.classes.prefix);
-            } else {
-                return this.element.wrapper;
-            }
+            return (children !== undefined) ? children.closest('.' + this.settings.classes.prefix) : this.element.wrapper;
         },
         getInputsRadio: function () {
             return this.getContext().find(this.element.selector).filter('[name="' + this.getInput().attr('name') + '"]');

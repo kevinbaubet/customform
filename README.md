@@ -11,16 +11,15 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 
 ## Options
 
-| Option                                                   | Type     | Valeur par défaut | Description                                               |
-|----------------------------------------------------------|----------|-------------------|-----------------------------------------------------------|
-| classes                                                  | object   | Voir ci-dessous   | Objet pour les options ci-dessous                         |
-| &nbsp;&nbsp;&nbsp;&nbsp;prefix                           | string   | 'customform'      | Préfix de classe                                          |
-| &nbsp;&nbsp;&nbsp;&nbsp;input                            | string   | '{prefix}-input'  | Classe autour de l'input                                  |
-| &nbsp;&nbsp;&nbsp;&nbsp;states                           | object   | Voir ci-dessous   | Objet pour les options ci-dessous                         |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled | string   | 'is-disabled'     | Classe quand l'input est désactivé                        |
-| tabindexStart                                            | integer  | 0                 | Valeur de l'attribut tabindex au chargement de CustomForm |
-| onSupportLoad                                            | function | undefined         | Callback au début du chargement du support                |
-| onSupportComplete                                        | function | undefined         | Callback à la fin du chargement du support                |
+| Option                           | Type     | Valeur par défaut | Description                                               |
+|----------------------------------|----------|-------------------|-----------------------------------------------------------|
+| classes                          | object   | Voir ci-dessous   | Objet pour les options ci-dessous                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;prefix   | string   | 'customform'      | Préfix de classe                                          |
+| &nbsp;&nbsp;&nbsp;&nbsp;input    | string   | '{prefix}-input'  | Classe autour de l'input                                  |
+| &nbsp;&nbsp;&nbsp;&nbsp;disabled | string   | 'is-disabled'     | Classe quand l'input est désactivé                        |
+| tabindexStart                    | integer  | 0                 | Valeur de l'attribut tabindex au chargement de CustomForm |
+| onSupportLoad                    | function | undefined         | Callback au début du chargement du support                |
+| onSupportComplete                | function | undefined         | Callback à la fin du chargement du support                |
 
 ## Méthodes
 
@@ -72,17 +71,16 @@ Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces
 
 ### Options
 
-| Option                                                  | Type     | Valeur par défaut | Description                                     |
-|---------------------------------------------------------|----------|-------------------|-------------------------------------------------|
-| classes                                                 | object   | Voir ci-dessous   | Objet pour les options ci-dessous               |
-| &nbsp;&nbsp;&nbsp;&nbsp;states                          | object   | Voir ci-dessous   | Objet pour l'option ci-dessous                  |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checked | string   | 'is-checked'      | Classe quand l'input est coché                  |
-| onLoad                                                  | function | undefined         | Callback au début du chargement                 |
-| beforeWrap                                              | function | undefined         | Callback avant l'ajout des wrappers dans le DOM |
-| afterEventsHandler                                      | function | undefined         | Callback après la déclaration des événements    |
-| onComplete                                              | function | undefined         | Callback à la fin du chargement                 |
-| onClick                                                 | function | undefined         | Callback au click sur l'input                   |
-| onReset                                                 | function | undefined         | Callback au reset du formulaire                 |
+| Option                          | Type     | Valeur par défaut | Description                                     |
+|---------------------------------|----------|-------------------|-------------------------------------------------|
+| classes                         | object   | Voir ci-dessous   | Objet pour les options ci-dessous               |
+| &nbsp;&nbsp;&nbsp;&nbsp;checked | string   | 'is-checked'      | Classe quand l'input est coché                  |
+| onLoad                          | function | undefined         | Callback au début du chargement                 |
+| beforeWrap                      | function | undefined         | Callback avant l'ajout des wrappers dans le DOM |
+| afterEventsHandler              | function | undefined         | Callback après la déclaration des événements    |
+| onComplete                      | function | undefined         | Callback à la fin du chargement                 |
+| onClick                         | function | undefined         | Callback au click sur l'input                   |
+| onReset                         | function | undefined         | Callback au reset du formulaire                 |
 
 ### Méthodes
 
@@ -111,49 +109,47 @@ Ce support permet de personnaliser les selects, multiple ou non.
 
 ### Options
 
-| Option                                                           | Type     | Valeur par défaut                 | Description                                                      |
-|------------------------------------------------------------------|----------|-----------------------------------|------------------------------------------------------------------|
-| classes                                                          | object   | Voir ci-dessous                   | Objet pour les options ci-dessous                                |
-| &nbsp;&nbsp;&nbsp;&nbsp;select                                   | object   | Voir ci-dessous                   | Objet pour les options ci-dessous                                |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;label            | string   | '{prefix}-selectLabel'            | Classe pour le nom de l'option sélectionné                       |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options          | string   | '{prefix}-selectOptions'          | Classe autour des options                                        |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;option           | string   | '{prefix}-selectOption'           | Classe autour d'une option                                       |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optionGroup      | string   | '{prefix}-selectOptionGroup'      | Classe autour d'un groupoption                                   |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;optionGroupLabel | string   | '{prefix}-selectOptionGroupLabel' | Classe autour du nom du groupoption                              |
-| &nbsp;&nbsp;&nbsp;&nbsp;states                                   | object   | Voir ci-dessous                   | Objet pour les options ci-dessous                                |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;first            | string   | 'is-first'                        | Classe pour la 1ère option                                       |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selected         | string   | 'is-selected'                     | Classe quand une option est sélectionnée                         |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple         | string   | 'is-multiple'                     | Classe si le select est de type multiple                         |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open             | string   | 'is-open'                         | Classe quand la liste des options est ouverte                    |
-| multipleOptionsSeparator                                         | string   | ', '                              | Séparateur entre les options affichées dans le label             |
-| onLoad                                                           | function | undefined                         | Callback au début du chargement                                  |
-| beforeWrap                                                       | function | undefined                         | Callback avant l'ajout des wrappers dans le DOM                  |
-| afterEventsHandler                                               | function | undefined                         | Callback après la déclaration des événements                     |
-| onComplete                                                       | function | undefined                         | Callback à la fin du chargement                                  |
-| onClick                                                          | function | undefined                         | Callback au click sur le select pour ouvrir la liste des options |
-| onChange                                                         | function | undefined                         | Callback au changement d'option                                  |
-| onReset                                                          | function | undefined                         | Callback au reset du formulaire                                  |
+| Option                                   | Type     | Valeur par défaut                 | Description                                                      |
+|------------------------------------------|----------|-----------------------------------|------------------------------------------------------------------|
+| classes                                  | object   | Voir ci-dessous                   | Objet pour les options ci-dessous                                |
+| &nbsp;&nbsp;&nbsp;&nbsp;label            | string   | '{prefix}-selectLabel'            | Classe pour le nom de l'option sélectionné                       |
+| &nbsp;&nbsp;&nbsp;&nbsp;options          | string   | '{prefix}-selectOptions'          | Classe autour des options                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;option           | string   | '{prefix}-selectOption'           | Classe autour d'une option                                       |
+| &nbsp;&nbsp;&nbsp;&nbsp;optionGroup      | string   | '{prefix}-selectOptionGroup'      | Classe autour d'un groupoption                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;optionGroupLabel | string   | '{prefix}-selectOptionGroupLabel' | Classe autour du nom du groupoption                              |
+| &nbsp;&nbsp;&nbsp;&nbsp;first            | string   | 'is-first'                        | Classe pour la 1ère option                                       |
+| &nbsp;&nbsp;&nbsp;&nbsp;selected         | string   | 'is-selected'                     | Classe quand une option est sélectionnée                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;multiple         | string   | 'is-multiple'                     | Classe si le select est de type multiple                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;open             | string   | 'is-open'                         | Classe quand la liste des options est ouverte                    |
+| multipleOptionsSeparator                 | string   | ', '                              | Séparateur entre les options affichées dans le label             |
+| onLoad                                   | function | undefined                         | Callback au début du chargement                                  |
+| beforeWrap                               | function | undefined                         | Callback avant l'ajout des wrappers dans le DOM                  |
+| afterEventsHandler                       | function | undefined                         | Callback après la déclaration des événements                     |
+| onComplete                               | function | undefined                         | Callback à la fin du chargement                                  |
+| onClick                                  | function | undefined                         | Callback au click sur le select pour ouvrir la liste des options |
+| onChange                                 | function | undefined                         | Callback au changement d'option                                  |
+| onReset                                  | function | undefined                         | Callback au reset du formulaire                                  |
 
 ### Méthodes
 
-| Méthode            | Arguments                                                                                                            | Description                                                                      |
-|--------------------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| initElementsState  | -                                                                                                                    | Défini l'état des éléments à l'initialisation                                    |
-| getContext         | -                                                                                                                    | Récupère l'élément de contexte                                                   |
-| getInput           | -                                                                                                                    | Récupère l'élément input                                                         |
-| getWrapper         | **[children]** *jQuery object* Élément enfant du wrapper                                                             | Récupère l'élément wrapper créé par CustomForm                                   |
-| getWrapperInput    | -                                                                                                                    | Récupère l'élément wrapper de l'input select                                     |
-| getWrapperLabel    | -                                                                                                                    | Récupère l'élément wrapper du label, correspond à l'option actuellement affichée |
-| getWrapperOptions  | -                                                                                                                    | Récupère l'élément wrapper de toutes les options                                 |
-| getOptions         | **[filter]** *string* Sélecteur pour filtrer le résultat                                                             | Récupère toutes les options créées par CustomForm                                |
-| getSourceOptions   | -                                                                                                                    | Récupère tous les options du select d'origine                                    |
-| getSourceOptgroups | -                                                                                                                    | Récupère tous les groupes d'options du select d'origine                          |
-| setOption          | **option** *jQuery object* Option à sélectionner                                                                     | Sélectionne une option unique                                                    |
-| setOptions         | **option** *jQuery object* Option à sélectionner                                                                     | Sélectionne une option multiple                                                  |
-| removeOptions      | **options** *string/array* Sélecteur ou liste des options, **disable** *boolean* Désactiver l'option en même temps ? | Enlève la sélection des options définies                                         |
-| disableOption      | **option** *jQuery object* Option à désactiver                                                                       | Désactive une option                                                             |
-| close              | -                                                                                                                    | Ferme l'affichage des options                                                    |
-| closeSiblings      | -                                                                                                                    | Ferme l'affichage des options des autres sélects du contexte                      |
+| Méthode            | Arguments                                                                                                                  | Description                                                                      |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| initElementsState  | -                                                                                                                          | Défini l'état des éléments à l'initialisation                                    |
+| getContext         | -                                                                                                                          | Récupère l'élément de contexte                                                   |
+| getInput           | -                                                                                                                          | Récupère l'élément input                                                         |
+| getWrapper         | **[children]** *jQuery object* Élément enfant du wrapper                                                                   | Récupère l'élément wrapper créé par CustomForm                                   |
+| getWrapperInput    | -                                                                                                                          | Récupère l'élément wrapper de l'input select                                     |
+| getWrapperLabel    | -                                                                                                                          | Récupère l'élément wrapper du label, correspond à l'option actuellement affichée |
+| getWrapperOptions  | -                                                                                                                          | Récupère l'élément wrapper de toutes les options                                 |
+| getOptions         | **[filter]** *string* Sélecteur pour filtrer le résultat                                                                   | Récupère toutes les options créées par CustomForm                                |
+| getSourceOptions   | -                                                                                                                          | Récupère tous les options du select d'origine                                    |
+| getSourceOptgroups | -                                                                                                                          | Récupère tous les groupes d'options du select d'origine                          |
+| setOption          | **option** *jQuery object* Option à sélectionner                                                                           | Sélectionne une option unique                                                    |
+| setOptions         | **option** *jQuery object* Option à sélectionner                                                                           | Sélectionne une option multiple                                                  |
+| removeOptions      | **options** *string/jQuery object* Sélecteur ou liste des options, **disable** *boolean* Désactiver l'option en même temps | Enlève la sélection des options définies                                         |
+| disableOption      | **option** *jQuery object* Option à désactiver                                                                             | Désactive une option                                                             |
+| close              | -                                                                                                                          | Ferme l'affichage des options                                                    |
+| closeSiblings      | -                                                                                                                          | Ferme l'affichage des options des autres sélects du contexte                     |
 
 
 ---
@@ -170,23 +166,22 @@ Ce support permet de personnaliser les input de type file.
 
 ### Options
 
-| Option                                               | Type     | Valeur par défaut               | Description                                               |
-|------------------------------------------------------|----------|---------------------------------|-----------------------------------------------------------|
-| labelText                                            | string   | 'Parcourir...'                  | Texte du bouton "parcourir"                               |
-| emptyText                                            | string   | 'Aucun fichier sélectionné.'    | Texte quand aucun fichier n'est sélectionné               |
-| multipleText                                         | string   | '{count} fichiers sélectionnés' | Texte quand plusieurs fichiers sont sélectionnés          |
-| classes                                              | object   | Voir ci-dessous                 | Objet pour les options ci-dessous                         |
-| &nbsp;&nbsp;&nbsp;&nbsp;label                        | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |
-| &nbsp;&nbsp;&nbsp;&nbsp;file                         | string   | '{prefix}-file'                 | Classe pour le nom du fichier sélectionné                 |
-| &nbsp;&nbsp;&nbsp;&nbsp;states                       | object   | Voir ci-dessous                 | Objet pour l'option ci-dessous                            |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open | string   | 'is-open'                       | Classe quand la fenêtre de choix des fichiers est ouverte |
-| onLoad                                               | function | undefined                       | Callback au début du chargement                           |
-| beforeWrap                                           | function | undefined                       | Callback avant l'ajout des wrappers dans le DOM           |
-| afterEventsHandler                                   | function | undefined                       | Callback après la déclaration des événements              |
-| onComplete                                           | function | undefined                       | Callback à la fin du chargement                           |
-| onClick                                              | function | undefined                       | Callback au click sur le label pour choisir un fichier    |
-| onChange                                             | function | undefined                       | Callback au choix du fichier                              |
-| onReset                                              | function | undefined                       | Callback au reset du formulaire                           |
+| Option                        | Type     | Valeur par défaut               | Description                                               |
+|-------------------------------|----------|---------------------------------|-----------------------------------------------------------|
+| labelText                     | string   | 'Parcourir...'                  | Texte du bouton "parcourir"                               |
+| emptyText                     | string   | 'Aucun fichier sélectionné.'    | Texte quand aucun fichier n'est sélectionné               |
+| multipleText                  | string   | '{count} fichiers sélectionnés' | Texte quand plusieurs fichiers sont sélectionnés          |
+| classes                       | object   | Voir ci-dessous                 | Objet pour les options ci-dessous                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;label | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;file  | string   | '{prefix}-file'                 | Classe pour le nom du fichier sélectionné                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;open  | string   | 'is-open'                       | Classe quand la fenêtre de choix des fichiers est ouverte |
+| onLoad                        | function | undefined                       | Callback au début du chargement                           |
+| beforeWrap                    | function | undefined                       | Callback avant l'ajout des wrappers dans le DOM           |
+| afterEventsHandler            | function | undefined                       | Callback après la déclaration des événements              |
+| onComplete                    | function | undefined                       | Callback à la fin du chargement                           |
+| onClick                       | function | undefined                       | Callback au click sur le label pour choisir un fichier    |
+| onChange                      | function | undefined                       | Callback au choix du fichier                              |
+| onReset                       | function | undefined                       | Callback au reset du formulaire                           |
 
 ### Méthodes
 
