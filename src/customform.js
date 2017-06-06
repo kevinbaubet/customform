@@ -1,7 +1,7 @@
 /**
  * CustomForm
  *
- * @version 4.4.1 (26/05/2017)
+ * @version 4.4.2 (06/06/2017)
  */
 (function ($) {
     'use strict';

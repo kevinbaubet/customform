@@ -17,9 +17,13 @@
   width: 100%;
   height: 33px;
   padding: 5px 10px;
+  padding-right: 30px;
   font-size: 1.2em;
-  border: 2px solid #9d9d9d;
+  text-overflow: ellipsis;
+  border: 1px solid #9d9d9d;
   background: #fff;
+  overflow: hidden;
+  white-space: nowrap;
   box-sizing: border-box;
   transition: .3s;
 }
@@ -27,12 +31,20 @@
   border-color: #34495e;
 }
 .customform-selectLabel:after {
-  content: "\\/";
+  content: "";
   position: absolute;
-  right: 10px;
+  right: 15px;
+  bottom: 15px;
+  z-index: 5;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 5px 0 5px;
+  border-color: #34495e transparent transparent;
+  transition: transform .3s;
 }
 .is-open .customform-selectLabel:after {
-  content: "/\\";
+  transform: rotateX(180deg);
 }
 .customform-selectOptions {
   position: absolute;
@@ -41,11 +53,13 @@
   z-index: -1;
   width: 100%;
   height: 0;
+  max-height: 0;
   background: #fff;
   border: 1px solid #9d9d9d;
   box-sizing: border-box;
   overflow: hidden;
   opacity: 0;
+  transition: .1s;
 }
 .is-open .customform-selectOptions {
   z-index: 50;
@@ -108,10 +122,4 @@
 }
 .customform--select.is-multiple .customform-selectOption.is-first {
   display: none;
-}
-.customform--select.is-multiple .customform-selectLabel {
-  padding-right: 20px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }

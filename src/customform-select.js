@@ -727,6 +727,29 @@
         },
         getSourceOptgroups: function () {
             return this.element.source.optgroups;
+        },
+        getValue: function (defaultValue) {
+            defaultValue = defaultValue || false;
+
+            var value = (defaultValue) ? this.getInput().attr('data-default-value') : this.getWrapperLabel().attr('data-value');
+
+            if (this.element.isMultiple) {
+                return value.split(',');
+            }
+
+            return value;
+        },
+        getDefaultValue: function () {
+            return this.getValue(true);
+        },
+        getOptionValue: function (option) {
+            option = option || undefined;
+
+            if (option !== undefined) {
+                return option.attr('data-value') || null;
+            }
+
+            return false;
         }
     };
 })(jQuery);
