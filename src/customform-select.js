@@ -339,12 +339,6 @@
                     }
                 }, 200);
             });
-
-            $(window).one('keydown.open', function (event) {
-                if (event.keyCode !== 9) {
-                    event.preventDefault();
-                }
-            });
         },
 
         /**
@@ -354,7 +348,6 @@
             this.getWrapper().removeClass(this.settings.classes.open);
             this.getWrapperLabel().off('click.close blur.close');
             this.getOptions().off('click.option');
-            $(window).off('keydown.open');
 
             return this;
         },
@@ -389,7 +382,7 @@
             var self = this;
 
             // Close handler
-            self.preventHandler.call(self);
+            self.preventHandler();
 
             // Ouverture des options
             self.getWrapper().addClass(self.settings.classes.open);
@@ -433,7 +426,7 @@
             }
 
             if (direction !== undefined || fastDirection !== undefined) {
-                self.preventHandler.call(self);
+                self.preventHandler();
             }
 
             var option = null;
