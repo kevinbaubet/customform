@@ -1,7 +1,7 @@
 /**
  * CustomForm
  *
- * @version 4.4.2 (06/06/2017)
+ * @version 4.4.4 (01/07/2017)
  */
 (function ($) {
     'use strict';
@@ -119,7 +119,7 @@
                 self.context.each(function () {
                     self.elementContext = $(this);
 
-                    $(self.support.selector, self.elementContext).each(function (i, n) {
+                    $(self.support.selector, self.elementContext).each(function () {
                         self.elementInput = $(this);
 
                         self.support.instances[self.getInstanceName(self.elementInput)] = new $[self.support.className](self, options);

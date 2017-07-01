@@ -7,6 +7,7 @@
 
         // Config
         this.element  = {
+            body: $('body'),
             context: this.CustomForm.elementContext,
             input: this.CustomForm.elementInput,     // <select>
             type: this.CustomForm.support.type,      // 'select'
@@ -260,17 +261,17 @@
         eventsHandler: function () {
             var self = this;
 
-            self.getWrapperLabel().on('click.open keyup.open', function (event) {
+            self.getWrapperLabel().on('click.customform.open keyup.customform.open', function (event) {
                 if (self.getInput().is(':disabled')) {
-                    return;
+                    return false;
                 }
 
                 if (event.type === 'click') {
-                    self.clickHandler.call(self, event);
+                    self.clickHandler(event);
                 }
 
                 if (event.type === 'keyup') {
-                    self.keyupHandler.call(self, event);
+                    self.keyupHandler(event);
                 }
             });
 
@@ -289,7 +290,7 @@
         resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset', function () {
+            self.getContext().on('reset.customform', function () {
                 var form = $(this);
 
                 self.getWrapper().removeClass(self.settings.classes.disabled);
@@ -311,33 +312,24 @@
         /**
          * Gestionnaire de fermeture
          */
-        preventHandler: function () {
+        closeHandler: function () {
             var self = this;
 
             // Fermeture des autres selects
             self.closeSiblings();
 
-            // Fermeture au clic sur le label
-            self.getWrapperLabel().focus().one('click.close', function () {
-                self.close.call(self);
+            // Label
+            self.getWrapperLabel().one('click.customform.close', function () {
+                self.close();
             });
 
-            // Fermeture au blur du label
-            self.getWrapperLabel().one('blur.close', function (event) {
-                var close = true;
-                
-                // Si multiple, on bloque la fermeture
-                if (self.element.isMultiple) {
-                    self.getOptions().one('click.option', function () {
-                        close = false;
-                    });
-                }
+            // Options
+            self.element.body.on('click.customform.close', function (event) {
+                var target = $(event.target);
 
-                setTimeout(function () {
-                    if (close) {
-                        self.close.call(self);
-                    }
-                }, 200);
+                if ((!self.element.isMultiple && target.hasClass(self.settings.classes.option)) || (!target.hasClass(self.settings.classes.label) && !target.hasClass(self.settings.classes.option))) {
+                    self.close();
+                }
             });
         },
 
@@ -346,8 +338,9 @@
          */
         close: function () {
             this.getWrapper().removeClass(this.settings.classes.open);
-            this.getWrapperLabel().off('click.close blur.close');
-            this.getOptions().off('click.option');
+            this.getWrapperLabel().off('click.customform.close');
+            this.getOptions().off('click.customform.option');
+            this.element.body.off('click.customform.close');
 
             return this;
         },
@@ -364,10 +357,12 @@
                     $(this)
                         .removeClass(self.settings.classes.open)
                         .find('.' + self.settings.classes.label)
-                            .off('click.close blur.close').end()
+                            .off('click.customform.close').end()
                         .find('.' + self.settings.classes.option)
-                            .off('click.option');
+                            .off('click.customform.option');
                 });
+
+                self.element.body.off('click.customform.close');
             }
 
             return self;
@@ -382,13 +377,13 @@
             var self = this;
 
             // Close handler
-            self.preventHandler();
+            self.closeHandler();
 
             // Ouverture des options
             self.getWrapper().addClass(self.settings.classes.open);
 
             // Ajout d'un événement sur les options
-            self.getOptions().on('click.option', function () {
+            self.getOptions().on('click.customform.option', function () {
                 self[(self.element.isMultiple) ? 'setOptions' : 'setOption'].call(self, $(this));
             });
 
@@ -421,12 +416,12 @@
             var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
 
             if (isClose) {
-                self.close.call(self);
-                return;
+                self.close();
+                return false;
             }
 
             if (direction !== undefined || fastDirection !== undefined) {
-                self.preventHandler();
+                self.closeHandler();
             }
 
             var option = null;
