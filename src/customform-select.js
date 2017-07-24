@@ -51,6 +51,7 @@
             optionGroup: '{prefix}-selectOptionGroup',
             optionGroupLabel: '{prefix}-selectOptionGroupLabel',
             first: 'is-first',
+            last: 'is-last',
             selected: 'is-selected',
             multiple: 'is-multiple',
             open: 'is-open'
@@ -201,7 +202,9 @@
             }
 
             // First option
-            self.getOptions().first().addClass(self.settings.classes.first);
+            self.getOptions()
+                .first().addClass(self.settings.classes.first).end()
+                .last().addClass(self.settings.classes.last);
         },
 
         /**
