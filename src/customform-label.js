@@ -58,7 +58,7 @@
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
-                    CustomFormLabel: this,
+                    customFormLabel: this,
                     context: this.getContext(),
                     inputs: this.getInputs()
                 });
@@ -71,7 +71,7 @@
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
-                    CustomFormLabel: this,
+                    customFormLabel: this,
                     context: this.getContext(),
                     inputs: this.getInputs()
                 });
@@ -112,7 +112,7 @@
                     // User callback
                     if (self.settings.onFocus !== undefined) {
                         self.settings.onFocus.call({
-                            CustomFormLabel: self,
+                            customFormLabel: self,
                             event: event,
                             wrapper: wrapper,
                             input: input
@@ -132,7 +132,7 @@
                     // User callback
                     if (self.settings.onBlur !== undefined) {
                         self.settings.onBlur.call({
-                            CustomFormLabel: self,
+                            customFormLabel: self,
                             event: event,
                             wrapper: wrapper,
                             input: input
@@ -144,7 +144,7 @@
             // User callback
             if (self.settings.afterEventsHandler !== undefined) {
                 self.settings.afterEventsHandler.call({
-                    CustomFormLabel: self,
+                    customFormLabel: self,
                     elements: self.elements
                 });
             }
@@ -153,7 +153,7 @@
         /**
          * Alias pour récupérer les éléments
          */
-        getContext: function() {
+        getContext: function () {
             return this.elements.context;
         },
         getWrapper: function (input) {

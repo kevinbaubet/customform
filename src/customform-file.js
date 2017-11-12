@@ -1,21 +1,21 @@
 (function ($) {
     'use strict';
 
-    $.CustomFormFile = function (CustomForm, options) {
+    $.CustomFormFile = function (customForm, options) {
         // Héritage
-        this.CustomForm = CustomForm;
+        this.customForm = customForm;
 
         // Config
         this.element  = {
-            context: this.CustomForm.elementContext,
-            input: this.CustomForm.elementInput,
-            type: this.CustomForm.support.type,
+            context: this.customForm.elementContext,
+            input: this.customForm.elementInput,
+            type: this.customForm.support.type,
             wrapper: null,
             wrapperInput: null,
             wrapperLabel: null,
             wrapperFile: null
         };
-        $.extend(true, (this.settings = {}), this.CustomForm.settings, $.CustomFormFile.defaults, options);
+        $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormFile.defaults, options);
 
         // Init
         if (this.prepareOptions()) {
@@ -30,7 +30,8 @@
         classes: {
             label: '{prefix}-label',
             file: '{prefix}-file',
-            open: 'is-open'
+            open: 'is-open',
+            selected: 'is-selected'
         },
         onLoad: undefined,
         beforeWrap: undefined,
@@ -49,7 +50,7 @@
          */
         prepareOptions: function () {
             // Classes
-            this.CustomForm.replacePrefixClass.call(this);
+            this.customForm.replacePrefixClass.call(this);
 
             return true;
         },
@@ -61,7 +62,7 @@
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
-                    CustomFormFile: this,
+                    customFormFile: this,
                     element: this.element
                 });
             }
@@ -75,7 +76,7 @@
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
-                    CustomFormFile: this,
+                    customFormFile: this,
                     element: this.element
                 });
             }
@@ -86,25 +87,25 @@
          */
         wrap: function () {
             this.element.wrapper = $('<span>', {
-                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
+                'class': this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
             });
             this.element.wrapperInput = $('<span>', {
-                class: this.settings.classes.input
+                'class': this.settings.classes.input
             });
             this.element.wrapperLabel = $('<span>', {
-                class: this.settings.classes.label,
+                'class': this.settings.classes.label,
                 tabindex: this.settings.tabindexStart,
                 html: this.settings.labelText
             });
             this.element.wrapperFile = $('<span>', {
-                class: this.settings.classes.file,
+                'class': this.settings.classes.file,
                 html: this.settings.emptyText
             });
 
             // User callback
             if (this.settings.beforeWrap !== undefined) {
                 this.settings.beforeWrap.call({
-                    CustomFormFile: this,
+                    customFormFile: this,
                     wrapper: this.element.wrapper,
                     wrapperInput: this.element.wrapperInput,
                     wrapperLabel: this.element.wrapperLabel,
@@ -149,12 +150,12 @@
 
             // Sélection du fichier
             self.getWrapperLabel().on('click keyup', function (event) {
-                if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 32)) {
+                if (event.type === 'click' || (event.type === 'keyup' && (event.keyCode === 32 || event.keyCode === 13))) {
                     event.preventDefault();
 
                     if (self.getInput().is(':disabled')) {
-                        return;
-                    }
+                        return false;
+                }
 
                     // État
                     self.getWrapper().addClass(self.settings.classes.open);
@@ -167,7 +168,7 @@
                     // User callback
                     if (self.settings.onClick !== undefined) {
                         self.settings.onClick.call({
-                            CustomFormFile: self,
+                            customFormFile: self,
                             wrapper: self.getWrapper(),
                             input: self.getInput()
                         });
@@ -188,7 +189,7 @@
                 // User callback
                 if (self.settings.onChange !== undefined) {
                     self.settings.onChange.call({
-                        CustomFormFile: self,
+                        customFormFile: self,
                         wrapper: self.getWrapper(),
                         input: self.getInput()
                     });
@@ -198,7 +199,7 @@
             // User callback
             if (self.settings.afterEventsHandler !== undefined) {
                 self.settings.afterEventsHandler.call({
-                    CustomFormFile: this,
+                    customFormFile: this,
                     element: this.element
                 });
             }
@@ -222,7 +223,7 @@
                     // User callback
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
-                            CustomFormFile: self,
+                            customFormFile: self,
                             form: form
                         });
                     }
@@ -247,6 +248,7 @@
 
             // Ajout de la valeur
             this.getWrapperFile().text(filename);
+            this.getWrapper().addClass(this.settings.classes.selected);
         },
 
         /**

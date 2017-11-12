@@ -1,14 +1,9 @@
-/**
- * CustomForm
- *
- * @version 4.4.5 (24/07/2017)
- */
 (function ($) {
     'use strict';
 
     $.CustomForm = function (context, options, supports) {
         // Config
-        $.extend((this.settings = {}), $.CustomForm.defaults, options);
+        $.extend(true, (this.settings = {}), $.CustomForm.defaults, options);
 
         // Support
         $.extend((this.supports = {}), $.CustomForm.supports, supports);
@@ -81,6 +76,7 @@
             var self = this;
 
             $.each(self.supports, function (support, selector) {
+                self.support = undefined;
                 self.setSupport(support);
             });
 
@@ -95,6 +91,11 @@
          */
         setSupport: function (support, options) {
             var self = this;
+
+            // Si le support est déjà initialisé, on stop
+            if (self.support !== undefined) {
+                return;
+            }
 
             // Données du support
             self.support = {};
@@ -119,10 +120,11 @@
                 self.context.each(function () {
                     self.elementContext = $(this);
 
-                    $(self.support.selector, self.elementContext).each(function () {
-                        self.elementInput = $(this);
+                    $(self.support.selector, self.elementContext).each(function (i, input) {
+                        self.elementInput = $(input);
+                        var instanceName = self.getInstanceName(self.elementInput);
 
-                        self.support.instances[self.getInstanceName(self.elementInput)] = new $[self.support.className](self, options);
+                        self.support.instances[((instanceName) ? instanceName : i)] = new $[self.support.className](self, options);
                     });
                 });
 

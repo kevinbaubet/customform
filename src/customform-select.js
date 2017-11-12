@@ -1,17 +1,17 @@
 (function ($) {
     'use strict';
 
-    $.CustomFormSelect = function (CustomForm, options) {
+    $.CustomFormSelect = function (customForm, options) {
         // Héritage
-        this.CustomForm = CustomForm;
+        this.customForm = customForm;
 
         // Config
         this.element  = {
             body: $('body'),
-            context: this.CustomForm.elementContext,
-            input: this.CustomForm.elementInput,     // <select>
-            type: this.CustomForm.support.type,      // 'select'
-            isMultiple: this.CustomForm.elementInput.prop('multiple'),
+            context: this.customForm.elementContext,
+            input: this.customForm.elementInput,     // <select>
+            type: this.customForm.support.type,      // 'select'
+            isMultiple: this.customForm.elementInput.prop('multiple'),
             wrapper: null,              // Wrapper global
             wrapperInput: null,         // Wrapper du <select>
             source: {
@@ -24,7 +24,7 @@
         if (this.element.isMultiple) {
             this.element.multipleOptions = [];
         }
-        $.extend(true, (this.settings = {}), this.CustomForm.settings, $.CustomFormSelect.defaults, options);
+        $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormSelect.defaults, options);
 
         // Variables
         this.keyup = {
@@ -74,7 +74,7 @@
          */
         prepareOptions: function () {
             // Classes
-            this.CustomForm.replacePrefixClass.call(this);
+            this.customForm.replacePrefixClass.call(this);
 
             return true;
         },
@@ -86,7 +86,7 @@
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
-                    CustomFormSelect: this,
+                    customFormSelect: this,
                     element: this.element
                 });
             }
@@ -100,7 +100,7 @@
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
-                    CustomFormSelect: this,
+                    customFormSelect: this,
                     element: this.element
                 });
             }
@@ -112,17 +112,17 @@
         wrap: function () {
             var self = this;
             self.element.wrapper = $('<span>', {
-                class: self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--select'
+                'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--select'
             });
             self.element.wrapperInput = $('<span>', {
-                class: self.settings.classes.input,
+                'class': self.settings.classes.input,
                 tabindex: self.settings.tabindexStart
             });
 
             // User callback
             if (self.settings.beforeWrap !== undefined) {
                 self.settings.beforeWrap.call({
-                    CustomForm: self,
+                    customForm: self,
                     wrapper: self.element.wrapper,
                     wrapperInput: self.element.wrapperInput
                 });
@@ -142,12 +142,12 @@
 
             // Wrappers
             self.getWrapperInput().append($('<span>', {
-                class: self.settings.classes.label
+                'class': self.settings.classes.label
             }));
             self.element.wrapperLabel = self.getInput().next();
 
             self.getWrapperInput().append($('<span>', {
-                class: self.settings.classes.options
+                'class': self.settings.classes.options
             }));
             self.element.wrapperOptions = self.getWrapperLabel().next();
 
@@ -167,7 +167,7 @@
                     var optionClasses = option.attr('class');
 
                     self.getWrapperOptions().append($('<span>', {
-                        class: self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
+                        'class': self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
                         'data-value': option.val(),
                         html: option.html()
                     }));
@@ -179,10 +179,10 @@
                 $.each(self.getSourceOptgroups(), function (indexOptgroup, optgroup) {
                     optgroup = $(optgroup);
                     var selectOptionGroup = $('<span>', {
-                        class: self.settings.classes.optionGroup
+                        'class': self.settings.classes.optionGroup
                     });
                     $('<span>', {
-                        class: self.settings.classes.optionGroupLabel,
+                        'class': self.settings.classes.optionGroupLabel,
                         html: optgroup.attr('label')
                     }).appendTo(selectOptionGroup);
 
@@ -191,7 +191,7 @@
                         var optionClasses = option.attr('class');
 
                         $('<span>', {
-                            class: self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
+                            'class': self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
                             'data-value': option.val(),
                             html: option.html()
                         }).appendTo(selectOptionGroup);
@@ -281,7 +281,7 @@
             // User callback
             if (self.settings.afterEventsHandler !== undefined) {
                 self.settings.afterEventsHandler.call({
-                    CustomFormSelect: this,
+                    customFormSelect: this,
                     element: this.element
                 });
             }
@@ -304,7 +304,7 @@
                     // User callback
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
-                            CustomFormSelect: self,
+                            customFormSelect: self,
                             form: form
                         });
                     }
@@ -396,7 +396,7 @@
             // User callback
             if (self.settings.onClick !== undefined) {
                 self.settings.onClick.call({
-                    CustomFormSelect: self,
+                    customFormSelect: self,
                     event: event,
                     wrapper: self.getWrapper(),
                     input: self.getInput(),
@@ -539,7 +539,7 @@
                     // User callback
                     if (this.settings.onChange !== undefined) {
                         this.settings.onChange.call({
-                            CustomFormSelect: this,
+                            customFormSelect: this,
                             wrapper: this.getWrapper(),
                             input: this.getInput(),
                             wrapperLabel: this.getWrapperLabel(),
@@ -634,7 +634,7 @@
                     // User callback
                     if (self.settings.onChange !== undefined) {
                         self.settings.onChange.call({
-                            CustomFormSelect: this,
+                            customFormSelect: this,
                             wrapper: self.getWrapper(),
                             input: self.getInput(),
                             wrapperLabel: self.getWrapperLabel(),

@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="../dist/customform-file.css" />
         <link rel="stylesheet" href="../dist/customform-label.css" />
         
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" ></script>
+        <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js" ></script>
         <!-- <script src="../test/JSLitmus.js"></script> -->
         
         <script src="../src/customform.js"></script>
@@ -21,25 +21,25 @@
         <script src="../src/customform-label.js"></script>
 
         <script>
-            jQuery(document).ready(function($) {
+            jQuery(document).ready(function ($) {
                 // DEMO
-                var CustomForm = $('form').customForm();
+                var customForm = $('form').customForm();
 
                 // Global
-                CustomForm.setSupports();
+                customForm.setSupports();
             
                 // One + get instances
-                // var CustomFormSelects = CustomForm.setSupport('select');
-                // var instance = CustomForm.getInstance(CustomFormSelects, $('#select-3'));
-                // console.log(instance);
+//                var customFormSelects = customForm.setSupport('select');
+//                customForm.setSupport('select');
+//                var instance = customForm.getInstance(customFormSelects, $('#select-3'));
 
                 // Labels
                 $('.form-labels').customFormLabel();
 
                 // TEST
-                // JSLitmus.test('customForm', function() {s
-                //     var CustomForm = $('form').customForm();
-                //     CustomForm.setSupports();
+                // JSLitmus.test('customForm', function () {s
+                //     var customForm = $('form').customForm();
+                //     customForm.setSupports();
                 // });
             });
         </script>
@@ -154,7 +154,7 @@
                     <div class="form-col">
                         <div class="form-item">
                             <label for="select-3">Multiple :</label>
-                            <select class="form-select" id="select-3" name="select-3" multiple>
+                            <select class="form-select" id="select-3" multiple>
                                 <option value="_none">Select</option>
                                 <option value="71" disabled>Option 1</option>
                                 <option value="6" selected>Option 2</option>
@@ -204,7 +204,7 @@
                 <form enctype="multipart/form-data">
                     <div class="form-item">
                         <label for="file-1">Fichier :</label>
-                        <input type="file" id="file-1" name="file-1" value="" multiple />
+                        <input type="file" id="file-1" name="file-1" value="" multiple accept=".png"  />
                     </div>
 
                     <div class="form-actions">

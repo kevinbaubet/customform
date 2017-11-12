@@ -1,20 +1,20 @@
 (function ($) {
     'use strict';
 
-    $.CustomFormCheck = function (CustomForm, options) {
+    $.CustomFormCheck = function (customForm, options) {
         // Héritage
-        this.CustomForm = CustomForm;
+        this.customForm = customForm;
 
         // Config
         this.element  = {
-            context: this.CustomForm.elementContext,
-            input: this.CustomForm.elementInput,
-            type: this.CustomForm.support.type,
-            selector: this.CustomForm.support.selector,
+            context: this.customForm.elementContext,
+            input: this.customForm.elementInput,
+            type: this.customForm.support.type,
+            selector: this.customForm.support.selector,
             wrapper: null,
             wrapperInput: null
         };
-        $.extend(true, (this.settings = {}), this.CustomForm.settings, $.CustomFormCheck.defaults, options);
+        $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormCheck.defaults, options);
 
         // Init
         this.load();
@@ -40,7 +40,7 @@
             // User callback
             if (this.settings.onLoad !== undefined) {
                 this.settings.onLoad.call({
-                    CustomFormCheck: this,
+                    customFormCheck: this,
                     element: this.element
                 });
             }
@@ -54,7 +54,7 @@
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
-                    CustomFormCheck: this,
+                    customFormCheck: this,
                     element: this.element
                 });
             }
@@ -65,17 +65,17 @@
          */
         wrap: function () {
             this.element.wrapper = $('<span>', {
-                class: this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
+                'class': this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
             });
             this.element.wrapperInput = $('<span>', {
-                class: this.settings.classes.input,
+                'class': this.settings.classes.input,
                 tabindex: this.settings.tabindexStart
             });
 
             // User callback
             if (this.settings.beforeWrap !== undefined) {
                 this.settings.beforeWrap.call({
-                    CustomFormCheck: this,
+                    customFormCheck: this,
                     wrapper: this.element.wrapper,
                     wrapperInput: this.element.wrapperInput
                 });
@@ -121,7 +121,7 @@
             // User callback
             if (self.settings.afterEventsHandler !== undefined) {
                 self.settings.afterEventsHandler.call({
-                    CustomFormCheck: this,
+                    customFormCheck: this,
                     element: this.element
                 });
             }
@@ -144,7 +144,7 @@
                     // User callback
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
-                            CustomFormCheck: self,
+                            customFormCheck: self,
                             form: form
                         });
                     }
@@ -166,7 +166,7 @@
             if (isRadio) {
                 self.getInputsRadio()
                     .prop('checked', false)
-                    .each(function() {
+                    .each(function () {
                         self.getWrapper($(this)).removeClass(self.settings.classes.checked);
                     });
             }
@@ -179,7 +179,7 @@
             // User callback
             if (self.settings.onClick !== undefined) {
                 self.settings.onClick.call({
-                    CustomFormCheck: self,
+                    customFormCheck: self,
                     wrapper: self.getWrapper(),
                     input: self.getInput(),
                     type: self.getInputType(),
