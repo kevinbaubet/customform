@@ -124,6 +124,11 @@
                         self.elementInput = $(input);
                         var instanceName = self.getInstanceName(self.elementInput);
 
+                        // Si l'input est déjà initialisé, on stop
+                        if (self.elementInput.closest('.' + self.settings.classes.prefix).length) {
+                            return;
+                        }
+
                         self.support.instances[((instanceName) ? instanceName : i)] = new $[self.support.className](self, options);
                     });
                 });
