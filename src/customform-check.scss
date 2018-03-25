@@ -12,11 +12,10 @@
         background: #fff;
         box-sizing: border-box;
         transition: .3s;
-
-        .is-checked& {
-            background-color: #303748;
-            border-color: #303748;
-        }
+    }
+    &.is-checked .customform-input {
+        background-color: #303748;
+        border-color: #303748;
     }
 
     &:hover {

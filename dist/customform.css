@@ -4,6 +4,7 @@
 .customform {
   cursor: pointer;
 }
+
 .customform.is-disabled,
 .customform.is-disabled label,
 .customform .is-disabled {
@@ -11,6 +12,7 @@
   cursor: default;
   color: graytext;
 }
+
 .customform-input > input,
 .customform-input > select {
   position: absolute;
