@@ -11,6 +11,7 @@
         // Variables
         this.context = context;
         this.options = {};
+        this.support = undefined;
 
         // Retour
         if (this.prepareOptions()) {
@@ -60,11 +61,11 @@
         /**
          * Enregistre les options pour un support
          *
-         * @param string support Nom du support
+         * @param string type    Type de support
          * @param object options Options du support
          */
-        setOptions: function (support, options) {
-            this.options[support] = options;
+        setOptions: function (type, options) {
+            this.options[type] = options;
 
             return this;
         },
@@ -75,9 +76,8 @@
         setSupports: function () {
             var self = this;
 
-            $.each(self.supports, function (support, selector) {
-                self.support = undefined;
-                self.setSupport(support);
+            $.each(self.supports, function (type, selector) {
+                self.setSupport(type);
             });
 
             return self;
@@ -86,20 +86,15 @@
         /**
          * Met en place un support
          *
-         * @param string support Nom du support
+         * @param string type    Type de support
          * @param object options Options du support
          */
-        setSupport: function (support, options) {
+        setSupport: function (type, options) {
             var self = this;
-
-            // Si le support est déjà initialisé, on stop
-            if (self.support !== undefined) {
-                return;
-            }
 
             // Données du support
             self.support = {};
-            self.support.type = support;
+            self.support.type = type;
             self.support.selector = $.CustomForm.supports[self.support.type];
             self.support.className = self.getSupportClassName(self.support.type);
             self.support.instances = {};
