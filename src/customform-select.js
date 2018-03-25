@@ -27,7 +27,7 @@
         $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormSelect.defaults, options);
 
         // Variables
-        this.keyup = {
+        this.keyboard = {
             timeout: null,
             keyCodeToKey: {
                 48: '0', 49: '1', 50: '2', 51: '3', 52: '4', 53: '5', 54: '6', 55: '7', 56: '8', 57: '9', 65: 'a', 66: 'b', 67: 'c', 68: 'd', 69: 'e', 70: 'f', 71: 'g', 72: 'h', 73: 'i', 74: 'j', 75: 'k', 76: 'l', 77: 'm', 78: 'n', 79: 'o', 80: 'p', 81: 'q', 82: 'r', 83: 's', 84: 't', 85: 'u', 86: 'v', 87: 'w', 88: 'x', 89: 'y', 90: 'z', 96: '0', 97: '1', 98: '2', 99: '3', 100: '4', 101: '5', 102: '6', 103: '7', 104: '8', 105: '9'
@@ -35,7 +35,6 @@
             search: [],
             options: {}
         };
-        this.optionsData = {};
 
         // Init
         if (this.prepareOptions()) {
@@ -247,11 +246,11 @@
                 if (self.element.isMultiple) {
                     $.each(defaultValue.split(','), function (i, defaultValue) {
                         if (optionValue === defaultValue) {
-                            self.setOptions.call(self, option);
+                            self.setOption(option);
                         }
                     });
                 } else if (optionValue === defaultValue) {
-                    self.setOption.call(self, option);
+                    self.setOption(option);
                 }
             });
 
@@ -264,25 +263,25 @@
         eventsHandler: function () {
             var self = this;
 
-            self.getWrapperLabel().on('click.customform.open keyup.customform.open', function (event) {
+            self.getWrapperLabel().on('click.customform.open keydown.customform.open', function (event) {
                 if (self.getInput().is(':disabled')) {
-                    return false;
+                    return;
                 }
 
                 if (event.type === 'click') {
                     self.clickHandler(event);
                 }
 
-                if (event.type === 'keyup') {
-                    self.keyupHandler(event);
+                if (event.type === 'keydown') {
+                    self.keyboardHandler(event);
                 }
             });
 
             // User callback
             if (self.settings.afterEventsHandler !== undefined) {
                 self.settings.afterEventsHandler.call({
-                    customFormSelect: this,
-                    element: this.element
+                    customFormSelect: self,
+                    element: self.element
                 });
             }
         },
@@ -386,8 +385,8 @@
             self.getWrapper().addClass(self.settings.classes.open);
 
             // Ajout d'un événement sur les options
-            self.getOptions().on('click.customform.option', function () {
-                self[(self.element.isMultiple) ? 'setOptions' : 'setOption'].call(self, $(this));
+            self.getOptions().on('click.customform.option', function (option) {
+                self.setOption($(option.currentTarget));
             });
 
             // Trigger click
@@ -407,32 +406,48 @@
         },
 
         /**
-         * Lors du keyup
+         * Au clavier
          *
-         * @param object event Evenement keyup
+         * @param object event Evenement
          */
-        keyupHandler: function (event) {
+        keyboardHandler: function (event) {
             var self = this;
-            var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
-            var fastDirection = (event.keyCode === 35) ? 'last' : (event.keyCode === 36) ? 'first' : undefined;
-            var isClose = (event.keyCode === 27 || event.keyCode === 13);
-            var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
-
-            if (isClose) {
-                self.close();
-                return false;
-            }
-
-            if (direction !== undefined || fastDirection !== undefined) {
-                self.closeHandler();
-            }
-
             var option = null;
             var currentOptionIndex = null;
             var optionsLength = 0;
-            self.getOptions().each(function (i, selector) {
-                var option = $(selector);
-                self.keyup.options[i] = option;
+            var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
+            var fastDirection = (event.keyCode === 35) ? 'last' : (event.keyCode === 36) ? 'first' : undefined;
+            var isClose = (event.keyCode === 27 || event.keyCode === 13 || event.keyCode === 9);
+            var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
+            var isSpace = (event.keyCode === 32);
+
+            // Stop scroll
+            if (isSpace) {
+                event.preventDefault();
+                return;
+            }
+            
+            // Fermeture
+            if (isClose) {
+                self.close();
+                return;
+            }
+
+            // Changement d'option
+            if (direction !== undefined || fastDirection !== undefined) {
+                event.preventDefault();
+                self.closeSiblings();
+
+                if (self.element.isMultiple) {
+                    self.clickHandler();
+                    return;
+                }
+            }
+
+            // Sélection de l'option
+            self.getOptions().each(function (i, option) {
+                option = $(option);
+                self.keyboard.options[i] = option;
 
                 if (option.hasClass(self.settings.classes.selected)) {
                     currentOptionIndex = i;
@@ -442,32 +457,32 @@
             });
 
             if (direction === 'up') {
-                option = self.keyup.options[currentOptionIndex-1];
+                option = self.keyboard.options[currentOptionIndex-1];
             } else if (direction === 'down') {
-                option = self.keyup.options[currentOptionIndex+1];
+                option = self.keyboard.options[currentOptionIndex+1];
             } else if (fastDirection !== undefined) {
-                option = (fastDirection === 'last') ? self.keyup.options[optionsLength-1] : self.keyup.options[0];
+                option = (fastDirection === 'last') ? self.keyboard.options[optionsLength-1] : self.keyboard.options[0];
             } else if (isLetter) {
-                var letter = (event.key !== undefined) ? event.key : self.keyup.keyCodeToKey[event.keyCode];
+                var letter = (event.key !== undefined) ? event.key : self.keyboard.keyCodeToKey[event.keyCode];
 
                 if (letter !== undefined) {
-                    clearTimeout(self.keyup.timeout);
-                    self.keyup.search.push(letter);
+                    clearTimeout(self.keyboard.timeout);
+                    self.keyboard.search.push(letter);
 
-                    self.keyup.timeout = setTimeout(function () {
-                        self.setOption.call(self, self.getOptionOnkeyup.call(self));
+                    self.keyboard.timeout = setTimeout(function () {
+                        self.setOption(self.getOptionOnkeyboard());
                     }, 250);
                 }
             }
 
             if (!self.element.isMultiple) {
-                self.setOption.call(self, option, {
+                self.setOption(option, {
                     direction: direction
                 });
             }
 
-            // Trigger keyup
-            self.getInput().triggerHandler('keyup');
+            // Trigger event
+            self.getInput().triggerHandler(event.type);
         },
 
         /**
@@ -475,9 +490,9 @@
          *
          * @return string
          */
-        getOptionOnkeyup: function () {
-            var searchString = this.keyup.search.join('', this.keyup.search);
+        getOptionOnkeyboard: function () {
             var out = null;
+            var searchString = this.keyboard.search.join('', this.keyboard.search);
 
             var seachResults = [];
             $.each(this.getOptions(), function (i, option) {
@@ -494,152 +509,157 @@
 
             if (searchIndexResult.length) {
                 searchIndexResult = searchIndexResult.shift();
-                out = this.keyup.options[searchIndexResult];
+                out = this.keyboard.options[searchIndexResult];
             }
 
-            this.keyup.search = [];
+            this.keyboard.search = [];
             return out;
         },
 
         /**
-         * Sélectionne l'option définie
+         * Sélectionne une option
+         *
+         * @param string|jQuery object option Sélecteur ou option
          */
         setOption: function (option, settings) {
+            var self = this;
+            var callbackEvent = {};
+            option   = (typeof option === 'string') ? self.getOptions(option) : option;
             settings = settings || {};
 
-            if (option !== null && option !== undefined && option.attr('data-value') !== undefined) {
-                if (option.hasClass(this.settings.classes.disabled) && settings.direction !== undefined) {
+            if (option !== null && option !== undefined && option.length && option.attr('data-value') !== undefined) {
+                var isDisabled = option.hasClass(self.settings.classes.disabled);
+
+                // Si l'option est désactivée, on passe à la précédente/suivante
+                if (isDisabled && settings.direction !== undefined) {
                     option = option[(settings.direction === 'up') ? 'prev' : 'next']();
-                    this.setOption.call(this, option, {
+                    self.setOption(option, {
                         direction: settings.direction
                     });
                     return;
                 }
 
-                if (option.length && !option.hasClass(this.settings.classes.disabled)) {
-                    var optionValue = option.attr('data-value');
-                    var optionName  = option.html();
-
-                    // <select>
-                    this.getInput().html($('<option>', {
-                        value: optionValue,
-                        html: optionName
-                    }));
-
-                    // Label
-                    this.getWrapperLabel().attr('data-value', optionValue).html(optionName);
-
-                    // Option
-                    this.getOptions().removeClass(this.settings.classes.selected);
-                    option.addClass(this.settings.classes.selected);
-
-                    // Trigger change
-                    this.getInput().triggerHandler('change');
-
-                    // User callback
-                    if (this.settings.onChange !== undefined) {
-                        this.settings.onChange.call({
-                            customFormSelect: this,
-                            wrapper: this.getWrapper(),
-                            input: this.getInput(),
-                            wrapperLabel: this.getWrapperLabel(),
-                            option: option
-                        });
-                    }
-                }
-            }
-
-            return this;
-        },
-
-        /**
-         * Sélectionne les options définies
-         */
-        setOptions: function (option) {
-            var self = this;
-            var optionsValues = [];
-            var optionsNames = [];
-
-            if (option !== null && option !== undefined && option.attr('data-value') !== undefined) {
-                if (option.hasClass(self.settings.classes.disabled)) {
+                // Si l'option la dernière option trouvée est désactivée, on stop
+                if (isDisabled) {
                     return;
                 } else {
-                    // Si l'option "none" est cochée, on l'enlève
-                    if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass('is-first')) {
-                        self.getInput().empty();
-                        self.element.multipleOptions[0].removeClass(self.settings.classes.selected);
-                        self.element.multipleOptions = [];
-                    }
+                    // Si on est en mode multiple
+                    if (self.element.isMultiple) {
+                        var optionsValues = [];
+                        var optionsNames = [];
 
-                    // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
-                    if (option.hasClass(self.settings.classes.selected)) {
-                        self.element.multipleOptions = [];
-                        option.removeClass(self.settings.classes.selected);
-                        self.getOptions('.' + self.settings.classes.selected).each(function () {
-                            self.element.multipleOptions.push($(this));
+                        // Si l'option "none" est cochée, on l'enlève
+                        if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass('is-first')) {
+                            self.getInput().empty();
+                            self.element.multipleOptions[0].removeClass(self.settings.classes.selected);
+                            self.element.multipleOptions = [];
+                        }
+
+                        // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
+                        if (option.hasClass(self.settings.classes.selected)) {
+                            self.element.multipleOptions = [];
+                            option.removeClass(self.settings.classes.selected);
+                            self.getOptions('.' + self.settings.classes.selected).each(function () {
+                                self.element.multipleOptions.push($(this));
+                            });
+
+                            if (self.element.multipleOptions.length === 0) {
+                                setTimeout(function () {
+                                    self.setOption('.' + self.settings.classes.first);
+                                }, 0);
+                            }
+                        } else {
+                            self.element.multipleOptions.push(option);
+                        }
+
+                        // Reorder
+                        self.element.multipleOptions.sort(function (a, b) {
+                            var options = self.getOptions();
+                            a = options.index(a);
+                            b = options.index(b);
+
+                            if (a === b) {
+                                return 0;
+                            }
+                            return (a < b) ? -1 : 1;
                         });
 
-                        if (self.element.multipleOptions.length === 0) {
-                            setTimeout(function () {
-                                self.setOption.call(self, self.getOptions('.' + self.settings.classes.first));
-                            }, 0);
+                        // Reset
+                        self.getInput().empty();
+                        self.getOptions().removeClass(self.settings.classes.selected);
+
+                        // Add
+                        $.each(self.element.multipleOptions, function (i, option) {
+                            option = $(option);
+
+                            if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.disabled)) {
+                                var optionValue = option.attr('data-value');
+                                var optionName = option.html();
+                                optionsValues.push(optionValue);
+                                optionsNames.push(optionName);
+
+                                // <select>
+                                self.getInput().append($('<option>', {
+                                    value: optionValue,
+                                    html: optionName
+                                }).prop('selected', true));
+
+                                // Option
+                                option.addClass(self.settings.classes.selected);
+                            }
+                        });
+
+                        // Label
+                        self.getWrapperLabel()
+                            .attr('data-value', optionsValues.join(','))
+                            .html(optionsNames.join(self.settings.multipleOptionsSeparator));
+
+                        // User callback
+                        if (self.settings.onChange !== undefined) {
+                            callbackEvent = $.extend(callbackEvent, {
+                                options: self.element.multipleOptions
+                            });
                         }
+
                     } else {
-                        self.element.multipleOptions.push(option);
+                        // Mode classique
+                        var optionValue = option.attr('data-value');
+                        var optionName  = option.html();
+
+                        // <select>
+                        self.getInput().html($('<option>', {
+                            value: optionValue,
+                            html: optionName
+                        }).prop('selected', true));
+
+                        // Label
+                        self.getWrapperLabel().attr('data-value', optionValue).html(optionName);
+
+                        // Option
+                        self.getOptions().removeClass(self.settings.classes.selected);
+                        option.addClass(self.settings.classes.selected);
+
+                        // User callback
+                        if (self.settings.onChange !== undefined) {
+                            callbackEvent = $.extend(callbackEvent, {
+                                option: option
+                            });
+                        }
                     }
-
-                    // Reorder
-                    self.element.multipleOptions.sort(function (a, b) {
-                        var options = self.getOptions();
-                        a = options.index(a);
-                        b = options.index(b);
-
-                        if (a === b) {
-                            return 0;
-                        }
-                        return (a < b) ? -1 : 1;
-                    });
-
-                    // Reset
-                    self.getInput().empty();
-                    self.getOptions().removeClass(self.settings.classes.selected);
-
-                    // Add
-                    $.each(self.element.multipleOptions, function (i, option) {
-                        option = $(option);
-
-                        if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.disabled)) {
-                            var optionValue = option.attr('data-value');
-                            var optionName = option.html();
-                            optionsValues.push(optionValue);
-                            optionsNames.push(optionName);
-
-                            // <select>
-                            self.getInput().append($('<option>', {
-                                value: optionValue,
-                                html: optionName
-                            }).prop('selected', true));
-
-                            // Option
-                            option.addClass(self.settings.classes.selected);
-                        }
-                    });
-
-                    // Label
-                    self.getWrapperLabel().attr('data-value', optionsValues.join(',')).html(optionsNames.join(self.settings.multipleOptionsSeparator));
 
                     // Trigger change
                     self.getInput().triggerHandler('change');
 
                     // User callback
                     if (self.settings.onChange !== undefined) {
-                        self.settings.onChange.call({
-                            customFormSelect: this,
+                        callbackEvent = $.extend({
+                            customFormSelect: self,
                             wrapper: self.getWrapper(),
                             input: self.getInput(),
-                            wrapperLabel: self.getWrapperLabel(),
-                            options: self.element.multipleOptions
-                        });
+                            wrapperLabel: self.getWrapperLabel()
+                        }, callbackEvent);
+
+                        self.settings.onChange.call(callbackEvent);
                     }
                 }
             }
@@ -648,22 +668,41 @@
         },
 
         /**
+         * @deprecated use setOption() for multiple select
+         * @removed in 4.6.0
+         *
+         * Sélectionne une option en mode multiple
+         *
+         * @param string|jQuery object option Sélecteur ou option
+         */
+        setOptions: function (option) {
+            this.customForm.setLog('warn', 'setOptions() is deprecated => use setOption() for multiple select. Removed in 4.6.0');
+            return this.setOption(option);
+        },
+
+        /**
          * Enlève la sélection des options définies
          * 
          * @param  string|jQuery object options Sélecteur ou liste des options
-         * @param  boolean              disable Désactiver l'option en même temps
+         * @param  boolean              disable Désactiver l'option en même
+         *     temps
          */
         removeOptions: function (options, disable) {
             var self = this;
             options = (typeof options === 'string') ? self.getOptions(options) : options;
             disable = disable || false;
 
+            if (!self.element.isMultiple) {
+                self.customForm.setLog('warn', 'removeOptions() works only with "multiple" attribute. Uses setOption() for classic <select>.');
+                return;
+            }
+
             if (options.length) {
-                $.each(options, function () {
-                    var option = $(this);
+                $.each(options, function (i, option) {
+                    option = $(option);
 
                     if (option.hasClass(self.settings.classes.selected)) {
-                        self.setOptions(option);
+                        self.setOption(option);
                     }
 
                     if (disable) {
