@@ -49,11 +49,11 @@ Lors de l'initialisation d'un support, CustomForm va éxecuter une classe JS qui
 
 La classe JS est instanciée pour chaque sélecteur du support dans le contexte. Pour faire des manipulations sur les supports, il faut récupérer les instances :
 
-    var CustomFormSelects = CustomForm.setSupport('name', [options]);
+    var selects = CustomForm.setSupport('name', [options]);
 
 Il est possible ensuite de manipuler l'instance en fonction de l'attribut **name** du sélecteur ou via la méthode **getInstance**.
 
-    var instance = CustomForm.getInstance(CustomFormSelects, $('#input'));
+    var instance = CustomForm.getInstance(selects, $('#input'));
 
 
 ---
@@ -150,8 +150,7 @@ Ce support permet de personnaliser les selects, multiple ou non.
 | getValue           | -                                                                                                                          | Récupère la valeur actuellement sélectionnée                                     |
 | getDefaultValue    | -                                                                                                                          | Récupère la valeur sélectionnée par défaut                                       |
 | getOptionValue     | **option** *jQuery object* Option pour en récupérer sa valeur                                                              | Récupère la valeur d'une option                                                  |
-| setOption          | **option** *jQuery object* Option à sélectionner                                                                           | Sélectionne une option unique                                                    |
-| setOptions         | **option** *jQuery object* Option à sélectionner                                                                           | Sélectionne une option multiple                                                  |
+| setOption          | **option** *jQuery object* Option à sélectionner                                                                           | Sélectionne une option                                                    |
 | removeOptions      | **options** *string/jQuery object* Sélecteur ou liste des options, **disable** *boolean* Désactiver l'option en même temps | Enlève la sélection des options définies                                         |
 | disableOption      | **option** *jQuery object* Option à désactiver                                                                             | Désactive une option                                                             |
 | close              | -                                                                                                                          | Ferme l'affichage des options                                                    |
@@ -174,9 +173,9 @@ Ce support permet de personnaliser les input de type file.
 
 | Option                        | Type     | Valeur par défaut               | Description                                               |
 |-------------------------------|----------|---------------------------------|-----------------------------------------------------------|
-| labelText                     | string   | 'Parcourir...'                  | Texte du bouton "parcourir"                               |
-| emptyText                     | string   | 'Aucun fichier sélectionné.'    | Texte quand aucun fichier n'est sélectionné               |
-| multipleText                  | string   | '{count} fichiers sélectionnés' | Texte quand plusieurs fichiers sont sélectionnés          |
+| labelText                     | string   | 'Browse...'                     | Texte du bouton "parcourir"                               |
+| emptyText                     | string   | 'No file selected.'             | Texte quand aucun fichier n'est sélectionné               |
+| multipleText                  | string   | '{count} files selected.'       | Texte quand plusieurs fichiers sont sélectionnés          |
 | classes                       | object   | Voir ci-dessous                 | Objet pour les options ci-dessous                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;label | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |
 | &nbsp;&nbsp;&nbsp;&nbsp;file  | string   | '{prefix}-file'                 | Classe pour le nom du fichier sélectionné                 |

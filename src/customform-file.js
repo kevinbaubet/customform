@@ -26,9 +26,9 @@
     };
 
     $.CustomFormFile.defaults = {
-        labelText: 'Parcourir...',
-        emptyText: 'Aucun fichier sélectionné.',
-        multipleText: '{count} fichiers sélectionnés',
+        labelText: 'Browse...',
+        emptyText: 'No file selected.',
+        multipleText: '{count} files selected.',
         classes: {
             label: '{prefix}-label',
             file: '{prefix}-file',
