@@ -21,6 +21,8 @@
         if (this.prepareOptions()) {
             this.load();
         }
+
+        return this;
     };
 
     $.CustomFormFile.defaults = {
@@ -80,6 +82,8 @@
                     element: this.element
                 });
             }
+
+            return this;
         },
 
         /**
@@ -124,6 +128,8 @@
             // WrapperLabel et file
             this.element.wrapperLabel.appendTo(this.element.wrapper);
             this.element.wrapperFile.appendTo(this.element.wrapper);
+
+            return this;
         },
 
         /**
@@ -140,6 +146,8 @@
             if (this.getInput().val() !== '') {
                 this.setWrapperFileValue(this.getInput().get(0));
             }
+
+            return this;
         },
 
         /**
@@ -149,13 +157,13 @@
             var self = this;
 
             // Sélection du fichier
-            self.getWrapperLabel().on('click keyup', function (event) {
-                if (event.type === 'click' || (event.type === 'keyup' && (event.keyCode === 32 || event.keyCode === 13))) {
+            self.getWrapperLabel().on('click.customform keydown.customform', function (event) {
+                if (event.type === 'click' || (event.type === 'keydown' && (event.keyCode === 32 || event.keyCode === 13))) {
                     event.preventDefault();
 
                     if (self.getInput().is(':disabled')) {
-                        return false;
-                }
+                        return;
+                    }
 
                     // État
                     self.getWrapper().addClass(self.settings.classes.open);
@@ -177,14 +185,14 @@
             });
 
             // Une fois une valeur sélectionnée
-            self.getInput().on('change', function () {
-                var input = $(this);
+            self.getInput().on('change.customform', function (event) {
+                var input = $(event.currentTarget);
 
                 // État
                 self.getWrapper().removeClass(self.settings.classes.open);
 
                 // Ajout de la valeur
-                self.setWrapperFileValue(this);
+                self.setWrapperFileValue(event.currentTarget);
 
                 // User callback
                 if (self.settings.onChange !== undefined) {
@@ -199,8 +207,8 @@
             // User callback
             if (self.settings.afterEventsHandler !== undefined) {
                 self.settings.afterEventsHandler.call({
-                    customFormFile: this,
-                    element: this.element
+                    customFormFile: self,
+                    element: self.element
                 });
             }
         },
@@ -211,9 +219,7 @@
         resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset', function () {
-                var form = $(this);
-
+            self.getContext().on('reset.customform', function (event) {
                 self.getWrapper().removeClass(self.settings.classes.disabled);
                 self.getWrapperFile().text(self.settings.emptyText);
 
@@ -224,7 +230,7 @@
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
                             customFormFile: self,
-                            form: form
+                            form: $(event.currentTarget)
                         });
                     }
                 }, 0);
@@ -249,6 +255,8 @@
             // Ajout de la valeur
             this.getWrapperFile().text(filename);
             this.getWrapper().addClass(this.settings.classes.selected);
+
+            return this;
         },
 
         /**

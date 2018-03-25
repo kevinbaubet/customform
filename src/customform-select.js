@@ -40,6 +40,8 @@
         if (this.prepareOptions()) {
             this.load();
         }
+
+        return this;
     };
 
     $.CustomFormSelect.defaults = {
@@ -103,6 +105,8 @@
                     element: this.element
                 });
             }
+
+            return this;
         },
 
         /**
@@ -204,6 +208,8 @@
             self.getOptions()
                 .first().addClass(self.settings.classes.first).end()
                 .last().addClass(self.settings.classes.last);
+
+            return self;
         },
 
         /**
@@ -228,8 +234,8 @@
 
                 if (defaultValue.length > 1) {
                     var defaultValues = [];
-                    $.each(defaultValue, function () {
-                        defaultValues.push($(this).val());
+                    $.each(defaultValue, function (i, selectedOption) {
+                        defaultValues.push($(selectedOption).val());
                     });
 
                     defaultValue = defaultValues.join(',');
@@ -239,8 +245,8 @@
                 self.getInput().attr('data-default-value', defaultValue);
             }
 
-            self.getOptions().each(function () {
-                var option = $(this);
+            self.getOptions().each(function (i, option) {
+                option = $(option);
                 var optionValue = option.attr('data-value');
 
                 if (self.element.isMultiple) {
@@ -292,9 +298,7 @@
         resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset.customform', function () {
-                var form = $(this);
-
+            self.getContext().on('reset.customform', function (event) {
                 self.getWrapper().removeClass(self.settings.classes.disabled);
 
                 setTimeout(function () {
@@ -304,7 +308,7 @@
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
                             customFormSelect: self,
-                            form: form
+                            form: $(event.currentTarget)
                         });
                     }
                 }, 0);
@@ -355,8 +359,8 @@
             var siblings = self.element.context.find('.' + self.settings.classes.prefix + '--select').not(self.element.wrapper);
 
             if (siblings.length) {
-                siblings.each(function () {
-                    $(this)
+                siblings.each(function (i, select) {
+                    $(select)
                         .removeClass(self.settings.classes.open)
                         .find('.' + self.settings.classes.label)
                             .off('click.customform.close').end()
@@ -559,8 +563,8 @@
                         if (option.hasClass(self.settings.classes.selected)) {
                             self.element.multipleOptions = [];
                             option.removeClass(self.settings.classes.selected);
-                            self.getOptions('.' + self.settings.classes.selected).each(function () {
-                                self.element.multipleOptions.push($(this));
+                            self.getOptions('.' + self.settings.classes.selected).each(function (i, selectedOption) {
+                                self.element.multipleOptions.push($(selectedOption));
                             });
 
                             if (self.element.multipleOptions.length === 0) {
@@ -760,7 +764,6 @@
         },
         getValue: function (defaultValue) {
             defaultValue = defaultValue || false;
-
             var value = (defaultValue) ? this.getInput().attr('data-default-value') : this.getWrapperLabel().attr('data-value');
 
             if (this.element.isMultiple) {

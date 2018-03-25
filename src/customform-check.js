@@ -18,6 +18,8 @@
 
         // Init
         this.load();
+
+        return this;
     };
 
     $.CustomFormCheck.defaults = {
@@ -58,6 +60,8 @@
                     element: this.element
                 });
             }
+
+            return this;
         },
 
         /**
@@ -88,6 +92,8 @@
             // Wrapper this.element.wrapperInput
             this.getInput().wrap(this.element.wrapperInput);
             this.element.wrapperInput = this.element.input.parent();
+
+            return this;
         },
 
         /**
@@ -110,8 +116,8 @@
         eventsHandler: function () {
             var self = this;
 
-            self.getWrapper().on('click keyup', function (event) {
-                if (event.type === 'click' || (event.type === 'keyup' && event.keyCode === 32)) {
+            self.getWrapper().on('click.customform keydown.customform', function (event) {
+                if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 32)) {
                     event.preventDefault();
 
                     self.setOption();
@@ -133,9 +139,7 @@
         resetHandler: function () {
             var self = this;
 
-            self.getContext().on('reset', function () {
-                var form = $(this);
-
+            self.getContext().on('reset.customform', function (event) {
                 self.getWrapper().removeClass(self.settings.classes.checked + ' ' + self.settings.classes.disabled);
 
                 setTimeout(function () {
@@ -145,7 +149,7 @@
                     if (self.settings.onReset !== undefined) {
                         self.settings.onReset.call({
                             customFormCheck: self,
-                            form: form
+                            form: $(event.currentTarget)
                         });
                     }
                 }, 0);
@@ -166,8 +170,8 @@
             if (isRadio) {
                 self.getInputsRadio()
                     .prop('checked', false)
-                    .each(function () {
-                        self.getWrapper($(this)).removeClass(self.settings.classes.checked);
+                    .each(function (i, input) {
+                        self.getWrapper($(input)).removeClass(self.settings.classes.checked);
                     });
             }
             self.getWrapper()[(isRadio) ? 'addClass' : 'toggleClass'](self.settings.classes.checked);

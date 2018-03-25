@@ -172,7 +172,7 @@
             if (name !== false && instances !== undefined && instances[name] !== undefined) {
                 return instances[name];
             } else {
-                this.setLog('error', 'input name attribut not found.')
+                this.setLog('error', '"name" attribute not found in input parameter.')
             }
 
             return false;

@@ -21,6 +21,8 @@
 
         // Init
         this.load();
+
+        return this;
     };
 
     $.CustomFormLabel.support = [
@@ -76,6 +78,8 @@
                     inputs: this.getInputs()
                 });
             }
+
+            return this;
         },
 
         /**
@@ -84,8 +88,8 @@
         initElementsState: function () {
             var self = this;
 
-            self.getInputs().each(function () {
-                var input = $(this);
+            self.getInputs().each(function (i, input) {
+                input = $(input);
                 var wrapper = self.getWrapper(input);
 
                 wrapper.addClass(self.settings.classes.label);
@@ -94,6 +98,8 @@
                     wrapper.addClass(self.settings.classes.filled);
                 }
             });
+
+            return self;
         },
 
         /**
@@ -103,8 +109,8 @@
             var self = this;
 
             self.getInputs().on({
-                'click keyup': function (event) {
-                    var input = $(this);
+                'click.customform keyup.customform': function (event) {
+                    var input = $(event.currentTarget);
                     var wrapper = self.getWrapper(input);
 
                     wrapper.addClass(self.settings.classes.filled + ' ' + self.settings.classes.focused);
@@ -119,8 +125,8 @@
                         });
                     }
                 },
-                blur: function (event) {
-                    var input = $(this);
+                'blur.customform': function (event) {
+                    var input = $(event.currentTarget);
                     var wrapper = self.getWrapper(input);
 
                     if (input.val().length > 0) {
