@@ -1,3 +1,5 @@
+@import "variables";
+
 /* ==========================================================================
    CustomForm
    ========================================================================== */
@@ -9,12 +11,14 @@
     .is-disabled {
         opacity: .5;
         cursor: default;
-        color: graytext;
     }
 }
 .customform-input {
-    > input,
-    > select {
+    display: block;
+    position: relative;
+
+    & > input,
+    & > select {
         position: absolute;
         z-index: -1;
         visibility: hidden;

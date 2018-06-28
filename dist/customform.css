@@ -10,7 +10,11 @@
 .customform .is-disabled {
   opacity: .5;
   cursor: default;
-  color: graytext;
+}
+
+.customform-input {
+  display: block;
+  position: relative;
 }
 
 .customform-input > input,

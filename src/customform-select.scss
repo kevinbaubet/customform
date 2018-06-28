@@ -1,141 +1,145 @@
+@import "variables";
+
 /* ==========================================================================
    CustomFormSelect
    ========================================================================== */
 .customform--select {
     position: relative;
     display: inline-block;
-    width: 250px;
-
-    &.is-disabled {
-        .customform-selectLabel {
-            &:hover {
-                border-color: #9d9d9d;
-            }
-            &:after {
-                display: none;
-            }
-        }
-    }
-}
-.customform-selectLabel {
-    display: inline-block;
     width: 100%;
-    height: 33px;
-    padding: 5px 10px;
-    padding-right: 30px;
-    font-size: 1.2em;
+    max-width: 250px;
+}
+
+.customform-selectLabel {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0 50px 0 $input--padding-horizontal;
     text-overflow: ellipsis;
-    border: 1px solid #9d9d9d;
-    background: #fff;
+    font-size: $input--font-size;
+    line-height: $input--height;
+    color: $input--text-color;
+    border: $input--border-width solid $input--border-color;
+    border-radius: $input--border-radius;
+    background: $input--background-color;
     overflow: hidden;
     white-space: nowrap;
     box-sizing: border-box;
     transition: .3s;
 
-    &:hover {
-        border-color: #34495e;
+    &:focus {
+        outline: 0;
     }
 
     &:after {
-        content: "";
+        content: '';
         position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
         right: 15px;
-        bottom: 15px;
-        z-index: 5;
         width: 0;
         height: 0;
         border-style: solid;
         border-width: 8px 5px 0 5px;
-        border-color: #34495e transparent transparent;
-        transition: transform .3s;
-
-        .is-open & {
-            transform: rotateX(180deg);
-        }
+        border-color: $input--border-color transparent transparent;
+        transition: .3s;
     }
 }
+
 .customform-selectOptions {
     position: absolute;
-    top: 54px;
-    left: 0;
     z-index: -1;
+    top: 100%;
+    left: 0;
     width: 100%;
-    height: 0;
     max-height: 0;
-    background: #fff;
-    border: 1px solid #9d9d9d;
-    box-sizing: border-box;
     overflow: hidden;
+    border: 1px solid $input--border-color;
+    border-top: 0;
+    border-radius: 0 0 $input--border-radius $input--border-radius;
+    background: $input--background-color;
     opacity: 0;
-    transition: .1s;
-
-    .is-open & {
-        z-index: 50;
-        height: auto;
-        max-height: 250px;
-        opacity: 1;
-        overflow-y: auto;
-    }
+    transition: .2s;
+    box-sizing: border-box;
 }
 .customform-selectOptionGroupLabel,
 .customform-selectOptionGroup,
 .customform-selectOption {
     display: block;
-    background: #fff;
-    box-sizing: border-box;
 }
 .customform-selectOption {
-    padding: 5px 10px;
+    padding: $input--padding-vertical $input--padding-horizontal;
 
-    &.is-selected,
-    &:hover {
+    &:not(.is-disabled):not(.is-selected ):hover {
+        color: $color--primary;
+        background-color: $input--background-color;
+    }
+    &.is-selected {
         color: #fff;
-        background-color: #34495e;
+        background-color: $color--primary;
     }
-    &.is-disabled:hover {
-        color: graytext;
-    }
-}
-.customform.is-disabled .customform-selectOption.is-selected,
-.customform.is-disabled .customform-selectOption:hover,
-.customform-selectOption.is-disabled:hover {
-    background-color: transparent;
 }
 .customform-selectOptionGroupLabel {
-    padding: 0 10px;
+    padding: $input--padding-vertical $input--padding-horizontal;
     font-style: italic;
-    font-weight: bold;
+    background-color: darken($input--background-color, 5%);
     cursor: default;
 }
 .customform-selectOptionGroup .customform-selectOption {
-    padding-left: 20px;
+    padding-left: $input--padding-horizontal*1.33;
 }
 
-/* Select multiple
+
+/* Main states
    ========================================================================== */
+.customform--select.is-open,
+.customform--select:hover {
+    .customform-selectLabel {
+        border-color: $color--primary;
+        &:after {
+            opacity: .3;
+        }
+    }
+}
+.customform--select.is-open {
+    .customform-selectOptions {
+        z-index: 50;
+        max-height: 280px;
+        opacity: 1;
+        overflow-y: auto;
+    }
+}
+
 .customform--select.is-multiple {
     .customform-selectOption {
         &:before {
             content: "";
             position: relative;
-            top: 2px;
             display: inline-block;
-            margin-right: 10px;
+            top: 1px;
+            vertical-align: top;
             width: 10px;
             height: 10px;
-            border: 1px solid #9d9d9d;
+            margin-right: 10px;
+            border: 1px solid $input--border-color;
         }
         &.is-selected {
-            color: #000;
-            background: none;
+            color: $input--text-color;
+            background: transparent;
 
             &:before {
-                background: #34495e;
-                border-color: #34495e;
+                background: $color--primary;
+                border-color: $color--primary;
             }
         }
         &.is-first {
             display: none;
         }
+    }
+}
+
+.customform--select.is-disabled {
+    .customform-selectLabel:hover {
+        border-color: $input--border-color;
     }
 }

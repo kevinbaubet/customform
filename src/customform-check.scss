@@ -1,63 +1,107 @@
+@import "variables";
+
 /* ==========================================================================
    CustomFormCheck
    ========================================================================== */
 .customform--checkbox,
-.customform--radio {
-    .customform-input {
-        position: relative;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 1px solid #9d9d9d;
-        background: #fff;
-        box-sizing: border-box;
-        transition: .3s;
-    }
-    &.is-checked .customform-input {
-        background-color: #303748;
-        border-color: #303748;
+.customform--radio { $s: 24px;
+    display: flex;
+    align-items: center;
+
+    label {
+        margin-left: .6em;
     }
 
-    &:hover {
+    .customform-input {
+        position: relative;
+        display: block;
+        width: $s;
+        height: $s;
+        border: 1px solid $input--border-color;
+        background: $input--background-color;
+        box-sizing: border-box;
+        transition: .2s;
+
+        &:before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: $color--primary;
+            width: 100%;
+            line-height: $s;
+            text-align: center;
+            visibility: hidden;
+            transform: scale(.2);
+            opacity: 0;
+            transition: .2s;
+        }
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &:not(.is-disabled):hover {
         .customform-input {
-            border-color: #303748;
-            border-width: 2px;
+            border-color: $color--primary;
         }
     }
 
     &.is-checked {
-        .customform-input:before,
-        &.is-disabled:hover .customform-input:before {
-            content: "";
-            position: absolute;
-            top: -5px;
-            left: -4px;
-            z-index: 5;
-            color: #fff;
-            font-size: 26px;
+        &,
+        &:hover {
+            .customform-input {
+                border-color: $input--border-color;
+
+                &:before {
+                    visibility: visible;
+                    opacity: 1;
+                    transform: scale(.6);
+                }
+            }
         }
     }
 
     &.is-disabled {
-        .customform-input {
-            border-width: 1px;
-            border-color: #9d9d9d;
-        }
-    }
+        opacity: .6;
 
-    &.is-checked.is-disabled {
-        .customform-input {
-            background-color: #9d9d9d;
-            border-color: #9d9d9d;
+        &.is-checked {
+            .customform-input {
+                &:before {
+                    color: $input--border-color;
+                }
+            }
         }
-    }
-
-    label {
-        padding-left: 10px;
-        vertical-align: super;
     }
 }
 
-.customform--radio .customform-input {
-    border-radius: 50%;
+.customform--checkbox {
+    .customform-input {
+        &:before {
+            content: "\2714";
+            font-size: 24px;
+        }
+    }
+}
+
+
+.customform--radio {
+    .customform-input {
+        border-radius: 50%;
+
+        &:before {
+            content: '';
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: $color--primary;
+        }
+    }
+    &.is-disabled {
+        .customform-input {
+            &:before {
+                background-color: $input--border-color;
+            }
+        }
+    }
 }

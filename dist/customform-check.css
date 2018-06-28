@@ -1,64 +1,108 @@
 /* ==========================================================================
    CustomFormCheck
    ========================================================================== */
-.customform--checkbox .customform-input,
-.customform--radio .customform-input {
-  position: relative;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #9d9d9d;
-  background: #fff;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  -webkit-transition: .3s;
-  -o-transition: .3s;
-  transition: .3s;
-}
-
-.customform--checkbox.is-checked .customform-input,
-.customform--radio.is-checked .customform-input {
-  background-color: #303748;
-  border-color: #303748;
-}
-
-.customform--checkbox:hover .customform-input,
-.customform--radio:hover .customform-input {
-  border-color: #303748;
-  border-width: 2px;
-}
-
-.customform--checkbox.is-checked .customform-input:before,
-.customform--checkbox.is-checked.is-disabled:hover .customform-input:before,
-.customform--radio.is-checked .customform-input:before,
-.customform--radio.is-checked.is-disabled:hover .customform-input:before {
-  content: "";
-  position: absolute;
-  top: -5px;
-  left: -4px;
-  z-index: 5;
-  color: #fff;
-  font-size: 1.625rem;
-}
-
-.customform--checkbox.is-disabled .customform-input,
-.customform--radio.is-disabled .customform-input {
-  border-width: 1px;
-  border-color: #9d9d9d;
-}
-
-.customform--checkbox.is-checked.is-disabled .customform-input,
-.customform--radio.is-checked.is-disabled .customform-input {
-  background-color: #9d9d9d;
-  border-color: #9d9d9d;
+.customform--checkbox,
+.customform--radio {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .customform--checkbox label,
 .customform--radio label {
-  padding-left: 0.625rem;
-  vertical-align: super;
+  margin-left: .6em;
+}
+
+.customform--checkbox .customform-input,
+.customform--radio .customform-input {
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #ccc;
+  background: #fff;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  -webkit-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+}
+
+.customform--checkbox .customform-input:before,
+.customform--radio .customform-input:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #ff5a60;
+  width: 100%;
+  line-height: 24px;
+  text-align: center;
+  visibility: hidden;
+  -webkit-transform: scale(0.2);
+      -ms-transform: scale(0.2);
+          transform: scale(0.2);
+  opacity: 0;
+  -webkit-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+}
+
+.customform--checkbox .customform-input:focus,
+.customform--radio .customform-input:focus {
+  outline: 0;
+}
+
+.customform--checkbox:not(.is-disabled):hover .customform-input,
+.customform--radio:not(.is-disabled):hover .customform-input {
+  border-color: #ff5a60;
+}
+
+.customform--checkbox.is-checked .customform-input, .customform--checkbox.is-checked:hover .customform-input,
+.customform--radio.is-checked .customform-input,
+.customform--radio.is-checked:hover .customform-input {
+  border-color: #ccc;
+}
+
+.customform--checkbox.is-checked .customform-input:before, .customform--checkbox.is-checked:hover .customform-input:before,
+.customform--radio.is-checked .customform-input:before,
+.customform--radio.is-checked:hover .customform-input:before {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transform: scale(0.6);
+      -ms-transform: scale(0.6);
+          transform: scale(0.6);
+}
+
+.customform--checkbox.is-disabled,
+.customform--radio.is-disabled {
+  opacity: .6;
+}
+
+.customform--checkbox.is-disabled.is-checked .customform-input:before,
+.customform--radio.is-disabled.is-checked .customform-input:before {
+  color: #ccc;
+}
+
+.customform--checkbox .customform-input:before {
+  content: "\2714";
+  font-size: 1.5rem;
 }
 
 .customform--radio .customform-input {
   border-radius: 50%;
+}
+
+.customform--radio .customform-input:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #ff5a60;
+}
+
+.customform--radio.is-disabled .customform-input:before {
+  background-color: #ccc;
 }
