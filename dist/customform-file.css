@@ -1,3 +1,6 @@
+/* ==========================================================================
+   CustomFormFile
+   ========================================================================== */
 .customform--file {
   cursor: default;
 }
@@ -10,13 +13,13 @@
 .customform--file .customform-label,
 .customform--file .customform-file {
   display: inline-block;
+  vertical-align: middle;
 }
 
 .customform--file .customform-label {
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem 0.938rem;
   color: #fff;
-  font-weight: bold;
-  background: #303748;
+  background: #ff5a60;
   cursor: pointer;
   -webkit-transition: .3s;
   -o-transition: .3s;
@@ -28,10 +31,9 @@
 }
 
 .customform--file .customform-label:focus {
-  outline: 1px dotted black;
+  outline: 0;
 }
 
 .customform--file .customform-file {
-  margin-left: 0.625rem;
-  font-size: 1.2em;
+  margin-left: 1em;
 }

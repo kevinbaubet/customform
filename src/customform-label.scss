@@ -1,3 +1,5 @@
+@import "variables";
+
 /* ==========================================================================
    CustomFormLabel
    ========================================================================== */
@@ -6,47 +8,43 @@
 
     label {
         position: absolute;
-        top: 6px;
-        left: 5px;
         z-index: 5;
-        padding: 0 10px;
-        font-size: 1.2em;
-        background: #fff;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
         border-top: 1px solid transparent;
+        border-left: 1px solid $input--border-color;
+        padding: 4px $input--padding-horizontal;
+        border-top: 1px solid transparent;
+        font-size: 1em;
+        background: $input--background-color;
         transition: .3s;
 
-        &:before,
         &:after {
-            content: "";
+            content: '';
             position: absolute;
-            z-index: 5;
-            width: 1px;
-            height: 10px;
-            background: transparent;
-            transition: background .3s;
-        }
-        &:before {
-            top: -1px;
-            left: -1px;
-        }
-        &:after {
             top: 0;
+            bottom: 50%;
             right: 0;
+            width: 1px;
+            background-color: transparent;
+            transition: .1s;
         }
     }
+
     &.is-filled {
         label {
-            transform: translate(-4px, -16px);
+            top: 0;
         }
     }
     &.is-filled,
     &.is-focused {
         label {
-            border-color: #ccc;
+            border-color: $input--border-color;
 
-            &:before,
             &:after {
-                background: #ccc;
+                background-color: $input--border-color;
+                transition: .3s;
             }
         }
     }

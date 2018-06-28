@@ -71,10 +71,10 @@ label {
     cursor: pointer;
 }
 .form-item {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 .form-item + .form-item {
-    margin-top: 10px;
+    margin-top: 15px;
 }
 .form-actions {
     clear: both;
@@ -100,8 +100,13 @@ label {
 .form-text,
 .form-textarea {
     width: 100%;
-    padding: 10px;
+    padding: 15px 20px;
     background-color: #fff;
     border: 1px solid #ccc;
     box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus {
+    outline: 0;
 }
