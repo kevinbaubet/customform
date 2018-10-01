@@ -699,19 +699,6 @@
         },
 
         /**
-         * @deprecated use setOption() for multiple select
-         * @removed in 4.6.0
-         *
-         * Sélectionne une option en mode multiple
-         *
-         * @param string|jQuery object option Sélecteur ou option
-         */
-        setOptions: function (option) {
-            this.customForm.setLog('warn', 'setOptions() is deprecated => use setOption() for multiple select. Removed in 4.6.0');
-            return this.setOption(option);
-        },
-
-        /**
          * Enlève la sélection des options définies
          * 
          * @param  string|jQuery object options Sélecteur ou liste des options
