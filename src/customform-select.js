@@ -219,12 +219,14 @@
             var self = this;
             var defaultValue = self.getInput().attr('data-default-value');
 
+            // States
             if (self.getInput().is(':disabled')) {
                 self.getWrapper().addClass(self.settings.classes.disabled);
                 self.getInput().removeAttr('tabindex');
                 self.getWrapperLabel().removeAttr('tabindex');
             }
 
+            // Définition de la valeur par défaut
             if (defaultValue === undefined) {
                 defaultValue = self.getSourceOptions().filter('[selected]');
 
@@ -245,11 +247,23 @@
                 self.getInput().attr('data-default-value', defaultValue);
             }
 
+            // En multiple, on ne selectionne pas la valeur par défaut
+            if (self.element.isMultiple) {
+                var firstOption = self.getOptions('.is-first');
+                var firstOptionValue = self.getOptionValue(firstOption);
+
+                if (defaultValue === firstOptionValue) {
+                    defaultValue = null;
+                    self.setLabel(firstOption.html());
+                }
+            }
+
+            // Ajout des options
             self.getOptions().each(function (i, option) {
                 option = $(option);
                 var optionValue = option.attr('data-value');
 
-                if (self.element.isMultiple) {
+                if (self.element.isMultiple && defaultValue !== null) {
                     $.each(defaultValue.split(','), function (i, defaultValue) {
                         if (optionValue === defaultValue) {
                             self.setOption(option);
@@ -518,6 +532,19 @@
 
             this.keyboard.search = [];
             return out;
+        },
+
+        /**
+         * Modifie le label du select custom
+         *
+         * @param mixed value
+         */
+        setLabel: function (value) {
+            if (this.element.isMultiple && typeof value === 'object') {
+                value = value.join(this.settings.multipleOptionsSeparator);
+            }
+
+            this.getWrapperLabel().html(value);
         },
 
         /**
