@@ -72,11 +72,22 @@
 
         /**
          * Met en place tous les supports
+         *
+         * @param array types Liste des types de support à exécuter
          */
-        setSupports: function () {
+        setSupports: function (types) {
             var self = this;
+            var supports = {};
 
-            $.each(self.supports, function (type, selector) {
+            if (types !== undefined && types.length > 0) {
+                $.each(types, function (i, type) {
+                    supports[type] = self.supports[type];
+                });
+            } else {
+                supports = self.supports;
+            }
+
+            $.each(supports, function (type, selector) {
                 self.setSupport(type);
             });
 

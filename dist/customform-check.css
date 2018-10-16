@@ -27,7 +27,6 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   -webkit-transition: .2s;
-  -o-transition: .2s;
   transition: .2s;
 }
 
@@ -42,11 +41,9 @@
   text-align: center;
   visibility: hidden;
   -webkit-transform: scale(0.2);
-      -ms-transform: scale(0.2);
           transform: scale(0.2);
   opacity: 0;
   -webkit-transition: .2s;
-  -o-transition: .2s;
   transition: .2s;
 }
 
@@ -72,7 +69,6 @@
   visibility: visible;
   opacity: 1;
   -webkit-transform: scale(0.6);
-      -ms-transform: scale(0.6);
           transform: scale(0.6);
 }
 

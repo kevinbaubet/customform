@@ -10,7 +10,6 @@
   z-index: 5;
   top: 50%;
   -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
           transform: translateY(-50%);
   left: 0;
   border-top: 1px solid transparent;
@@ -20,7 +19,6 @@
   font-size: 1em;
   background: #fff;
   -webkit-transition: .3s;
-  -o-transition: .3s;
   transition: .3s;
 }
 
@@ -33,7 +31,6 @@
   width: 1px;
   background-color: transparent;
   -webkit-transition: .1s;
-  -o-transition: .1s;
   transition: .1s;
 }
 
@@ -48,6 +45,5 @@
 .customform--label.is-filled label:after, .customform--label.is-focused label:after {
   background-color: #ccc;
   -webkit-transition: .3s;
-  -o-transition: .3s;
   transition: .3s;
 }

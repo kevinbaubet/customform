@@ -23,14 +23,14 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 
 ## Méthodes
 
-| Méthode             | Arguments                                                                                                       | Description                                                        |
-|---------------------|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| setOptions          | **support** *string* Nom du support, **options** *object* Options utilisateur à passer au support               | Enregistre les options pour un support                             |
-| setSupports         | -                                                                                                               | Définition de tous les supports présent dans $.CustomForm.supports |
-| setSupport          | **support** *string* Nom du support, **[options]** *object* Options utilisateur à passer au support             | Définition d'un support                                            |
-| getSupportClassName | **support** *string* Nom du support                                                                             | Récupère le nom de la classe JS correspondant à l'argument         |
-| getInstance         | **instances** *object* Retour de setSupport() ou liste des instances, **input** *jQuery object* Élément input   | Récupère l'instance via l'élément input                            |
-| getInstanceName     | **input** *jQuery object* Élément input                                                                         | Récupère le nom formaté d'une instance via l'élément input         |
+| Méthode             | Arguments                                                                                                       | Description                                                                               |
+|---------------------|-----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| setOptions          | **support** *string* Nom du support, **options** *object* Options utilisateur à passer au support               | Enregistre les options pour un support                                                    |
+| setSupports         | **types** *array* Liste des types de support à exécuter (optionnel)                                             | Définition de tous les supports présent dans $.CustomForm.supports ou passés en paramètre |
+| setSupport          | **support** *string* Nom du support, **[options]** *object* Options utilisateur à passer au support             | Définition d'un support                                                                   |
+| getSupportClassName | **support** *string* Nom du support                                                                             | Récupère le nom de la classe JS correspondant à l'argument                                |
+| getInstance         | **instances** *object* Retour de setSupport() ou liste des instances, **input** *jQuery object* Élément input   | Récupère l'instance via l'élément input                                                   |
+| getInstanceName     | **input** *jQuery object* Élément input                                                                         | Récupère le nom formaté d'une instance via l'élément input                                |
 
 
 ## Supports
