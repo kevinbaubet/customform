@@ -262,15 +262,19 @@
             self.getOptions().each(function (i, option) {
                 option = $(option);
                 var optionValue = option.attr('data-value');
+                var settings = {
+                    context: 'init'
+                };
+
 
                 if (self.element.isMultiple && defaultValue !== null) {
                     $.each(defaultValue.split(','), function (i, defaultValue) {
                         if (optionValue === defaultValue) {
-                            self.setOption(option);
+                            self.setOption(option, settings);
                         }
                     });
                 } else if (optionValue === defaultValue) {
-                    self.setOption(option);
+                    self.setOption(option, settings);
                 }
             });
 
@@ -404,7 +408,7 @@
 
             // Ajout d'un événement sur les options
             self.getOptions().on('click.customform.option', function (option) {
-                self.setOption($(option.currentTarget));
+                self.setOption($(option.currentTarget), {context: 'click'});
             });
 
             // Trigger click
@@ -488,13 +492,14 @@
                     self.keyboard.search.push(letter);
 
                     self.keyboard.timeout = setTimeout(function () {
-                        self.setOption(self.getOptionOnkeyboard());
+                        self.setOption(self.getOptionOnkeyboard(), {context: 'keydown'});
                     }, 250);
                 }
             }
 
             if (!self.element.isMultiple) {
                 self.setOption(option, {
+                    context: 'keydown',
                     direction: direction
                 });
             }
@@ -565,6 +570,7 @@
                 if (isDisabled && settings.direction !== undefined) {
                     option = option[(settings.direction === 'up') ? 'prev' : 'next']();
                     self.setOption(option, {
+                        context: 'auto-move',
                         direction: settings.direction
                     });
                     return;
@@ -596,7 +602,7 @@
 
                             if (self.element.multipleOptions.length === 0) {
                                 setTimeout(function () {
-                                    self.setOption('.' + self.settings.classes.first);
+                                    self.setOption('.' + self.settings.classes.first, settings);
                                 }, 0);
                             }
                         } else {
@@ -687,7 +693,9 @@
                             customFormSelect: self,
                             wrapper: self.getWrapper(),
                             input: self.getInput(),
-                            wrapperLabel: self.getWrapperLabel()
+                            wrapperLabel: self.getWrapperLabel(),
+                            option: option,
+                            settings: settings
                         }, callbackEvent);
 
                         self.settings.onChange.call(callbackEvent);
@@ -720,7 +728,7 @@
                     option = $(option);
 
                     if (option.hasClass(self.settings.classes.selected)) {
-                        self.setOption(option);
+                        self.setOption(option, {context: 'remove'});
                     }
 
                     if (disable) {
@@ -745,7 +753,7 @@
         },
 
         /**
-         * Alias pour récupérer les éléments
+         * Alias
          */
         getContext: function () {
             return this.element.context;
