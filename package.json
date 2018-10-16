@@ -1,6 +1,6 @@
 {
   "name": "customform",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "main": "./dist/customform.min.js",
   "repository": "https://github.com/kevinbaubet/customform.git",
   "author": "Kévin Baubet <contact@kevinbaubet.fr>",
@@ -16,7 +16,7 @@
     "gulp-pixrem": "^1.0.0",
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.1",
+    "gulp-sass": "^4.0.2",
     "postcss-pxtorem": "^4.0.1"
   },
   "sass": {
