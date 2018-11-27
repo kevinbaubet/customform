@@ -21,5 +21,5 @@
 .customform-input > select {
   position: absolute;
   z-index: -1;
-  visibility: hidden;
+  opacity: 0;
 }

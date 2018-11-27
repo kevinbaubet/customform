@@ -4,12 +4,13 @@
    CustomFormCheck
    ========================================================================== */
 .customform--checkbox,
-.customform--radio { $s: 24px;
+.customform--radio { $s: 20px;
     display: flex;
     align-items: center;
 
     label {
         margin-left: .6em;
+        margin-bottom: 0;
     }
 
     .customform-input {
@@ -18,7 +19,7 @@
         width: $s;
         height: $s;
         border: 1px solid $input--border-color;
-        background: $input--background-color;
+        background: $input--background;
         box-sizing: border-box;
         transition: .2s;
 

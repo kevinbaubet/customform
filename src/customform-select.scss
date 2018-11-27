@@ -7,7 +7,6 @@
     position: relative;
     display: inline-block;
     width: 100%;
-    max-width: 250px;
 }
 
 .customform-selectLabel {
@@ -16,12 +15,12 @@
     width: 100%;
     padding: 0 50px 0 $input--padding-horizontal;
     text-overflow: ellipsis;
-    font-size: $input--font-size;
-    line-height: $input--height;
-    color: $input--text-color;
+    font-size: $input--fontsize;
+    line-height: $input--height - $input--border-width*2;
+    color: $input--color;
     border: $input--border-width solid $input--border-color;
     border-radius: $input--border-radius;
-    background: $input--background-color;
+    background: $input--background;
     overflow: hidden;
     white-space: nowrap;
     box-sizing: border-box;
@@ -57,7 +56,7 @@
     border: 1px solid $input--border-color;
     border-top: 0;
     border-radius: 0 0 $input--border-radius $input--border-radius;
-    background: $input--background-color;
+    background: $input--background;
     opacity: 0;
     transition: .2s;
     box-sizing: border-box;
@@ -68,11 +67,11 @@
     display: block;
 }
 .customform-selectOption {
-    padding: $input--padding-vertical $input--padding-horizontal;
+    padding: 10px $input--padding-horizontal;
 
     &:not(.is-disabled):not(.is-selected ):hover {
         color: $color--primary;
-        background-color: $input--background-color;
+        background-color: $input--background;
     }
     &.is-selected {
         color: #fff;
@@ -82,7 +81,7 @@
 .customform-selectOptionGroupLabel {
     padding: $input--padding-vertical $input--padding-horizontal;
     font-style: italic;
-    background-color: darken($input--background-color, 5%);
+    background-color: darken($input--background, 5%);
     cursor: default;
 }
 .customform-selectOptionGroup .customform-selectOption {
@@ -124,7 +123,7 @@
             border: 1px solid $input--border-color;
         }
         &.is-selected {
-            color: $input--text-color;
+            color: $input--color;
             background: transparent;
 
             &:before {
