@@ -16,6 +16,7 @@
     .customform-input {
         position: relative;
         display: block;
+        flex-shrink: 0;
         width: $s;
         height: $s;
         border: $input--border-width solid $input--border-color;
