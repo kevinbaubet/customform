@@ -126,8 +126,8 @@
             this.element.wrapperInput = this.element.input.parent();
 
             // WrapperLabel et file
-            this.element.wrapperLabel.appendTo(this.element.wrapper);
-            this.element.wrapperFile.appendTo(this.element.wrapper);
+            this.element.wrapperLabel.appendTo(this.element.wrapperInput);
+            this.element.wrapperFile.appendTo(this.element.wrapperInput);
 
             return this;
         },

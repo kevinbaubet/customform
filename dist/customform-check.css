@@ -38,7 +38,6 @@
   left: 0;
   color: #ff5a60;
   width: 100%;
-  line-height: 20px;
   text-align: center;
   visibility: hidden;
   -webkit-transform: scale(0.2);
@@ -83,9 +82,14 @@
   color: #ccc;
 }
 
+.customform--checkbox .customform-input {
+  border-radius: 4px;
+}
+
 .customform--checkbox .customform-input:before {
   content: "\2714";
-  font-size: 1.5rem;
+  line-height: .5;
+  font-size: 1.75rem;
 }
 
 .customform--radio .customform-input {
@@ -93,7 +97,7 @@
 }
 
 .customform--radio .customform-input:before {
-  content: '';
+  content: "";
   width: 100%;
   height: 100%;
   border-radius: 50%;

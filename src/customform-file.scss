@@ -3,12 +3,14 @@
 /* ==========================================================================
    CustomFormFile
    ========================================================================== */
-
 .customform--file {
     cursor: default;
 
     label {
         display: block;
+        margin-bottom: 5px;
+    }
+    .customform-input {
         margin-bottom: 5px;
     }
     .customform-label,
