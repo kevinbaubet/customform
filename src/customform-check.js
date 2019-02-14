@@ -14,12 +14,10 @@
             wrapper: null,
             wrapperInput: null
         };
-        $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormCheck.defaults, options);
+        $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormCheck.defaults, options);
 
         // Init
-        this.load();
-
-        return this;
+        return this.load();
     };
 
     $.CustomFormCheck.defaults = {
@@ -131,6 +129,8 @@
                     element: this.element
                 });
             }
+
+            return self;
         },
 
         /**
@@ -154,6 +154,8 @@
                     }
                 }, 0);
             });
+
+            return self;
         },
 
         /**
@@ -179,6 +181,7 @@
 
             // Trigger click
             self.getInput().triggerHandler('click');
+            self.getInput().triggerHandler('change');
 
             // User callback
             if (self.settings.onClick !== undefined) {
@@ -236,7 +239,7 @@
             return this.element.type;
         },
         getWrapper: function (children) {
-            return (children !== undefined) ? children.closest('.' + this.settings.classes.prefix) : this.element.wrapper;
+            return children === undefined ? this.element.wrapper : children.closest('.' + this.settings.classes.prefix);
         },
         getInputsRadio: function () {
             return this.getContext().find(this.element.selector).filter('[name="' + this.getInput().attr('name') + '"]');
