@@ -233,10 +233,10 @@
     /**
      * Fonction utilisateur
      *
-     * @param  {object} options Options utilisateur
-     * @param  {object} support Support de la personnalisation : {type: 'selecteur'}
+     * @param  {object} options  Options utilisateur
+     * @param  {object} supports Supports de la personnalisation : {type: 'selecteur'}
      */
-    $.fn.customForm = function (options, support) {
-        return new $.CustomForm($(this), options, support);
+    $.fn.customForm = function (options, supports) {
+        return new $.CustomForm($(this), options, supports);
     };
 })(jQuery);
