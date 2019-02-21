@@ -13,14 +13,14 @@
         };
 
         // Support
-        $.extend((this.support = []), $.CustomFormLabel.support, support);
+        $.extend(this.support = [], $.CustomFormLabel.support, support);
         this.elements.inputs = $(this.support.join(','), this.elements.context);
 
         // Config
-        $.extend((this.settings = {}), $.CustomFormLabel.defaults, options);
+        $.extend(this.settings = {}, $.CustomFormLabel.defaults, options);
 
         // Init
-        this.load();
+        this.init();
 
         return this;
     };
@@ -48,7 +48,7 @@
             focused: 'is-focused',
             filled : 'is-filled'
         },
-        onLoad: undefined,
+        beforeLoad: undefined,
         afterEventsHandler: undefined,
         onComplete: undefined,
         onFocus: undefined,
@@ -56,10 +56,10 @@
     };
 
     $.CustomFormLabel.prototype = {
-        load: function () {
+        init: function () {
             // User callback
-            if (this.settings.onLoad !== undefined) {
-                this.settings.onLoad.call({
+            if (this.settings.beforeLoad !== undefined) {
+                this.settings.beforeLoad.call({
                     customFormLabel: this,
                     context: this.getContext(),
                     inputs: this.getInputs()
@@ -67,7 +67,7 @@
             }
 
             // Load
-            this.initElementsState();
+            this.reset();
             this.eventsHandler();
 
             // User callback
@@ -83,9 +83,9 @@
         },
 
         /**
-         * Initialise l'état des éléments
+         * Initialise l'état des éléments par défaut
          */
-        initElementsState: function () {
+        reset: function () {
             var self = this;
 
             self.getInputs().each(function (i, input) {
@@ -108,42 +108,29 @@
         eventsHandler: function () {
             var self = this;
 
-            self.getInputs().on({
-                'click.customform keyup.customform': function (event) {
-                    var input = $(event.currentTarget);
-                    var wrapper = self.getWrapper(input);
+            self.getInputs().on('click.customform keyup.customform blur.customform', function (event) {
+                var input = $(event.currentTarget);
+                var wrapper = self.getWrapper(input);
 
-                    wrapper.addClass(self.settings.classes.filled + ' ' + self.settings.classes.focused);
-
-                    // User callback
-                    if (self.settings.onFocus !== undefined) {
-                        self.settings.onFocus.call({
-                            customFormLabel: self,
-                            event: event,
-                            wrapper: wrapper,
-                            input: input
-                        });
-                    }
-                },
-                'blur.customform': function (event) {
-                    var input = $(event.currentTarget);
-                    var wrapper = self.getWrapper(input);
-
+                if (event.type === 'blur') {
                     if (input.val().length > 0) {
                         wrapper.removeClass(self.settings.classes.focused);
                     } else {
                         wrapper.removeClass(self.settings.classes.filled + ' ' + self.settings.classes.focused);
                     }
 
-                    // User callback
-                    if (self.settings.onBlur !== undefined) {
-                        self.settings.onBlur.call({
-                            customFormLabel: self,
-                            event: event,
-                            wrapper: wrapper,
-                            input: input
-                        });
-                    }
+                } else {
+                    wrapper.addClass(self.settings.classes.filled + ' ' + self.settings.classes.focused);
+                }
+
+                // User callback
+                if (self.settings[event.type === 'blur' ? 'onBlur' : 'onFocus'] !== undefined) {
+                    self.settings[event.type === 'blur' ? 'onBlur' : 'onFocus'].call({
+                        customFormLabel: self,
+                        event: event,
+                        wrapper: wrapper,
+                        input: input
+                    });
                 }
             });
 
@@ -157,14 +144,28 @@
         },
 
         /**
-         * Alias pour récupérer les éléments
+         * Retourne le contexte de customform (<form>)
+         *
+         * @return {object}
          */
         getContext: function () {
             return this.elements.context;
         },
+
+        /**
+         * Retourne le wrapper générique global (.customform)
+         *
+         * @return {object}
+         */
         getWrapper: function (input) {
             return input.closest(this.settings.wrapper);
         },
+
+        /**
+         * Retourne tous les inputs du contexte
+         *
+         * @return {object}
+         */
         getInputs: function () {
             return this.elements.inputs;
         }
