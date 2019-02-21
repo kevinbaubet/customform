@@ -6,12 +6,10 @@
         this.customForm = customForm;
 
         // Config
-        this.element  = {
+        this.elements = {
             body: $('body'),
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
-            type: this.customForm.support.type,
-            isMultiple: this.customForm.elementInput.prop('multiple'),
             wrapper: null,
             wrapperInput: null,
             source: {
@@ -26,7 +24,7 @@
         // Variables
         this.type = this.customForm.support.type;
         this.multiple = this.getInput().prop('multiple');
-        this.element.multipleOptions = [];
+        this.multipleOptions = [];
         this.keyboard = {
             timeout: null,
             keyCodeToKey: {
@@ -94,7 +92,7 @@
 
             // Load
             this.wrap();
-            this.initElementsState();
+            this.reset();
             this.eventsHandler();
 
             // User callback
@@ -115,10 +113,10 @@
             var self = this;
 
             // Wrappers génériques
-            self.element.wrapper = $('<span>', {
+            self.elements.wrapper = $('<span>', {
                 'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.getInputType()
             });
-            self.element.wrapperInput = $('<span>', {
+            self.elements.wrapperInput = $('<span>', {
                 'class': self.settings.classes.input,
                 tabindex: self.settings.tabindexStart
             });
@@ -127,33 +125,32 @@
             if (self.settings.beforeWrap !== undefined) {
                 self.settings.beforeWrap.call({
                     customForm: self,
-                    wrapper: self.getWrapper(),
-                    wrapperInput: self.getWrapperInput()
+                    elements: self.getElements()
                 });
             }
 
             // Wrapper
-            self.getInput().parent().wrapInner(self.element.wrapper);
-            self.element.wrapper = self.getInput().parent();
+            self.getInput().parent().wrapInner(self.getWrapper());
+            self.elements.wrapper = self.getInput().parent();
 
             // Wrapper input
-            self.getInput().wrap(self.element.wrapperInput);
-            self.element.wrapperInput = self.element.input.parent();
+            self.getInput().wrap(self.getWrapperInput());
+            self.elements.wrapperInput = self.getInput().parent();
 
             // Récupération des données du <select>
-            self.element.source.options = self.getInput().children('option');
-            self.element.source.optgroups = self.getInput().children('optgroup');
+            self.elements.source.options = self.getInput().children('option');
+            self.elements.source.optgroups = self.getInput().children('optgroup');
 
             // Wrappers
             self.getWrapperInput().append($('<span>', {
                 'class': self.settings.classes.label
             }));
-            self.element.wrapperLabel = self.getInput().next();
+            self.elements.wrapperLabel = self.getInput().next();
 
             self.getWrapperInput().append($('<span>', {
                 'class': self.settings.classes.options
             }));
-            self.element.wrapperOptions = self.getWrapperLabel().next();
+            self.elements.wrapperOptions = self.getWrapperLabel().next();
 
             // Tabindex
             self.getWrapperInput().removeAttr('tabindex');
@@ -214,13 +211,12 @@
         },
 
         /**
-         * Définition de l'état des éléments à l'initialisation
-         *
-         * todo rename reset()
+         * Initialise l'état des éléments par défaut
          */
-        initElementsState: function () {
+        reset: function () {
             var self = this;
             var defaultValue = self.getDefaultValue();
+            self.getWrapper().removeClass(self.settings.classes.disabled);
 
             // States
             if (self.getInput().is(':disabled')) {
@@ -273,8 +269,11 @@
                 };
 
                 if (self.isMultiple() && defaultValue !== null) {
-                    // todo fix bug on(reset)
-                    $.each(defaultValue.split(','), function (i, defaultValue) {
+                    if (typeof defaultValue === 'string') {
+                        defaultValue = defaultValue.split(',');
+                    }
+
+                    $.each(defaultValue, function (i, defaultValue) {
                         if (optionValue === defaultValue) {
                             self.setOption(option, settings);
                         }
@@ -308,21 +307,17 @@
                 }
             });
 
-            // Reset <form>
+            // Reset
             self.getContext().on('reset.customform', function (event) {
-                self.getWrapper().removeClass(self.settings.classes.disabled);
+                self.reset();
 
-                setTimeout(function () {
-                    self.initElementsState();
-
-                    // User callback
-                    if (self.settings.onReset !== undefined) {
-                        self.settings.onReset.call({
-                            customFormSelect: self,
-                            form: $(event.currentTarget)
-                        });
-                    }
-                }, 0);
+                // User callback
+                if (self.settings.onReset !== undefined) {
+                    self.settings.onReset.call({
+                        customFormSelect: self,
+                        form: $(event.currentTarget)
+                    });
+                }
             });
 
             // User callback
@@ -343,7 +338,7 @@
             self.getWrapper().removeClass(self.settings.classes.open);
             self.getWrapperLabel().off('click.customform.close');
             self.getOptions().off('click.customform.option');
-            self.element.body.off('click.customform.close');
+            self.getElements().body.off('click.customform.close');
 
             return self;
         },
@@ -449,7 +444,7 @@
                 option = $(option);
                 self.keyboard.options[i] = option;
 
-                if (option.hasClass(self.settings.classes.selected)) {
+                if (self.isSelected(option)) {
                     currentOptionIndex = i;
                 }
 
@@ -602,32 +597,32 @@
                         var optionsNames = [];
 
                         // Si l'option "none" est cochée, on l'enlève
-                        if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass(self.settings.classes.first)) {
+                        if (self.multipleOptions.length === 1 && self.multipleOptions[0].hasClass(self.settings.classes.first)) {
                             self.getInput().empty();
-                            self.element.multipleOptions[0].removeClass(self.settings.classes.selected);
-                            self.element.multipleOptions = [];
+                            self.multipleOptions[0].removeClass(self.settings.classes.selected);
+                            self.multipleOptions = [];
                         }
 
                         // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
                         if (self.isSelected(option)) {
-                            self.element.multipleOptions = [];
+                            self.multipleOptions = [];
                             option.removeClass(self.settings.classes.selected);
 
                             self.getOptions('.' + self.settings.classes.selected).each(function (i, selectedOption) {
-                                self.element.multipleOptions.push($(selectedOption));
+                                self.multipleOptions.push($(selectedOption));
                             });
 
-                            if (self.element.multipleOptions.length === 0) {
+                            if (self.multipleOptions.length === 0) {
                                 setTimeout(function () {
                                     self.setOption('.' + self.settings.classes.first, settings);
                                 }, 0);
                             }
                         } else {
-                            self.element.multipleOptions.push(option);
+                            self.multipleOptions.push(option);
                         }
 
                         // Reorder
-                        self.element.multipleOptions.sort(function (a, b) {
+                        self.multipleOptions.sort(function (a, b) {
                             var options = self.getOptions();
                             a = options.index(a);
                             b = options.index(b);
@@ -643,7 +638,7 @@
                         self.getOptions().removeClass(self.settings.classes.selected);
 
                         // Add
-                        $.each(self.element.multipleOptions, function (i, option) {
+                        $.each(self.multipleOptions, function (i, option) {
                             option = $(option);
 
                             if (option !== undefined && option !== null && !self.isDisabled(option)) {
@@ -669,7 +664,7 @@
                         // User callback
                         if (self.settings.onChange !== undefined) {
                             callbackEvent = $.extend(callbackEvent, {
-                                options: self.element.multipleOptions
+                                options: self.multipleOptions
                             });
                         }
                     }
@@ -708,9 +703,7 @@
                         if (self.settings.onChange !== undefined) {
                             callbackEvent = $.extend({
                                 customFormSelect: self,
-                                wrapper: self.getWrapper(),
-                                input: self.getInput(),
-                                wrapperLabel: self.getWrapperLabel(),
+                                elements: self.getElements(),
                                 settings: settings
                             }, callbackEvent);
 
@@ -813,7 +806,7 @@
          * @return {object}
          */
         getElements: function () {
-            return this.element;
+            return this.elements;
         },
 
         /**

@@ -6,7 +6,7 @@
         this.customForm = customForm;
 
         // Config
-        this.elements  = {
+        this.elements = {
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
             wrapper: null,
