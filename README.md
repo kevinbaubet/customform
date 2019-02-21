@@ -18,8 +18,8 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 | &nbsp;&nbsp;&nbsp;&nbsp;input    | string   | '{prefix}-input'  | Classe autour de l'input                                  |
 | &nbsp;&nbsp;&nbsp;&nbsp;disabled | string   | 'is-disabled'     | Classe quand l'input est désactivé                        |
 | tabindexStart                    | integer  | 0                 | Valeur de l'attribut tabindex au chargement de CustomForm |
-| onSupportLoad                    | function | undefined         | Callback au début du chargement du support                |
-| onSupportComplete                | function | undefined         | Callback à la fin du chargement du support                |
+| supportBeforeLoad                | function | undefined         | Callback au début du chargement du support                |
+| supportComplete                  | function | undefined         | Callback à la fin du chargement du support                |
 
 ## Méthodes
 
@@ -75,7 +75,7 @@ Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces
 |---------------------------------|----------|-------------------|-------------------------------------------------|
 | classes                         | object   | Voir ci-dessous   | Objet pour les options ci-dessous               |
 | &nbsp;&nbsp;&nbsp;&nbsp;checked | string   | 'is-checked'      | Classe quand l'input est coché                  |
-| onLoad                          | function | undefined         | Callback au début du chargement                 |
+| beforeLoad                      | function | undefined         | Callback au début du chargement                 |
 | beforeWrap                      | function | undefined         | Callback avant l'ajout des wrappers dans le DOM |
 | afterEventsHandler              | function | undefined         | Callback après la déclaration des événements    |
 | onComplete                      | function | undefined         | Callback à la fin du chargement                 |
@@ -125,7 +125,7 @@ Ce support permet de personnaliser les selects, multiple ou non.
 | &nbsp;&nbsp;&nbsp;&nbsp;multiple         | string   | 'is-multiple'                     | Classe si le select est de type multiple                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;open             | string   | 'is-open'                         | Classe quand la liste des options est ouverte                    |
 | multipleOptionsSeparator                 | string   | ', '                              | Séparateur entre les options affichées dans le label             |
-| onLoad                                   | function | undefined                         | Callback au début du chargement                                  |
+| beforeLoad                               | function | undefined                         | Callback au début du chargement                                  |
 | beforeWrap                               | function | undefined                         | Callback avant l'ajout des wrappers dans le DOM                  |
 | afterEventsHandler                       | function | undefined                         | Callback après la déclaration des événements                     |
 | onComplete                               | function | undefined                         | Callback à la fin du chargement                                  |
@@ -181,7 +181,7 @@ Ce support permet de personnaliser les input de type file.
 | &nbsp;&nbsp;&nbsp;&nbsp;label | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |
 | &nbsp;&nbsp;&nbsp;&nbsp;file  | string   | '{prefix}-file'                 | Classe pour le nom du fichier sélectionné                 |
 | &nbsp;&nbsp;&nbsp;&nbsp;open  | string   | 'is-open'                       | Classe quand la fenêtre de choix des fichiers est ouverte |
-| onLoad                        | function | undefined                       | Callback au début du chargement                           |
+| beforeLoad                    | function | undefined                       | Callback au début du chargement                           |
 | beforeWrap                    | function | undefined                       | Callback avant l'ajout des wrappers dans le DOM           |
 | afterEventsHandler            | function | undefined                       | Callback après la déclaration des événements              |
 | onComplete                    | function | undefined                       | Callback à la fin du chargement                           |
@@ -254,7 +254,7 @@ CustomFormLabel n'est pas un support mais une classe à part entière. Ce script
 | &nbsp;&nbsp;&nbsp;&nbsp;label   | string   | 'customform-label' | Classe appliquée sur le wrapper                                |
 | &nbsp;&nbsp;&nbsp;&nbsp;focused | string   | 'is-focused'       | Classe d'état quand l'élément est actif                        |
 | &nbsp;&nbsp;&nbsp;&nbsp;filled  | object   | 'is-filled'        | Classe d'état quand l'élément est rempli                       |
-| onLoad                          | function | undefined          | Callback au début du chargement                                |
+| beforeLoad                      | function | undefined          | Callback au début du chargement                                |
 | afterEventsHandler              | function | undefined          | Callback après la déclaration des événements                   |
 | onComplete                      | function | undefined          | Callback à la fin du chargement                                |
 | onFocus                         | function | undefined          | Callback au focus d'un élément                                 |

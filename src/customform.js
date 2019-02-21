@@ -3,22 +3,20 @@
 
     $.CustomForm = function (context, options, supports) {
         // Config
-        $.extend(true, (this.settings = {}), $.CustomForm.defaults, options);
+        $.extend(true, this.settings = {}, $.CustomForm.defaults, options);
 
         // Support
-        $.extend((this.supports = {}), $.CustomForm.supports, supports);
+        $.extend(this.supports = {}, $.CustomForm.supports, supports);
 
         // Variables
         this.context = context;
         this.options = {};
         this.support = undefined;
 
-        // Retour
-        if (this.prepareOptions()) {
-            return this;
-        }
+        // Init
+        this.prepareOptions();
 
-        return false;
+        return this;
     };
 
     /**
@@ -41,15 +39,15 @@
             disabled: 'is-disabled'
         },
         tabindexStart: 0,
-        onSupportLoad: undefined,
-        onSupportComplete: undefined
+        supportBeforeLoad: undefined,
+        supportComplete: undefined
     };
 
     $.CustomForm.prototype = {
         /**
          * Préparation des options utilisateur
          *
-         * @return bool
+         * @return boolean
          */
         prepareOptions: function () {
             // Classes
@@ -61,8 +59,8 @@
         /**
          * Enregistre les options pour un support
          *
-         * @param string type    Type de support
-         * @param object options Options du support
+         * @param {string} type    Type de support
+         * @param {object} options Options du support
          */
         setOptions: function (type, options) {
             this.options[type] = options;
@@ -73,7 +71,7 @@
         /**
          * Met en place tous les supports
          *
-         * @param array types Liste des types de support à exécuter
+         * @param {array} types Liste des types de support à exécuter
          */
         setSupports: function (types) {
             var self = this;
@@ -87,7 +85,7 @@
                 supports = self.supports;
             }
 
-            $.each(supports, function (type, selector) {
+            $.each(supports, function (type) {
                 self.setSupport(type);
             });
 
@@ -97,8 +95,10 @@
         /**
          * Met en place un support
          *
-         * @param string type    Type de support
-         * @param object options Options du support
+         * @param {string} type    Type de support
+         * @param {object=undefined} options Options du support
+         *
+         * @return {object} support infos
          */
         setSupport: function (type, options) {
             var self = this;
@@ -111,8 +111,8 @@
             self.support.instances = {};
 
             // User Callback
-            if (self.settings.onSupportLoad !== undefined) {
-                self.settings.onSupportLoad.call(self);
+            if (self.settings.supportBeforeLoad !== undefined) {
+                self.settings.supportBeforeLoad.call(self);
             }
 
             // Si le support est chargé, on l'init
@@ -122,7 +122,7 @@
                     options = self.options[self.support.type];
                 }
 
-                // Appel de la classe
+                // Instanciation
                 self.context.each(function () {
                     self.elementContext = $(this);
 
@@ -135,7 +135,7 @@
                             return;
                         }
 
-                        self.support.instances[((instanceName) ? instanceName : i)] = new $[self.support.className](self, options);
+                        self.support.instances[(instanceName ? instanceName : i)] = new $[self.support.className](self, options);
                     });
                 });
 
@@ -144,8 +144,8 @@
             }
 
             // User Callback
-            if (self.settings.onSupportComplete !== undefined) {
-                self.settings.onSupportComplete.call(self);
+            if (self.settings.supportComplete !== undefined) {
+                self.settings.supportComplete.call(self);
             }
 
             return self.support;
@@ -154,27 +154,21 @@
         /**
          * Récupère le nom de la classe du support correspondant
          *
-         * @param  string support Nom du support
-         * @return string
+         * @param  {string} support Nom du support
+         *
+         * @return {string}
          */
         getSupportClassName: function (support) {
-            var suffix = null;
-
-            if (support === 'checkbox' || support === 'radio') {
-                suffix = 'Check';
-            } else {
-                suffix = support.charAt(0).toUpperCase() + support.substr(1);
-            }
-
-            return 'CustomForm' + suffix;
+            return 'CustomForm' + (support === 'checkbox' || support === 'radio' ? 'Check' : support.charAt(0).toUpperCase() + support.substr(1));
         },
 
         /**
          * Récupère l'instance via l'élément input
          * 
-         * @param  object        instances Retour de setSupport() ou liste des instances
-         * @param  jQuery object input     Élément input
-         * @return object si trouvée, sinon false
+         * @param  {object} instances Retour de setSupport() ou liste des instances
+         * @param  {object} input     Élément input
+         *
+         * @return {object|boolean}
          */
         getInstance: function (instances, input) {
             instances = instances.instances || instances;
@@ -182,6 +176,7 @@
 
             if (name !== false && instances !== undefined && instances[name] !== undefined) {
                 return instances[name];
+
             } else {
                 this.setLog('error', '"name" attribute not found in input parameter.')
             }
@@ -192,8 +187,9 @@
         /**
          * Récupère le nom formaté d'une instance via l'élément input
          * 
-         * @param  jQuery object input Élément input
-         * @return string si attr name trouvé sinon false
+         * @param  {object} input Élément input
+         *
+         * @return {boolean}
          */
         getInstanceName: function (input) {
             var name = input.attr('name');
@@ -209,11 +205,18 @@
         },
 
         /**
-         * Utils
+         * Créer un log
+         *
+         * @param {string} type
+         * @param {string} log
          */
         setLog: function (type, log) {
             console[type]('CustomForm: ' + log);
         },
+
+        /**
+         * Remplace la chaine {prefix} par la classe de préfix dans toutes les classes
+         */
         replacePrefixClass: function () {
             var self = this;
 
@@ -229,8 +232,9 @@
 
     /**
      * Fonction utilisateur
-     * @param  object options Options utilisateur
-     * @param  object support Support de la personnalisation : {type: 'selecteur'}
+     *
+     * @param  {object} options Options utilisateur
+     * @param  {object} support Support de la personnalisation : {type: 'selecteur'}
      */
     $.fn.customForm = function (options, support) {
         return new $.CustomForm($(this), options, support);

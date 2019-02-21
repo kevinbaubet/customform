@@ -116,7 +116,7 @@
 
             // Wrappers génériques
             self.element.wrapper = $('<span>', {
-                'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.type
+                'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.getInputType()
             });
             self.element.wrapperInput = $('<span>', {
                 'class': self.settings.classes.input,
@@ -804,7 +804,7 @@
          * @return {object}
          */
         getSiblings: function () {
-            return this.getContext().find('.' + this.settings.classes.prefix + '--' + this.type).not(this.getWrapper());
+            return this.getContext().find('.' + this.settings.classes.prefix + '--' + this.getInputType()).not(this.getWrapper());
         },
 
         /**
@@ -832,6 +832,13 @@
          */
         getInput: function () {
             return this.getElements().input;
+        },
+
+        /**
+         * Retourne le type de l'élément
+         */
+        getInputType: function () {
+            return this.type;
         },
 
         /**
