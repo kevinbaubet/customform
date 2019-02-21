@@ -28,11 +28,12 @@
 }
 
 .customform-selectLabel:focus {
+  border-color: #ff5a60;
   outline: 0;
 }
 
 .customform-selectLabel:after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
@@ -74,6 +75,8 @@
 
 .customform-selectOption {
   padding: 0.625rem 1.25rem;
+  -webkit-transition: .3s;
+  transition: .3s;
 }
 
 .customform-selectOption:not(.is-disabled):not(.is-selected):hover {
@@ -126,6 +129,10 @@
   height: 10px;
   margin-right: 0.625rem;
   border: 1px solid #ccc;
+}
+
+.customform--select.is-multiple .customform-selectOption:focus {
+  color: #ff5a60;
 }
 
 .customform--select.is-multiple .customform-selectOption.is-selected {

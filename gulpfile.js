@@ -35,5 +35,6 @@ function minify(pumpCallback) {
 }
 
 // Alias
+exports.sass = sass;
 exports.default = plugins.gulp.series(sass, watchsass);
 exports.prod = plugins.gulp.parallel(sass, minify);

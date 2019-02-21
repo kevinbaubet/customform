@@ -27,11 +27,12 @@
     transition: .3s;
 
     &:focus {
+        border-color: $color--primary;
         outline: 0;
     }
 
     &:after {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -68,6 +69,7 @@
 }
 .customform-selectOption {
     padding: 10px $input--padding-horizontal;
+    transition: .3s;
 
     &:not(.is-disabled):not(.is-selected ):hover {
         color: $color--primary;
@@ -95,6 +97,7 @@
 .customform--select:hover {
     .customform-selectLabel {
         border-color: $color--primary;
+
         &:after {
             opacity: .3;
         }
@@ -121,6 +124,9 @@
             height: 10px;
             margin-right: 10px;
             border: 1px solid $input--border-color;
+        }
+        &:focus {
+            color: $color--primary;
         }
         &.is-selected {
             color: $input--color;

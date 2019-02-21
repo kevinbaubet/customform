@@ -9,24 +9,24 @@
         this.element  = {
             body: $('body'),
             context: this.customForm.elementContext,
-            input: this.customForm.elementInput,     // <select>
-            type: this.customForm.support.type,      // 'select'
+            input: this.customForm.elementInput,
+            type: this.customForm.support.type,
             isMultiple: this.customForm.elementInput.prop('multiple'),
-            wrapper: null,              // Wrapper global
-            wrapperInput: null,         // Wrapper du <select>
+            wrapper: null,
+            wrapperInput: null,
             source: {
-                options: null,          // <option> du <select>
-                optgroups: null         // <optgroup> du <select>
+                options: null,
+                optgroups: null
             },
-            wrapperLabel: null,         // Wrapper du label du select custom (correspond à la valeur sélectionnée)
-            wrapperOptions: null        // Wrapper des options du select custom
+            wrapperLabel: null,
+            wrapperOptions: null
         };
-        if (this.element.isMultiple) {
-            this.element.multipleOptions = [];
-        }
-        $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormSelect.defaults, options);
+        $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormSelect.defaults, options);
 
         // Variables
+        this.type = this.customForm.support.type;
+        this.multiple = this.getInput().prop('multiple');
+        this.element.multipleOptions = [];
         this.keyboard = {
             timeout: null,
             keyCodeToKey: {
@@ -38,7 +38,7 @@
 
         // Init
         if (this.prepareOptions()) {
-            this.load();
+            this.init();
         }
 
         return this;
@@ -58,7 +58,7 @@
             open: 'is-open'
         },
         multipleOptionsSeparator: ', ',
-        onLoad: undefined,
+        beforeLoad: undefined,
         beforeWrap: undefined,
         afterEventsHandler: undefined,
         onComplete: undefined,
@@ -71,7 +71,7 @@
         /**
          * Préparation des options utilisateur
          *
-         * @return bool
+         * @return boolean
          */
         prepareOptions: function () {
             // Classes
@@ -83,12 +83,12 @@
         /**
          * Initialisation
          */
-        load: function () {
+        init: function () {
             // User callback
-            if (this.settings.onLoad !== undefined) {
-                this.settings.onLoad.call({
+            if (this.settings.beforeLoad !== undefined) {
+                this.settings.beforeLoad.call({
                     customFormSelect: this,
-                    element: this.element
+                    elements: this.getElements()
                 });
             }
 
@@ -96,13 +96,12 @@
             this.wrap();
             this.initElementsState();
             this.eventsHandler();
-            this.resetHandler();
 
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
                     customFormSelect: this,
-                    element: this.element
+                    elements: this.getElements()
                 });
             }
 
@@ -114,8 +113,10 @@
          */
         wrap: function () {
             var self = this;
+
+            // Wrappers génériques
             self.element.wrapper = $('<span>', {
-                'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--select'
+                'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.type
             });
             self.element.wrapperInput = $('<span>', {
                 'class': self.settings.classes.input,
@@ -126,8 +127,8 @@
             if (self.settings.beforeWrap !== undefined) {
                 self.settings.beforeWrap.call({
                     customForm: self,
-                    wrapper: self.element.wrapper,
-                    wrapperInput: self.element.wrapperInput
+                    wrapper: self.getWrapper(),
+                    wrapperInput: self.getWrapperInput()
                 });
             }
 
@@ -159,7 +160,7 @@
             self.getWrapperLabel().attr('tabindex', self.settings.tabindexStart);
 
             // Multiple
-            if (self.element.isMultiple) {
+            if (self.isMultiple()) {
                 self.getWrapper().addClass(self.settings.classes.multiple);
             }
 
@@ -170,7 +171,7 @@
                     var optionClasses = option.attr('class');
 
                     self.getWrapperOptions().append($('<span>', {
-                        'class': self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
+                        'class': self.settings.classes.option + (optionClasses !== undefined ? ' ' + optionClasses : '') + (option.attr('disabled') !== undefined ? ' ' + self.settings.classes.disabled : ''),
                         'data-value': option.val(),
                         html: option.html()
                     }));
@@ -194,7 +195,7 @@
                         var optionClasses = option.attr('class');
 
                         $('<span>', {
-                            'class': self.settings.classes.option + ((optionClasses !== undefined) ? ' ' + optionClasses : '') + ((option.attr('disabled') !== undefined) ? ' ' + self.settings.classes.disabled : ''),
+                            'class': self.settings.classes.option + (optionClasses !== undefined ? ' ' + optionClasses : '') + (option.attr('disabled') !== undefined ? ' ' + self.settings.classes.disabled : ''),
                             'data-value': option.val(),
                             html: option.html()
                         }).appendTo(selectOptionGroup);
@@ -204,7 +205,7 @@
                 });
             }
 
-            // First option
+            // First/last option
             self.getOptions()
                 .first().addClass(self.settings.classes.first).end()
                 .last().addClass(self.settings.classes.last);
@@ -213,11 +214,13 @@
         },
 
         /**
-         * Défini l'état des éléments à l'initialisation
+         * Définition de l'état des éléments à l'initialisation
+         *
+         * todo rename reset()
          */
         initElementsState: function () {
             var self = this;
-            var defaultValue = self.getInput().attr('data-default-value');
+            var defaultValue = self.getDefaultValue();
 
             // States
             if (self.getInput().is(':disabled')) {
@@ -236,19 +239,22 @@
 
                 if (defaultValue.length > 1) {
                     var defaultValues = [];
+
                     $.each(defaultValue, function (i, selectedOption) {
                         defaultValues.push($(selectedOption).val());
                     });
 
                     defaultValue = defaultValues.join(',');
+
                 } else {
                     defaultValue = defaultValue.val();
                 }
+
                 self.getInput().attr('data-default-value', defaultValue);
             }
 
             // En multiple, on ne selectionne pas la valeur par défaut
-            if (self.element.isMultiple) {
+            if (self.isMultiple()) {
                 var firstOption = self.getOptions('.is-first');
                 var firstOptionValue = self.getOptionValue(firstOption);
 
@@ -261,18 +267,19 @@
             // Ajout des options
             self.getOptions().each(function (i, option) {
                 option = $(option);
-                var optionValue = option.attr('data-value');
+                var optionValue = self.getOptionValue(option);
                 var settings = {
                     context: 'init'
                 };
 
-
-                if (self.element.isMultiple && defaultValue !== null) {
+                if (self.isMultiple() && defaultValue !== null) {
+                    // todo fix bug on(reset)
                     $.each(defaultValue.split(','), function (i, defaultValue) {
                         if (optionValue === defaultValue) {
                             self.setOption(option, settings);
                         }
                     });
+
                 } else if (optionValue === defaultValue) {
                     self.setOption(option, settings);
                 }
@@ -287,6 +294,7 @@
         eventsHandler: function () {
             var self = this;
 
+            // Sélection
             self.getWrapperLabel().on('click.customform.open keydown.customform.open', function (event) {
                 if (self.getInput().is(':disabled')) {
                     return;
@@ -294,28 +302,13 @@
 
                 if (event.type === 'click') {
                     self.clickHandler(event);
-                }
 
-                if (event.type === 'keydown') {
+                } else if (event.type === 'keydown') {
                     self.keyboardHandler(event);
                 }
             });
 
-            // User callback
-            if (self.settings.afterEventsHandler !== undefined) {
-                self.settings.afterEventsHandler.call({
-                    customFormSelect: self,
-                    element: self.element
-                });
-            }
-        },
-
-        /**
-         * Initialise un event "reset" sur le sélecteur contexte
-         */
-        resetHandler: function () {
-            var self = this;
-
+            // Reset <form>
             self.getContext().on('reset.customform', function (event) {
                 self.getWrapper().removeClass(self.settings.classes.disabled);
 
@@ -331,42 +324,28 @@
                     }
                 }, 0);
             });
-        },
 
-        /**
-         * Gestionnaire de fermeture
-         */
-        closeHandler: function () {
-            var self = this;
-
-            // Fermeture des autres selects
-            self.closeSiblings();
-
-            // Label
-            self.getWrapperLabel().one('click.customform.close', function () {
-                self.close();
-            });
-
-            // Options
-            self.element.body.on('click.customform.close', function (event) {
-                var target = $(event.target);
-
-                if ((!self.element.isMultiple && target.hasClass(self.settings.classes.option)) || (!target.hasClass(self.settings.classes.label) && !target.hasClass(self.settings.classes.option))) {
-                    self.close();
-                }
-            });
+            // User callback
+            if (self.settings.afterEventsHandler !== undefined) {
+                self.settings.afterEventsHandler.call({
+                    customFormSelect: self,
+                    elements: self.getElements()
+                });
+            }
         },
 
         /**
          * Fermeture des options
          */
-        close: function () {
-            this.getWrapper().removeClass(this.settings.classes.open);
-            this.getWrapperLabel().off('click.customform.close');
-            this.getOptions().off('click.customform.option');
-            this.element.body.off('click.customform.close');
+        close: function (event) {
+            var self = (event !== undefined && event.data !== undefined && event.data.self !== undefined) ? event.data.self : this;
 
-            return this;
+            self.getWrapper().removeClass(self.settings.classes.open);
+            self.getWrapperLabel().off('click.customform.close');
+            self.getOptions().off('click.customform.option');
+            self.element.body.off('click.customform.close');
+
+            return self;
         },
 
         /**
@@ -374,7 +353,7 @@
          */
         closeSiblings: function () {
             var self = this;
-            var siblings = self.element.context.find('.' + self.settings.classes.prefix + '--select').not(self.element.wrapper);
+            var siblings = self.getSiblings();
 
             if (siblings.length) {
                 siblings.each(function (i, select) {
@@ -386,22 +365,34 @@
                             .off('click.customform.option');
                 });
 
-                self.element.body.off('click.customform.close');
+                self.getElements().body.off('click.customform.close');
             }
 
             return self;
         },
 
         /**
-         * Lors du click
+         * Lors du click sur le label
          *
-         * @param object event Evenement click
+         * @param {object} event
          */
         clickHandler: function (event) {
             var self = this;
 
-            // Close handler
-            self.closeHandler();
+            // Fermeture des autres selects
+            self.closeSiblings();
+
+            // Fermeture au click sur le label
+            self.getWrapperLabel().one('click.customform.close', {self: self}, self.close);
+
+            // Fermeture au click en dehors du select (mais pas sur un autre select)
+            self.getElements().body.on('click.customform.close', function (event) {
+                var target = $(event.target);
+
+                if ((!self.isMultiple() && target.hasClass(self.settings.classes.option)) || (!target.hasClass(self.settings.classes.label) && !target.hasClass(self.settings.classes.option))) {
+                    self.close();
+                }
+            });
 
             // Ouverture des options
             self.getWrapper().addClass(self.settings.classes.open);
@@ -419,9 +410,7 @@
                 self.settings.onClick.call({
                     customFormSelect: self,
                     event: event,
-                    wrapper: self.getWrapper(),
-                    input: self.getInput(),
-                    wrapperLabel: self.getWrapperLabel(),
+                    elements: self.getElements(),
                     options: self.getOptions()
                 });
             }
@@ -430,7 +419,7 @@
         /**
          * Au clavier
          *
-         * @param object event Evenement
+         * @param {object} event Evenement
          */
         keyboardHandler: function (event) {
             var self = this;
@@ -455,17 +444,6 @@
                 return;
             }
 
-            // Changement d'option
-            if (direction !== undefined || fastDirection !== undefined) {
-                event.preventDefault();
-                self.closeSiblings();
-
-                if (self.element.isMultiple) {
-                    self.clickHandler();
-                    return;
-                }
-            }
-
             // Sélection de l'option
             self.getOptions().each(function (i, option) {
                 option = $(option);
@@ -478,14 +456,35 @@
                 optionsLength++;
             });
 
-            if (direction === 'up') {
-                option = self.keyboard.options[currentOptionIndex-1];
-            } else if (direction === 'down') {
-                option = self.keyboard.options[currentOptionIndex+1];
-            } else if (fastDirection !== undefined) {
-                option = (fastDirection === 'last') ? self.keyboard.options[optionsLength-1] : self.keyboard.options[0];
-            } else if (isLetter) {
-                var letter = (event.key !== undefined) ? event.key : self.keyboard.keyCodeToKey[event.keyCode];
+            // Changement d'option
+            if (direction !== undefined || fastDirection !== undefined) {
+                event.preventDefault();
+                self.closeSiblings();
+
+                if (self.isMultiple()) {
+                    return;
+                }
+
+                if (direction === 'up') {
+                    option = self.keyboard.options[currentOptionIndex - 1];
+
+                } else if (direction === 'down') {
+                    option = self.keyboard.options[currentOptionIndex + 1];
+
+                } else if (fastDirection !== undefined) {
+                    option = (fastDirection === 'last') ? self.keyboard.options[optionsLength - 1] : self.keyboard.options[0];
+                }
+
+                if (option !== null) {
+                    self.setOption(option, {
+                        context: 'keydown',
+                        direction: direction
+                    });
+                }
+            }
+
+            if (isLetter) {
+                var letter = event.key !== undefined ? event.key : self.keyboard.keyCodeToKey[event.keyCode];
 
                 if (letter !== undefined) {
                     clearTimeout(self.keyboard.timeout);
@@ -495,13 +494,6 @@
                         self.setOption(self.getOptionOnkeyboard(), {context: 'keydown'});
                     }, 250);
                 }
-            }
-
-            if (!self.element.isMultiple) {
-                self.setOption(option, {
-                    context: 'keydown',
-                    direction: direction
-                });
             }
 
             // Trigger event
@@ -515,87 +507,112 @@
          */
         getOptionOnkeyboard: function () {
             var out = null;
-            var searchString = this.keyboard.search.join('', this.keyboard.search);
-
+            var searchString = this.keyboard.search.join('');
             var seachResults = [];
-            $.each(this.getOptions(), function (i, option) {
+            var searchIndexResult = [];
+
+            // Résultats
+            this.getOptions().each(function (i, option) {
                 option = $(option);
                 seachResults.push(option.html().toLowerCase().indexOf(searchString));
             });
 
-            var searchIndexResult = [];
-            $.each(seachResults, function (seachIndex, searchStringIndex) {
-                if (searchStringIndex !== -1) {
-                    searchIndexResult.push(seachIndex);
-                }
-            });
-
-            if (searchIndexResult.length) {
-                searchIndexResult = searchIndexResult.shift();
-                out = this.keyboard.options[searchIndexResult];
+            // Index des résultats
+            if (seachResults.length) {
+                $.each(seachResults, function (seachIndex, searchStringIndex) {
+                    if (searchStringIndex !== -1) {
+                        searchIndexResult.push(seachIndex);
+                    }
+                });
             }
 
+            // Association de l'option au premet index des résultats
+            if (searchIndexResult.length) {
+                searchIndexResult = searchIndexResult.shift();
+
+                if (this.keyboard.options[searchIndexResult].length) {
+                    out = this.keyboard.options[searchIndexResult];
+                }
+            }
+
+            // Reset search
             this.keyboard.search = [];
+
             return out;
         },
 
         /**
          * Modifie le label du select custom
          *
-         * @param mixed value
+         * @param {string|object[]} name
+         * @param {string|object[]=undefined} value
          */
-        setLabel: function (value) {
-            if (this.element.isMultiple && typeof value === 'object') {
-                value = value.join(this.settings.multipleOptionsSeparator);
+        setLabel: function (name, value) {
+            if (this.isMultiple()) {
+                if (typeof value === 'object') {
+                    value = value.join(',');
+                }
+                if (typeof name === 'object') {
+                    name = name.join(this.settings.multipleOptionsSeparator);
+                }
             }
 
-            this.getWrapperLabel().html(value);
+            if (value !== undefined) {
+                this.getWrapperLabel().attr('data-value', value);
+            }
+
+            this.getWrapperLabel().html(name);
+
+            return this;
         },
 
         /**
          * Sélectionne une option
          *
-         * @param string|jQuery object option Sélecteur ou option
+         * @param {string|object} option Sélecteur ou option
+         * @param {object=undefined} settings Paramètres optionnels
          */
         setOption: function (option, settings) {
             var self = this;
             var callbackEvent = {};
-            option   = (typeof option === 'string') ? self.getOptions(option) : option;
+            option = typeof option === 'string' ? self.getOptions(option) : option;
             settings = settings || {};
 
-            if (option !== null && option !== undefined && option.length && option.attr('data-value') !== undefined) {
-                var isDisabled = option.hasClass(self.settings.classes.disabled);
-
+            if (option !== undefined && option !== null && option.length && self.getOptionValue(option) !== undefined) {
                 // Si l'option est désactivée, on passe à la précédente/suivante
-                if (isDisabled && settings.direction !== undefined) {
-                    option = option[(settings.direction === 'up') ? 'prev' : 'next']();
+                if (self.isDisabled(option) && settings.direction !== undefined) {
+                    option = option[settings.direction === 'up' ? 'prev' : 'next']();
+
                     self.setOption(option, {
                         context: 'auto-move',
                         direction: settings.direction
                     });
+
                     return;
                 }
 
                 // Si l'option la dernière option trouvée est désactivée, on stop
-                if (isDisabled) {
+                if (self.isDisabled(option)) {
                     return;
+
                 } else {
                     // Si on est en mode multiple
-                    if (self.element.isMultiple) {
+                    if (self.isMultiple()) {
                         var optionsValues = [];
                         var optionsNames = [];
 
                         // Si l'option "none" est cochée, on l'enlève
-                        if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass('is-first')) {
+                        if (self.element.multipleOptions.length === 1 && self.element.multipleOptions[0].hasClass(self.settings.classes.first)) {
                             self.getInput().empty();
                             self.element.multipleOptions[0].removeClass(self.settings.classes.selected);
                             self.element.multipleOptions = [];
                         }
 
                         // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
-                        if (option.hasClass(self.settings.classes.selected)) {
+                        if (self.isSelected(option)) {
                             self.element.multipleOptions = [];
                             option.removeClass(self.settings.classes.selected);
+
                             self.getOptions('.' + self.settings.classes.selected).each(function (i, selectedOption) {
                                 self.element.multipleOptions.push($(selectedOption));
                             });
@@ -618,7 +635,7 @@
                             if (a === b) {
                                 return 0;
                             }
-                            return (a < b) ? -1 : 1;
+                            return a < b ? -1 : 1;
                         });
 
                         // Reset
@@ -629,8 +646,8 @@
                         $.each(self.element.multipleOptions, function (i, option) {
                             option = $(option);
 
-                            if (option !== null && option !== undefined && !option.hasClass(self.settings.classes.disabled)) {
-                                var optionValue = option.attr('data-value');
+                            if (option !== undefined && option !== null && !self.isDisabled(option)) {
+                                var optionValue = self.getOptionValue(option);
                                 var optionName = option.html();
                                 optionsValues.push(optionValue);
                                 optionsNames.push(optionName);
@@ -647,9 +664,7 @@
                         });
 
                         // Label
-                        self.getWrapperLabel()
-                            .attr('data-value', optionsValues.join(','))
-                            .html(optionsNames.join(self.settings.multipleOptionsSeparator));
+                        self.setLabel(optionsNames, optionsValues);
 
                         // User callback
                         if (self.settings.onChange !== undefined) {
@@ -657,10 +672,11 @@
                                 options: self.element.multipleOptions
                             });
                         }
+                    }
 
-                    } else {
-                        // Mode classique
-                        var optionValue = option.attr('data-value');
+                    // Mode classique
+                    else {
+                        var optionValue = self.getOptionValue(option);
                         var optionName  = option.html();
 
                         // <select>
@@ -670,7 +686,7 @@
                         }).prop('selected', true));
 
                         // Label
-                        self.getWrapperLabel().attr('data-value', optionValue).html(optionName);
+                        self.setLabel(optionName, optionValue);
 
                         // Option
                         self.getOptions().removeClass(self.settings.classes.selected);
@@ -684,21 +700,22 @@
                         }
                     }
 
-                    // Trigger change
-                    self.getInput().triggerHandler('change');
+                    if (settings.context !== 'init') {
+                        // Trigger change
+                        self.getInput().triggerHandler('change');
 
-                    // User callback
-                    if (self.settings.onChange !== undefined) {
-                        callbackEvent = $.extend({
-                            customFormSelect: self,
-                            wrapper: self.getWrapper(),
-                            input: self.getInput(),
-                            wrapperLabel: self.getWrapperLabel(),
-                            option: option,
-                            settings: settings
-                        }, callbackEvent);
+                        // User callback
+                        if (self.settings.onChange !== undefined) {
+                            callbackEvent = $.extend({
+                                customFormSelect: self,
+                                wrapper: self.getWrapper(),
+                                input: self.getInput(),
+                                wrapperLabel: self.getWrapperLabel(),
+                                settings: settings
+                            }, callbackEvent);
 
-                        self.settings.onChange.call(callbackEvent);
+                            self.settings.onChange.call(callbackEvent);
+                        }
                     }
                 }
             }
@@ -709,16 +726,15 @@
         /**
          * Enlève la sélection des options définies
          * 
-         * @param  string|jQuery object options Sélecteur ou liste des options
-         * @param  boolean              disable Désactiver l'option en même
-         *     temps
+         * @param  {string|object=undefined} options Sélecteur ou liste des options
+         * @param  {boolean=undefined}       disable Désactive l'option en même temps
          */
         removeOptions: function (options, disable) {
             var self = this;
-            options = (typeof options === 'string') ? self.getOptions(options) : options;
+            options = (options === undefined || typeof options === 'string') ? self.getOptions(options) : options;
             disable = disable || false;
 
-            if (!self.element.isMultiple) {
+            if (!self.isMultiple()) {
                 self.customForm.setLog('warn', 'removeOptions() works only with "multiple" attribute. Uses setOption() for classic <select>.');
                 return;
             }
@@ -727,7 +743,7 @@
                 $.each(options, function (i, option) {
                     option = $(option);
 
-                    if (option.hasClass(self.settings.classes.selected)) {
+                    if (self.isSelected(option)) {
                         self.setOption(option, {context: 'remove'});
                     }
 
@@ -742,9 +758,8 @@
 
         /**
          * Désactive une option
-         * 
-         * @param  jQuery object option
-         * @return bool
+         *
+         * @param {object} option
          */
         disableOption: function (option) {
             option.addClass(this.settings.classes.disabled);
@@ -753,58 +768,190 @@
         },
 
         /**
-         * Alias
+         * Détermine si l'option est sélectionnée
+         *
+         * @param {object} option
+         *
+         * @return {boolean}
+         */
+        isSelected: function (option) {
+            return option.hasClass(this.settings.classes.selected);
+        },
+
+        /**
+         * Détermine si l'option est désactivée
+         *
+         * @param {object} option
+         *
+         * @return {boolean}
+         */
+        isDisabled: function (option) {
+            return option.hasClass(this.settings.classes.disabled);
+        },
+
+        /**
+         * Détermine si le select est multiple
+         *
+         * @return boolean
+         */
+        isMultiple: function () {
+            return this.multiple;
+        },
+
+        /**
+         * Retourne tous les autres selects du contexte actuel
+         *
+         * @return {object}
+         */
+        getSiblings: function () {
+            return this.getContext().find('.' + this.settings.classes.prefix + '--' + this.type).not(this.getWrapper());
+        },
+
+        /**
+         * Retourne tous les éléments de customform
+         *
+         * @return {object}
+         */
+        getElements: function () {
+            return this.element;
+        },
+
+        /**
+         * Retourne le contexte de customform (<form>)
+         *
+         * @return {object}
          */
         getContext: function () {
-            return this.element.context;
+            return this.getElements().context;
         },
+
+        /**
+         * Retourne l'élément <select>
+         *
+         * @return {object}
+         */
         getInput: function () {
-            return this.element.input;
+            return this.getElements().input;
         },
+
+        /**
+         * Retourne le wrapper générique global (.customform)
+         *
+         * @param {object=undefined} children Permet de récupérer le wrapper à partir d'un enfant
+         *
+         * @return {object}
+         */
         getWrapper: function (children) {
-            return (children !== undefined) ? children.closest('.' + this.settings.classes.prefix) : this.element.wrapper;
+            return children !== undefined ? children.closest('.' + this.settings.classes.prefix) : this.getElements().wrapper;
         },
+
+        /**
+         * Retourne le wrapper générique du <select> (.customform-input)
+         *
+         * @return {object}
+         */
         getWrapperInput: function () {
-            return this.element.wrapperInput;
+            return this.getElements().wrapperInput;
         },
+
+        /**
+         * Retourne le wrapper du label (.customform-selectLabel)
+         *
+         * @return {object}
+         */
         getWrapperLabel: function () {
-            return this.element.wrapperLabel;
+            return this.getElements().wrapperLabel;
         },
+
+        /**
+         * Retourne le wrapper des options (.customform-selectOptions)
+         *
+         * @return {object}
+         */
         getWrapperOptions: function () {
-            return this.element.wrapperOptions;
+            return this.getElements().wrapperOptions;
         },
+
+        /**
+         * Retourne toutes les options ou en partie
+         *
+         * @param filter Sélecteur de filtre pour les options à retourner
+         *
+         * @return {object}
+         */
         getOptions: function (filter) {
             var options = this.getWrapperOptions().find('.' + this.settings.classes.option);
 
             return (filter !== undefined) ? options.filter(filter) : options;
         },
+
+        /**
+         * Retourne les <option> sur <select> initial
+         *
+         * @return {object}
+         */
         getSourceOptions: function () {
-            return this.element.source.options;
+            return this.getElements().source.options;
         },
+
+        /**
+         * Retourne les <optgroup> sur <select> initial
+         *
+         * @return {object}
+         */
         getSourceOptgroups: function () {
-            return this.element.source.optgroups;
+            return this.getElements().source.optgroups;
         },
+
+        /**
+         * Retourne la valeur courante ou par défaut
+         *
+         * @param {boolean} defaultValue
+         *
+         * @return {string|object}
+         */
         getValue: function (defaultValue) {
             defaultValue = defaultValue || false;
-            var value = (defaultValue) ? this.getInput().attr('data-default-value') : this.getWrapperLabel().attr('data-value');
+            var value = defaultValue ? this.getInput().attr('data-default-value') : this.getWrapperLabel().attr('data-value');
 
-            if (this.element.isMultiple) {
+            if (value !== undefined && this.isMultiple()) {
                 return value.split(',');
             }
 
             return value;
         },
+
+        /**
+         * Retourne la valeur courante
+         *
+         * @return {string|object}
+         */
+        getCurrentValue: function () {
+            return this.getValue();
+        },
+
+        /**
+         * Retourne la valeur par défaut
+         *
+         * @return {string|object}
+         */
         getDefaultValue: function () {
             return this.getValue(true);
         },
-        getOptionValue: function (option) {
-            option = option || undefined;
 
+        /**
+         * Retourne la valeur d'une option
+         *
+         * @param {object} option
+         *
+         * @return {null|string}
+         */
+        getOptionValue: function (option) {
             if (option !== undefined) {
-                return option.attr('data-value') || null;
+                return option.attr('data-value');
             }
 
-            return false;
+            return null;
         }
     };
 })(jQuery);
