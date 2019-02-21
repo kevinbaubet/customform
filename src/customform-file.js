@@ -6,20 +6,22 @@
         this.customForm = customForm;
 
         // Config
-        this.element  = {
+        this.elements  = {
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
-            type: this.customForm.support.type,
             wrapper: null,
             wrapperInput: null,
             wrapperLabel: null,
             wrapperFile: null
         };
-        $.extend(true, (this.settings = {}), this.customForm.settings, $.CustomFormFile.defaults, options);
+        $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormFile.defaults, options);
+
+        // Variables
+        this.type = this.customForm.support.type;
 
         // Init
         if (this.prepareOptions()) {
-            this.load();
+            this.init();
         }
 
         return this;
@@ -35,7 +37,7 @@
             open: 'is-open',
             selected: 'is-selected'
         },
-        onLoad: undefined,
+        beforeLoad: undefined,
         beforeWrap: undefined,
         afterEventsHandler: undefined,
         onComplete: undefined,
@@ -48,7 +50,7 @@
         /**
          * Préparation des options utilisateur
          *
-         * @return bool
+         * @return {boolean}
          */
         prepareOptions: function () {
             // Classes
@@ -60,26 +62,25 @@
         /**
          * Initialisation
          */
-        load: function () {
+        init: function () {
             // User callback
-            if (this.settings.onLoad !== undefined) {
-                this.settings.onLoad.call({
+            if (this.settings.beforeLoad !== undefined) {
+                this.settings.beforeLoad.call({
                     customFormFile: this,
-                    element: this.element
+                    elements: this.getElements()
                 });
             }
 
             // Load
             this.wrap();
-            this.initElementsState();
+            this.reset();
             this.eventsHandler();
-            this.resetHandler();
 
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
                     customFormFile: this,
-                    element: this.element
+                    elements: this.getElements()
                 });
             }
 
@@ -90,18 +91,18 @@
          * Création des wrappers
          */
         wrap: function () {
-            this.element.wrapper = $('<span>', {
+            this.elements.wrapper = $('<span>', {
                 'class': this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
             });
-            this.element.wrapperInput = $('<span>', {
+            this.elements.wrapperInput = $('<span>', {
                 'class': this.settings.classes.input
             });
-            this.element.wrapperLabel = $('<span>', {
+            this.elements.wrapperLabel = $('<span>', {
                 'class': this.settings.classes.label,
                 tabindex: this.settings.tabindexStart,
                 html: this.settings.labelText
             });
-            this.element.wrapperFile = $('<span>', {
+            this.elements.wrapperFile = $('<span>', {
                 'class': this.settings.classes.file,
                 html: this.settings.emptyText
             });
@@ -110,34 +111,35 @@
             if (this.settings.beforeWrap !== undefined) {
                 this.settings.beforeWrap.call({
                     customFormFile: this,
-                    wrapper: this.element.wrapper,
-                    wrapperInput: this.element.wrapperInput,
-                    wrapperLabel: this.element.wrapperLabel,
-                    wrapperFile: this.element.wrapperFile
+                    elements: this.getElements()
                 });
             }
 
             // Wrapper
-            this.getInput().parent().wrapInner(this.element.wrapper);
-            this.element.wrapper = this.getInput().parent();
+            this.getInput().parent().wrapInner(this.getWrapper());
+            this.elements.wrapper = this.getInput().parent();
 
             // WrapperInput
-            this.getInput().wrap(this.element.wrapperInput);
-            this.element.wrapperInput = this.element.input.parent();
+            this.getInput().wrap(this.getWrapperInput());
+            this.elements.wrapperInput = this.getInput().parent();
 
             // WrapperLabel et file
-            this.element.wrapperLabel.appendTo(this.element.wrapperInput);
-            this.element.wrapperFile.appendTo(this.element.wrapperInput);
+            this.elements.wrapperLabel.appendTo(this.getWrapperInput());
+            this.elements.wrapperFile.appendTo(this.getWrapperInput());
 
             return this;
         },
 
         /**
-         * Initialise l'état des éléments
+         * Initialise l'état des éléments par défaut
          */
-        initElementsState: function () {
+        reset: function () {
+            // Reset
+            this.getWrapper().removeClass(this.settings.classes.disabled);
+            this.getWrapperFile().text(this.settings.emptyText);
+
             // Désactivé ?
-            if (this.getInput().is(':disabled')) {
+            if (this.isDisabled()) {
                 this.getWrapper().addClass(this.settings.classes.disabled);
                 this.getWrapperLabel().removeAttr('tabindex');
             }
@@ -161,7 +163,7 @@
                 if (event.type === 'click' || (event.type === 'keydown' && (event.keyCode === 32 || event.keyCode === 13))) {
                     event.preventDefault();
 
-                    if (self.getInput().is(':disabled')) {
+                    if (self.isDisabled()) {
                         return;
                     }
 
@@ -177,8 +179,7 @@
                     if (self.settings.onClick !== undefined) {
                         self.settings.onClick.call({
                             customFormFile: self,
-                            wrapper: self.getWrapper(),
-                            input: self.getInput()
+                            elements: self.getElements()
                         });
                     }
                 }
@@ -186,8 +187,6 @@
 
             // Une fois une valeur sélectionnée
             self.getInput().on('change.customform', function (event) {
-                var input = $(event.currentTarget);
-
                 // État
                 self.getWrapper().removeClass(self.settings.classes.open);
 
@@ -198,33 +197,15 @@
                 if (self.settings.onChange !== undefined) {
                     self.settings.onChange.call({
                         customFormFile: self,
-                        wrapper: self.getWrapper(),
-                        input: self.getInput()
+                        elements: self.getElements()
                     });
                 }
             });
 
-            // User callback
-            if (self.settings.afterEventsHandler !== undefined) {
-                self.settings.afterEventsHandler.call({
-                    customFormFile: self,
-                    element: self.element
-                });
-            }
-        },
-
-        /**
-         * Initialise un event "reset" sur le sélecteur contexte
-         */
-        resetHandler: function () {
-            var self = this;
-
+            // Reset
             self.getContext().on('reset.customform', function (event) {
-                self.getWrapper().removeClass(self.settings.classes.disabled);
-                self.getWrapperFile().text(self.settings.emptyText);
-
                 setTimeout(function () {
-                    self.initElementsState();
+                    self.reset();
 
                     // User callback
                     if (self.settings.onReset !== undefined) {
@@ -235,12 +216,20 @@
                     }
                 }, 0);
             });
+
+            // User callback
+            if (self.settings.afterEventsHandler !== undefined) {
+                self.settings.afterEventsHandler.call({
+                    customFormFile: self,
+                    elements: self.getElements()
+                });
+            }
         },
 
         /**
-         * Ajout la valeur de l'input au wrapperFile
+         * Ajout de la valeur de l'input au wrapperFile
          *
-         * @param object input Input type file
+         * @param {object} input Input type file
          */
         setWrapperFileValue: function (input) {
             var filename = null;
@@ -260,25 +249,84 @@
         },
 
         /**
-         * Alias pour récupérer les éléments
+         * Détermine si l'option est désactivée
+         *
+         * @return {boolean}
+         */
+        isDisabled: function () {
+            return this.getInput().is(':disabled');
+        },
+
+        /**
+         * Retourne tous les éléments de customform
+         *
+         * @return {object}
+         */
+        getElements: function () {
+            return this.elements;
+        },
+
+        /**
+         * Retourne le contexte de customform (<form>)
+         *
+         * @return {object}
          */
         getContext: function () {
-            return this.element.context;
+            return this.getElements().context;
         },
+
+        /**
+         * Retourne l'élément <input>
+         *
+         * @return {object}
+         */
         getInput: function () {
-            return this.element.input;
+            return this.getElements().input;
         },
+
+        /**
+         * Retourne le type de l'élément <input>
+         */
         getInputType: function () {
-            return this.element.type;
+            return this.type;
         },
+
+        /**
+         * Retourne le wrapper générique global (.customform)
+         *
+         * @param {object=undefined} children Permet de récupérer le wrapper à partir d'un enfant
+         *
+         * @return {object}
+         */
         getWrapper: function (children) {
-            return (children !== undefined) ? children.closest('.' + this.settings.classes.prefix) : this.element.wrapper;
+            return children !== undefined ? children.closest('.' + this.settings.classes.prefix) : this.getElements().wrapper;
         },
+
+        /**
+         * Retourne le wrapper générique de l'élément <input> (.customform-input)
+         *
+         * @return {object}
+         */
+        getWrapperInput: function () {
+            return this.getElements().wrapperInput;
+        },
+
+        /**
+         * Retourne le wrapper du label
+         *
+         * @return {object}
+         */
         getWrapperLabel: function () {
-            return this.element.wrapperLabel;
+            return this.getElements().wrapperLabel;
         },
+
+        /**
+         * Retourne le wrapper du fichier
+         *
+         * @return {object}
+         */
         getWrapperFile: function () {
-            return this.element.wrapperFile;
+            return this.getElements().wrapperFile;
         }
     };
 })(jQuery);
