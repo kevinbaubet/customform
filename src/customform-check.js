@@ -104,7 +104,7 @@
                 this.getWrapper().addClass(this.settings.classes.checked);
             }
             if (this.isDisabled()) {
-                this.disableOption();
+                this.disable();
             }
 
             return this;
@@ -121,7 +121,7 @@
                 if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 32)) {
                     event.preventDefault();
 
-                    self.setOption();
+                    self.select();
                 }
             });
 
@@ -154,7 +154,7 @@
         /**
          * Sélectionne une option
          */
-        setOption: function () {
+        select: function () {
             var self = this;
             var isRadio = (self.getInputType() === 'radio');
 
@@ -194,14 +194,14 @@
          *
          * @param {boolean=false} disable Désactive l'option en même temps
          */
-        removeOption: function (disable) {
+        remove: function (disable) {
             disable = disable || false;
 
             if (this.isChecked()) {
-                this.setOption();
+                this.select();
 
                 if (disable) {
-                    this.disableOption();
+                    this.disable();
                 }
             }
 
@@ -209,9 +209,9 @@
         },
 
         /**
-         * Désactive une option
+         * Désactive l'input
          */
-        disableOption: function () {
+        disable: function () {
             this.getInput()
                 .prop('disabled', true)
                 .removeAttr('tabindex');
@@ -222,7 +222,7 @@
         },
 
         /**
-         * Détermine si l'option est cochée
+         * Détermine si l'input est cochée
          *
          * @return {boolean}
          */
@@ -231,7 +231,7 @@
         },
 
         /**
-         * Détermine si l'option est désactivée
+         * Détermine si l'input est désactivée
          *
          * @return {boolean}
          */

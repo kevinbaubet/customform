@@ -1,11 +1,11 @@
-/**
- * CustomForm - Label
- *
- * Ajoute un état sur les labels quand on focus les inputs
- */
 (function ($) {
     'use strict';
 
+    /**
+     * CustomForm - Label
+     *
+     * Ajoute un état sur les labels quand on focus les inputs
+     */
     $.CustomFormLabel = function (context, options, support) {
         // Éléments
         this.elements = {
@@ -41,6 +41,7 @@
         'input[type="url"]',
         'textarea'
     ];
+
     $.CustomFormLabel.defaults = {
         wrapper: '.form-item',
         classes: {

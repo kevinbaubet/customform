@@ -249,7 +249,7 @@
         },
 
         /**
-         * Détermine si l'option est désactivée
+         * Détermine si l'input est désactivée
          *
          * @return {boolean}
          */
