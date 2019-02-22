@@ -251,7 +251,7 @@
 
             // En multiple, on ne selectionne pas la valeur par défaut
             if (self.isMultiple()) {
-                var firstOption = self.option(self.getOptions('.' + self.settings.classes.first));
+                var firstOption = self.loadOption(self.getOptions('.' + self.settings.classes.first));
 
                 if (defaultValue === firstOption.getValue()) {
                     defaultValue = null;
@@ -261,7 +261,7 @@
 
             // Ajout des options
             self.getOptions().each(function (i, option) {
-                option = self.option(option);
+                option = self.loadOption(option);
                 var optionValue = option.getValue();
                 var settings = {
                     context: 'init'
@@ -393,7 +393,7 @@
 
             // Ajout d'un événement sur les options
             self.getOptions().on('click.customform.option', function (option) {
-                self.option(option.currentTarget).select({context: 'click'});
+                self.loadOption(option.currentTarget).select({context: 'click'});
             });
 
             // Trigger click
@@ -440,7 +440,7 @@
 
             // Sélection de l'option
             self.getOptions().each(function (i, option) {
-                option = self.option(option);
+                option = self.loadOption(option);
                 self.keyboard.options[i] = option;
 
                 if (option.isSelected()) {
@@ -512,7 +512,7 @@
 
             // Résultats
             this.getOptions().each(function (i, option) {
-                option = self.option(option);
+                option = self.loadOption(option);
                 seachResults.push(option.getName().toLowerCase().indexOf(searchString));
             });
 
@@ -570,7 +570,7 @@
          *
          * @param {object|string} option
          */
-        option: function (option) {
+        loadOption: function (option) {
             return new $.CustomFormSelectOption(this, option);
         },
 
@@ -586,13 +586,13 @@
             disable = disable || false;
 
             if (!self.isMultiple()) {
-                self.customForm.setLog('removeOptions() works only with "multiple" attribute. Uses setOption() for classic <select>.', 'warn');
+                // self.customForm.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
                 return;
             }
 
             if (options.length) {
                 $.each(options, function (i, option) {
-                    option = self.option(option);
+                    option = self.loadOption(option);
 
                     if (option.isSelected()) {
                         option.remove();
@@ -772,7 +772,7 @@
      * @param {object|string} option
      */
     $.CustomFormSelectOption = function (customFormSelect, option) {
-        if (typeof option === 'object') {
+        if (typeof option === 'object' && !(option instanceof jQuery)) {
             option = $(option);
         }
 
@@ -830,13 +830,13 @@
                             self.removeState('selected');
 
                             self.customFormSelect.getOptions('.' + self.customFormSelect.settings.classes.selected).each(function (i, selectedOption) {
-                                self.customFormSelect.multipleOptions.push(self.customFormSelect.option(selectedOption));
+                                self.customFormSelect.multipleOptions.push(self.customFormSelect.loadOption(selectedOption));
                             });
 
                             if (self.customFormSelect.multipleOptions.length === 0) {
                                 setTimeout(function () {
                                     self.customFormSelect
-                                        .option(self.customFormSelect.getOptions('.' + self.customFormSelect.settings.classes.first))
+                                        .loadOption(self.customFormSelect.getOptions('.' + self.customFormSelect.settings.classes.first))
                                         .select(settings);
                                 }, 0);
                             }
@@ -862,8 +862,6 @@
 
                         // Add
                         $.each(self.customFormSelect.multipleOptions, function (i, option) {
-                            // option = self.customFormSelect.option(option);
-
                             if (!option.isDisabled()) {
                                 var optionValue = option.getValue();
                                 var optionName = option.getName();

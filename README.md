@@ -54,8 +54,8 @@ Il est possible ensuite de manipuler l'instance avec la méthode **getInstance**
 
 ## Supports présents dans CustomForm
 
-* [Checkboxs & Radios](docs/check.md)
-* [Sélects](docs/select.md)
+* [Checkbox & Radio](docs/check.md)
+* [Select](docs/select.md)
 * [File](docs/file.md)
 
 

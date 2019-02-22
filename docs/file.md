@@ -15,7 +15,7 @@ Ce support permet de personnaliser les inputs de type file.
 | Option                        | Type     | Valeur par défaut               | Description                                               |
 |-------------------------------|----------|---------------------------------|-----------------------------------------------------------|
 | labelText                     | string   | 'Browse...'                     | Texte du bouton "parcourir"                               |
-| emptyText                   ****  | string   | 'No file selected.'             | Texte quand aucun fichier n'est sélectionné               |
+| emptyText                     | string   | 'No file selected.'             | Texte quand aucun fichier n'est sélectionné               |
 | multipleText                  | string   | '{count} files selected.'       | Texte quand plusieurs fichiers sont sélectionnés          |
 | classes                       | object   | Voir ci-dessous                 | Objet pour les options ci-dessous                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;label | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |

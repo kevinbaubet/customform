@@ -2,6 +2,11 @@
 
 Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 
+Nom des supports :
+
+* **checkbox**
+* **radio**
+
 
 ### Initialisation
 
@@ -30,5 +35,3 @@ Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 
 
 ### Méthodes
-
-todo
