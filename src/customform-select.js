@@ -586,7 +586,7 @@
             disable = disable || false;
 
             if (!self.isMultiple()) {
-                self.customForm.setLog('warn', 'removeOptions() works only with "multiple" attribute. Uses setOption() for classic <select>.');
+                self.customForm.setLog('removeOptions() works only with "multiple" attribute. Uses setOption() for classic <select>.', 'warn');
                 return;
             }
 

@@ -5,10 +5,6 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 * Compatibilité : IE10+
 * Dépendance : jQuery
 
-## Initialisation
-
-    var customForm = $('context').customForm([options]);
-
 ## Options
 
 | Option                           | Type     | Valeur par défaut | Description                                               |
@@ -39,19 +35,19 @@ Un *support* correspond à un type d'input à personnaliser (checkbox, radio, se
 
 ### Initialiser un support
 
-Une fois CustomForm initialisé :
-
+    var customForm = $('form').customForm([options]);
+    
     customForm.setSupport('name', [options]);
-
-Lors de l'initialisation d'un support, CustomForm va éxecuter une classe JS qui correspondra à **$.CustomFormName**. "Name" étant le nom du support.
 
 ### Instances
 
 La classe JS est instanciée pour chaque sélecteur du support dans le contexte. Pour faire des manipulations sur les supports, il faut récupérer les instances :
 
-    var selects = customForm.setSupport('name', [options]);
+    var customForm = $('form').customForm([options]);
+    
+    var selects = customForm.setSupport('select', [options]);
 
-Il est possible ensuite de manipuler l'instance en fonction de l'attribut **name** du sélecteur ou via la méthode **getInstance**.
+Il est possible ensuite de manipuler l'instance avec la méthode **getInstance**.
 
     var instance = customForm.getInstance(selects, $('#input'));
 
@@ -63,32 +59,6 @@ Il est possible ensuite de manipuler l'instance en fonction de l'attribut **name
 * [File](docs/file.md)
 
 
-## Autre support ?
+## Support supplémentaire
 
-Il est possible d'ajouter autant de support que vous voulez.
-
-Il faut d'abord ajouter un sélecteur à la liste des supports :
-
-    $.CustomForm.supports.name = 'input[type="name"]';
-    
-    ou
-    
-    $('form').customForm([options], {
-        name: 'input[type="name"]'
-    });
-    
-
-Puis créer la classe JS associée :
-
-    $.CustomFormName(customForm, options) {
-        this.init();
-    };
-    
-    $.CustomFormName.prototype = {
-        /**
-         * Initialisation
-         */
-        init: function() {
-            console.log('in the support "name"');
-        }
-    };
+* [Créer un support](docs/custom.md)

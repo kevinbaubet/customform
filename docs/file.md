@@ -1,17 +1,21 @@
 ## File
 
-Ce support permet de personnaliser les input de type file.
+Ce support permet de personnaliser les inputs de type file.
+
 
 ### Initialisation
 
-    CustomForm.setSupport('file', [options]);
+    var customForm = $('form').customForm([options]);
+
+    customForm.setSupport('file', [options]);
+
 
 ### Options
 
 | Option                        | Type     | Valeur par défaut               | Description                                               |
 |-------------------------------|----------|---------------------------------|-----------------------------------------------------------|
 | labelText                     | string   | 'Browse...'                     | Texte du bouton "parcourir"                               |
-| emptyText                     | string   | 'No file selected.'             | Texte quand aucun fichier n'est sélectionné               |
+| emptyText                   ****  | string   | 'No file selected.'             | Texte quand aucun fichier n'est sélectionné               |
 | multipleText                  | string   | '{count} files selected.'       | Texte quand plusieurs fichiers sont sélectionnés          |
 | classes                       | object   | Voir ci-dessous                 | Objet pour les options ci-dessous                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;label | string   | '{prefix}-label'                | Classe pour le bouton "Parcourir..."                      |
@@ -25,15 +29,7 @@ Ce support permet de personnaliser les input de type file.
 | onChange                      | function | undefined                       | Callback au choix du fichier                              |
 | onReset                       | function | undefined                       | Callback au reset du formulaire                           |
 
+
 ### Méthodes
 
-| Méthode             | Arguments                                                | Description                                              |
-|---------------------|----------------------------------------------------------|----------------------------------------------------------|
-| initElementsState   | -                                                        | Initialise l'état des éléments                           |
-| getContext          | -                                                        | Récupère l'élément de contexte                           |
-| getInput            | -                                                        | Récupère l'élément input                                 |
-| getInputType        | -                                                        | Récupère le type de l'élément input                      |
-| getWrapper          | **[children]** *jQuery object* Élément enfant du wrapper | Récupère l'élément wrapper créé par CustomForm           |
-| getWrapperLabel     | -                                                        | Récupère l'élément wrapper du bouton                     |
-| getWrapperFile      | -                                                        | Récupère l'élément wrapper du nom du fichier sélectionné |
-| setWrapperFileValue | **input** *object* Input type file                       | Met à jour la valeur du fichier sélectionné              |
+todo

@@ -1,11 +1,19 @@
 ## Checkboxs & Radios
 
-Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces 2 supports, c'est la classe JS $.CustomFormCheck qui est initialisée.
+Ce support permet de personnaliser 2 types d'input : checkbox et radio.
+
 
 ### Initialisation
 
-    CustomForm.setSupport('checkbox', [options]);
-    CustomForm.setSupport('radio', [options]);
+    var customForm = $('form').customForm([options]);
+    
+    customForm.setSupport('checkbox', [options]);
+    customForm.setSupport('radio', [options]);
+    
+    // or
+    
+    customForm.setSupports(['checkbox', 'radio']);
+
 
 ### Options
 
@@ -20,16 +28,7 @@ Ce support est spécial car il regroupe 2 supports : checkbox et radio. Pour ces
 | onClick                         | function | undefined         | Callback au click sur l'input                   |
 | onReset                         | function | undefined         | Callback au reset du formulaire                 |
 
+
 ### Méthodes
 
-| Méthode           | Arguments                                                | Description                                                                 |
-|-------------------|----------------------------------------------------------|-----------------------------------------------------------------------------|
-| initElementsState | -                                                        | Initialise l'état des éléments                                              |
-| getContext        | -                                                        | Récupère l'élément de contexte                                              |
-| getInput          | -                                                        | Récupère l'élément input                                                    |
-| getInputType      | -                                                        | Récupère le type de l'élément input (radio, checkbox)                       |
-| getWrapper        | **[children]** *jQuery object* Élément enfant du wrapper | Récupère l'élément wrapper créé par CustomForm                              |
-| getInputsRadio    | -                                                        | Récupère tous les éléments radios du contexte ayant le même attribut "name" |
-| setOption         | -                                                        | Sélectionne une option                                                      |
-| removeOption      | -                                                        | Enlève la sélection de l'option                                             |
-| disableOption     | -                                                        | Désactive une option                                                        |
+todo

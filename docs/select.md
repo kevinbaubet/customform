@@ -1,10 +1,14 @@
 ## Sélects
 
-Ce support permet de personnaliser les selects, multiple ou non.
+Ce support permet de personnaliser les sélects classiques et multiples.
+
 
 ### Initialisation
 
-    CustomForm.setSupport('select', [options]);
+    var customForm = $('form').customForm([options]);
+
+    customForm.setSupport('select', [options]);
+
 
 ### Options
 
@@ -29,26 +33,7 @@ Ce support permet de personnaliser les selects, multiple ou non.
 | onChange                                 | function | undefined                         | Callback au changement d'option                                  |
 | onReset                                  | function | undefined                         | Callback au reset du formulaire                                  |
 
-### Méthodes
 
-| Méthode            | Arguments                                                                                                                  | Description                                                                      |
-|--------------------|----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| initElementsState  | -                                                                                                                          | Défini l'état des éléments à l'initialisation                                    |
-| getContext         | -                                                                                                                          | Récupère l'élément de contexte                                                   |
-| getInput           | -                                                                                                                          | Récupère l'élément input                                                         |
-| getWrapper         | **[children]** *jQuery object* Élément enfant du wrapper                                                                   | Récupère l'élément wrapper créé par CustomForm                                   |
-| getWrapperInput    | -                                                                                                                          | Récupère l'élément wrapper de l'input select                                     |
-| getWrapperLabel    | -                                                                                                                          | Récupère l'élément wrapper du label, correspond à l'option actuellement affichée |
-| getWrapperOptions  | -                                                                                                                          | Récupère l'élément wrapper de toutes les options                                 |
-| getOptions         | **[filter]** *string* Sélecteur pour filtrer le résultat                                                                   | Récupère toutes les options créées par CustomForm                                |
-| getSourceOptions   | -                                                                                                                          | Récupère tous les options du select d'origine                                    |
-| getSourceOptgroups | -                                                                                                                          | Récupère tous les groupes d'options du select d'origine                          |
-| getValue           | -                                                                                                                          | Récupère la valeur actuellement sélectionnée                                     |
-| getDefaultValue    | -                                                                                                                          | Récupère la valeur sélectionnée par défaut                                       |
-| getOptionValue     | **option** *jQuery object* Option pour en récupérer sa valeur                                                              | Récupère la valeur d'une option                                                  |
-| setLabel           | **value** *mixed* Titre du select custom                                                                                   | Modifie le label du select custom                                                |
-| setOption          | **option** *jQuery object* Option à sélectionner                                                                           | Sélectionne une option                                                           |
-| removeOptions      | **options** *string/jQuery object* Sélecteur ou liste des options, **disable** *boolean* Désactiver l'option en même temps | Enlève la sélection des options définies                                         |
-| disableOption      | **option** *jQuery object* Option à désactiver                                                                             | Désactive une option                                                             |
-| close              | -                                                                                                                          | Ferme l'affichage des options                                                    |
-| closeSiblings      | -                                                                                                                          | Ferme l'affichage des options des autres sélects du contexte                     |
+### Méthodes
+                                                                                                                      
+todo

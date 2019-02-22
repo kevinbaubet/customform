@@ -140,7 +140,7 @@
                 });
 
             } else {
-                self.setLog('error', 'Support "' + self.support.className + '" not found.');
+                self.setLog('Support "' + self.support.className + '" not found.', 'error');
             }
 
             // User Callback
@@ -178,7 +178,7 @@
                 return instances[name];
 
             } else {
-                this.setLog('error', '"name" attribute not found in input parameter.')
+                this.setLog('"name" attribute not found in input parameter.', 'error')
             }
 
             return false;
@@ -207,10 +207,12 @@
         /**
          * Créer un log
          *
-         * @param {string} type
          * @param {string} log
+         * @param {string=undefined} type
          */
-        setLog: function (type, log) {
+        setLog: function (log, type) {
+            type = type || 'log';
+
             console[type]('CustomForm: ' + log);
         },
 
