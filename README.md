@@ -39,19 +39,6 @@ Un *support* correspond à un type d'input à personnaliser (checkbox, radio, se
     
     customForm.setSupport('name', [options]);
 
-### Instances
-
-La classe JS est instanciée pour chaque sélecteur du support dans le contexte. Pour faire des manipulations sur les supports, il faut récupérer les instances :
-
-    var customForm = $('form').customForm([options]);
-    
-    var selects = customForm.setSupport('select', [options]);
-
-Il est possible ensuite de manipuler l'instance avec la méthode **getInstance**.
-
-    var instance = customForm.getInstance(selects, $('#input'));
-
-
 ## Supports présents dans CustomForm
 
 * [Checkbox & Radio](docs/check.md)

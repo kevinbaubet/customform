@@ -40,27 +40,27 @@ Pour utiliser l'api, il y a 2 solutions :
 
 * **Callback** : Utiliser les options de type "function" ci-dessus. Cela va fonctionner pour tous les inputs présents dans le *form*.
 
-    var customForm = $('form').customForm();
-    
-    customForm.setSupport('file', {
-        onChange: function () {
-            var selectedFiles = this.customFormFile.getSelectedFiles();
-            console.log(selectedFiles);
-        }
-    });
+        var customForm = $('form').customForm();
+        
+        customForm.setSupport('file', {
+            onChange: function () {
+                var selectedFiles = this.customFormFile.getSelectedFiles();
+                console.log(selectedFiles);
+            }
+        });
     
 * **Instance** : Utiliser une instance précise.
 
-    var customForm = $('form').customForm();
-    var files = customForm.setSupport('file');
-    var file = customForm.getInstance(files, $('#file-1'));
-    
-    if (file instanceof $.CustomFormFile) {
-        file.getInput().on('change', function () {
-            var selectedFiles = file.getSelectedFiles();
-            console.log(selectedFiles);
-        });
-    }
+        var customForm = $('form').customForm();
+        var files = customForm.setSupport('file');
+        var file = customForm.getInstance(files, $('#file-1'));
+        
+        if (file instanceof $.CustomFormFile) {
+            file.getInput().on('change', function () {
+                var selectedFiles = file.getSelectedFiles();
+                console.log(selectedFiles);
+            });
+        }
 
 #### reset()
 

@@ -42,25 +42,25 @@ Pour utiliser l'api, il y a 2 solutions :
 
 * **Callback** : Utiliser les options de type "function" ci-dessus. Cela va fonctionner pour tous les inputs présents dans le *form*.
 
-    var customForm = $('form').customForm();
-    
-    customForm.setSupport('checkbox', {
-        onClick: function () {
-            this.customFormCheck.disable();
-        }
-    });
+        var customForm = $('form').customForm();
+        
+        customForm.setSupport('checkbox', {
+            onClick: function () {
+                this.customFormCheck.disable();
+            }
+        });
     
 * **Instance** : Utiliser une instance précise.
 
-    var customForm = $('form').customForm();
-    var checkboxes = customForm.setSupport('checkbox');
-    var checkbox = customForm.getInstance(checkboxes, $('#checkbox1-1'));
-    
-    if (checkbox instanceof $.CustomFormCheck) {
-        checkbox.getInput().on('click', function () {
-            checkbox.disable();
-        });
-    }
+        var customForm = $('form').customForm();
+        var checkboxes = customForm.setSupport('checkbox');
+        var checkbox = customForm.getInstance(checkboxes, $('#checkbox1-1'));
+        
+        if (checkbox instanceof $.CustomFormCheck) {
+            checkbox.getInput().on('click', function () {
+                checkbox.disable();
+            });
+        }
 
 #### reset()
 
