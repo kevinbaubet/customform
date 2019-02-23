@@ -100,7 +100,7 @@ Retourne tous les éléments de customform
 
 #### getContext()
 
-Retourne le contexte de customform (<form>)
+Retourne le contexte de customform (form)
 
 * @return *{object}*
 
@@ -112,7 +112,7 @@ Retourne l'élément <input>
 
 #### getInputType()
 
-Retourne le type de l'élément <input>
+Retourne le type de l'élément input
 
 * @return *{string}*
 
@@ -125,12 +125,12 @@ Retourne le wrapper générique global (.customform)
 
 #### getWrapperInput()
 
-Retourne le wrapper générique de l'élément <input> (.customform-input)
+Retourne le wrapper générique de l'élément input (.customform-input)
 
 * @return *{object}*
 
 #### getInputsRadio()
 
-Retourne tous les <inputs> de type radio
+Retourne tous les inputs de type radio
 
 * @return *{object}*
