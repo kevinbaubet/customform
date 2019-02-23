@@ -5,7 +5,7 @@
         // Héritage
         this.customForm = customForm;
 
-        // Config
+        // Élements
         this.elements = {
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
@@ -14,6 +14,8 @@
             wrapperLabel: null,
             wrapperFile: null
         };
+
+        // Config
         $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormFile.defaults, options);
 
         // Variables

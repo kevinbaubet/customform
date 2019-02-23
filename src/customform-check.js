@@ -5,13 +5,15 @@
         // Héritage
         this.customForm = customForm;
 
-        // Config
+        // Élements
         this.elements = {
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
             wrapper: null,
             wrapperInput: null
         };
+
+        // Config
         $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormCheck.defaults, options);
 
         // Variables
@@ -125,7 +127,7 @@
                 }
             });
 
-            // Reset <form>
+            // Reset
             self.getContext().on('reset.customform', function (event) {
                 setTimeout(function () {
                     self.reset();
@@ -190,15 +192,20 @@
         },
 
         /**
-         * Enlève la sélection de l'option
+         * Enlève la sélection d'une checkbox
          *
-         * @param {boolean=false} disable Désactive l'option en même temps
+         * @param {boolean=false} disable Désactive la checkbox en même temps
          */
         remove: function (disable) {
             disable = disable || false;
 
             if (this.isChecked()) {
-                this.select();
+                if (this.getInputType() === 'radio') {
+                    this.customForm.setLog('remove() works only with checkbox. Uses select() on another radio.', 'warn');
+
+                } else {
+                    this.select();
+                }
 
                 if (disable) {
                     this.disable();
@@ -268,6 +275,8 @@
 
         /**
          * Retourne le type de l'élément <input>
+         *
+         * @return {string}
          */
         getInputType: function () {
             return this.type;

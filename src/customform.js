@@ -132,6 +132,7 @@
 
                         // Si l'input est déjà initialisé, on stop
                         if (self.elementInput.closest('.' + self.settings.classes.prefix).length) {
+                            self.setLog('Support "' + self.support.type + '" is already initialized!', 'warn');
                             return;
                         }
 
@@ -140,7 +141,7 @@
                 });
 
             } else {
-                self.setLog('Support "' + self.support.className + '" not found.', 'error');
+                self.setLog('Support "' + self.support.type + '" not found.', 'error');
             }
 
             // User Callback
@@ -174,11 +175,11 @@
             instances = instances.instances || instances;
             var name = this.getInstanceName(input);
 
-            if (name !== false && instances !== undefined && instances[name] !== undefined) {
-                return instances[name];
+            if (!name) {
+                this.setLog('"name" attribute not found in input parameter.', 'error');
 
-            } else {
-                this.setLog('"name" attribute not found in input parameter.', 'error')
+            } else if (instances !== undefined && instances[name] !== undefined) {
+                return instances[name];
             }
 
             return false;
@@ -192,16 +193,23 @@
          * @return {boolean}
          */
         getInstanceName: function (input) {
+            var instanceName = null;
             var name = input.attr('name');
+            var id = input.attr('id');
 
             if (name !== undefined) {
-                return name
+                instanceName = name
+                    .replace(/-/g, '')
                     .replace('[]', '')
                     .replace('[', '_')
                     .replace(']', '');
             }
 
-            return false;
+            if (id !== undefined) {
+                instanceName += '--' + id.replace(/-/g, '');
+            }
+
+            return instanceName;
         },
 
         /**

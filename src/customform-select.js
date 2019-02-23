@@ -5,7 +5,7 @@
         // Héritage
         this.customForm = customForm;
 
-        // Config
+        // Élements
         this.elements = {
             body: $('body'),
             context: this.customForm.elementContext,
@@ -19,6 +19,8 @@
             wrapperLabel: null,
             wrapperOptions: null
         };
+
+        // Config
         $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormSelect.defaults, options);
 
         // Variables
@@ -308,15 +310,17 @@
 
             // Reset
             self.getContext().on('reset.customform', function (event) {
-                self.reset();
+                setTimeout(function () {
+                    self.reset();
 
-                // User callback
-                if (self.settings.onReset !== undefined) {
-                    self.settings.onReset.call({
-                        customFormSelect: self,
-                        form: $(event.currentTarget)
-                    });
-                }
+                    // User callback
+                    if (self.settings.onReset !== undefined) {
+                        self.settings.onReset.call({
+                            customFormSelect: self,
+                            form: $(event.currentTarget)
+                        });
+                    }
+                }, 0);
             });
 
             // User callback
@@ -586,7 +590,7 @@
             disable = disable || false;
 
             if (!self.isMultiple()) {
-                // self.customForm.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
+                self.customForm.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
                 return;
             }
 
