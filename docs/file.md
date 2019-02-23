@@ -2,6 +2,8 @@
 
 Ce support permet de personnaliser les inputs de type file.
 
+Nom du support : **file**
+
 
 ### Initialisation
 
@@ -30,6 +32,119 @@ Ce support permet de personnaliser les inputs de type file.
 | onReset                       | function | undefined                       | Callback au reset du formulaire                           |
 
 
-### Méthodes
+### API
 
-todo
+#### Callback vs Instance
+
+Pour utiliser l'api, il y a 2 solutions :
+
+* **Callback** : Utiliser les options de type "function" ci-dessus. Cela va fonctionner pour tous les inputs présents dans le *form*.
+
+    var customForm = $('form').customForm();
+    
+    customForm.setSupport('file', {
+        onChange: function () {
+            var selectedFiles = this.customFormFile.getSelectedFiles();
+            console.log(selectedFiles);
+        }
+    });
+    
+* **Instance** : Utiliser une instance précise.
+
+    var customForm = $('form').customForm();
+    var files = customForm.setSupport('file');
+    var file = customForm.getInstance(files, $('#file-1'));
+    
+    if (file instanceof $.CustomFormFile) {
+        file.getInput().on('change', function () {
+            var selectedFiles = file.getSelectedFiles();
+            console.log(selectedFiles);
+        });
+    }
+
+#### reset()
+
+Initialise l'état des éléments par défaut
+
+#### select()
+
+Affiche les fichiers sélectionnés
+
+#### getSelectedFiles()
+
+Retourne la liste des fichiers sélectionnés
+
+* @return *{FileList|Array}*
+
+#### getValue()
+
+Retourne la valeur de l'input
+
+* @return *{null|string}*
+
+#### setLabel()
+
+Modifie le label du fichier sélectionné
+
+* @param *{string}* **name**
+
+#### isEmpty()
+
+Détermine si la valeur de l'input est vide
+
+* @return *{boolean}*
+
+#### isDisabled()
+
+Détermine si l'input est désactivée
+
+* @return *{boolean}*
+
+#### getElements()
+
+Retourne tous les éléments de customform
+
+* @return *{object}*
+
+#### getContext()
+
+Retourne le contexte de customform (<form>)
+
+* @return *{object}*
+
+#### getInput()
+
+Retourne l'élément <input>
+
+* @return *{object}*
+
+#### getInputType()
+
+Retourne le type de l'élément <input>
+
+* @return *{string}*
+
+#### getWrapper()
+
+Retourne le wrapper générique global (.customform)
+
+* @param {object=undefined} **children** Permet de récupérer le wrapper à partir d'un enfant
+* @return *{object}*
+
+#### getWrapperInput()
+
+Retourne le wrapper générique de l'élément <input> (.customform-input)
+
+* @return *{object}*
+
+#### getWrapperLabel()
+
+Retourne le wrapper du label
+
+* @return *{object}*
+
+#### getWrapperFile()
+
+Retourne le wrapper du fichier
+
+* @return *{object}*

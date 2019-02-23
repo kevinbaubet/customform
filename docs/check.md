@@ -40,7 +40,7 @@ Nom des supports :
 
 Pour utiliser l'api, il y a 2 solutions :
 
-* **Callback** : Utiliser les options de type "function" ci-dessus. Cela va fonctionner pour tous les radios présent dans le *form*.
+* **Callback** : Utiliser les options de type "function" ci-dessus. Cela va fonctionner pour tous les inputs présents dans le *form*.
 
     var customForm = $('form').customForm();
     
@@ -54,7 +54,7 @@ Pour utiliser l'api, il y a 2 solutions :
 
     var customForm = $('form').customForm();
     var checkboxes = customForm.setSupport('checkbox');
-    var checkbox = customForm.getInstance(checkboxes, $('#input-checkbox-1'));
+    var checkbox = customForm.getInstance(checkboxes, $('#checkbox1-1'));
     
     if (checkbox instanceof $.CustomFormCheck) {
         checkbox.getInput().on('click', function () {

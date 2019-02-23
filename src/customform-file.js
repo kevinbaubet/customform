@@ -147,8 +147,8 @@
             }
 
             // Valeur par défaut
-            if (this.getInput().val() !== '') {
-                this.setWrapperFileValue(this.getInput().get(0));
+            if (!this.isEmpty()) {
+                this.select();
             }
 
             return this;
@@ -188,12 +188,12 @@
             });
 
             // Une fois une valeur sélectionnée
-            self.getInput().on('change.customform', function (event) {
+            self.getInput().on('change.customform', function () {
                 // État
                 self.getWrapper().removeClass(self.settings.classes.open);
 
                 // Ajout de la valeur
-                self.setWrapperFileValue(event.currentTarget);
+                self.select();
 
                 // User callback
                 if (self.settings.onChange !== undefined) {
@@ -229,25 +229,74 @@
         },
 
         /**
-         * Ajout de la valeur de l'input au wrapperFile
-         *
-         * @param {object} input Input type file
+         * Affiche les fichiers sélectionnés
          */
-        setWrapperFileValue: function (input) {
+        select: function () {
             var filename = null;
+            var files = this.getSelectedFiles();
 
             // Nom du fichier
-            if (input.files !== undefined && input.files.length > 1) {
-                filename = this.settings.multipleText.replace(/{count}/, input.files.length);
+            if (files.length > 1) {
+                filename = this.settings.multipleText.replace(/{count}/, files.length);
             } else {
-                filename = input.value.split('\\').pop();
+                filename = this.getValue();
             }
 
-            // Ajout de la valeur
-            this.getWrapperFile().text(filename);
+            // Ajout du label
+            this.setLabel(filename);
             this.getWrapper().addClass(this.settings.classes.selected);
 
             return this;
+        },
+
+        /**
+         * Retourne la liste des fichiers sélectionnés
+         *
+         * @return {FileList|Array}
+         */
+        getSelectedFiles: function () {
+            var input = this.getInput().get(0);
+
+            if (input.files !== undefined) {
+                return input.files;
+            }
+
+            return [];
+        },
+
+        /**
+         * Retourne la valeur de l'input
+         *
+         * @return {null|string}
+         */
+        getValue: function () {
+            var input = this.getInput().get(0);
+
+            if (input.value !== undefined) {
+                return input.value.split('\\').pop();
+            }
+
+            return null;
+        },
+
+        /**
+         * Modifie le label du fichier sélectionné
+         *
+         * @param {string} name
+         */
+        setLabel: function (name) {
+            this.getWrapperFile().html(name);
+
+            return this;
+        },
+
+        /**
+         * Détermine si la valeur de l'input est vide
+         *
+         * @return {boolean}
+         */
+        isEmpty: function () {
+            return this.getInput().val() === '';
         },
 
         /**
