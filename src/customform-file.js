@@ -4,6 +4,7 @@
     $.CustomFormFile = function (customForm, options) {
         // Héritage
         this.customForm = customForm;
+        $.extend($.CustomFormFile.prototype, $.CustomForm.prototype);
 
         // Élements
         this.elements = {
@@ -22,7 +23,7 @@
         this.type = this.customForm.support.type;
 
         // Init
-        if (this.prepareOptions()) {
+        if (this.prepareUserOptions()) {
             this.init();
         }
 
@@ -49,18 +50,6 @@
     };
 
     $.CustomFormFile.prototype = {
-        /**
-         * Préparation des options utilisateur
-         *
-         * @return {boolean}
-         */
-        prepareOptions: function () {
-            // Classes
-            this.customForm.replacePrefixClass.call(this);
-
-            return true;
-        },
-
         /**
          * Initialisation
          */
@@ -206,7 +195,7 @@
 
             // Reset
             self.getContext().on('reset.customform', function (event) {
-                setTimeout(function () {
+                self.onReady(function () {
                     self.reset();
 
                     // User callback
@@ -216,7 +205,7 @@
                             form: $(event.currentTarget)
                         });
                     }
-                }, 0);
+                });
             });
 
             // User callback
@@ -288,78 +277,6 @@
             this.getWrapperFile().html(name);
 
             return this;
-        },
-
-        /**
-         * Détermine si la valeur de l'input est vide
-         *
-         * @return {boolean}
-         */
-        isEmpty: function () {
-            return this.getInput().val() === '';
-        },
-
-        /**
-         * Détermine si l'input est désactivée
-         *
-         * @return {boolean}
-         */
-        isDisabled: function () {
-            return this.getInput().is(':disabled');
-        },
-
-        /**
-         * Retourne tous les éléments de customform
-         *
-         * @return {object}
-         */
-        getElements: function () {
-            return this.elements;
-        },
-
-        /**
-         * Retourne le contexte de customform (<form>)
-         *
-         * @return {object}
-         */
-        getContext: function () {
-            return this.getElements().context;
-        },
-
-        /**
-         * Retourne l'élément <input>
-         *
-         * @return {object}
-         */
-        getInput: function () {
-            return this.getElements().input;
-        },
-
-        /**
-         * Retourne le type de l'élément <input>
-         */
-        getInputType: function () {
-            return this.type;
-        },
-
-        /**
-         * Retourne le wrapper générique global (.customform)
-         *
-         * @param {object=undefined} children Permet de récupérer le wrapper à partir d'un enfant
-         *
-         * @return {object}
-         */
-        getWrapper: function (children) {
-            return children !== undefined ? children.closest('.' + this.settings.classes.prefix) : this.getElements().wrapper;
-        },
-
-        /**
-         * Retourne le wrapper générique de l'élément <input> (.customform-input)
-         *
-         * @return {object}
-         */
-        getWrapperInput: function () {
-            return this.getElements().wrapperInput;
         },
 
         /**

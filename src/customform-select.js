@@ -4,6 +4,7 @@
     $.CustomFormSelect = function (customForm, options) {
         // Héritage
         this.customForm = customForm;
+        $.extend($.CustomFormSelect.prototype, $.CustomForm.prototype);
 
         // Élements
         this.elements = {
@@ -37,7 +38,7 @@
         };
 
         // Init
-        if (this.prepareOptions()) {
+        if (this.prepareUserOptions()) {
             this.init();
         }
 
@@ -68,18 +69,6 @@
     };
 
     $.CustomFormSelect.prototype = {
-        /**
-         * Préparation des options utilisateur
-         *
-         * @return boolean
-         */
-        prepareOptions: function () {
-            // Classes
-            this.customForm.replacePrefixClass.call(this);
-
-            return true;
-        },
-
         /**
          * Initialisation
          */
@@ -310,7 +299,7 @@
 
             // Reset
             self.getContext().on('reset.customform', function (event) {
-                setTimeout(function () {
+                self.onReady(function () {
                     self.reset();
 
                     // User callback
@@ -320,7 +309,7 @@
                             form: $(event.currentTarget)
                         });
                     }
-                }, 0);
+                });
             });
 
             // User callback
@@ -398,7 +387,7 @@
                 event.preventDefault();
                 return;
             }
-            
+
             // Fermeture
             if (isClose) {
                 self.close();
@@ -570,17 +559,8 @@
         },
 
         /**
-         * Gestion d'une option
-         *
-         * @param {object|string} option
-         */
-        loadOption: function (option) {
-            return new $.CustomFormSelectOption(this, option);
-        },
-
-        /**
          * Enlève la sélection des options définies
-         * 
+         *
          * @param {string|object=undefined} options Sélecteur ou liste des options
          * @param {boolean=undefined}       disable Désactive l'option en même temps
          */
@@ -590,7 +570,7 @@
             disable = disable || false;
 
             if (!self.isMultiple()) {
-                self.customForm.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
+                self.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
                 return;
             }
 
@@ -627,60 +607,6 @@
          */
         getSiblings: function () {
             return this.getContext().find('.' + this.settings.classes.prefix + '--' + this.getInputType()).not(this.getWrapper());
-        },
-
-        /**
-         * Retourne tous les éléments de customform
-         *
-         * @return {object}
-         */
-        getElements: function () {
-            return this.elements;
-        },
-
-        /**
-         * Retourne le contexte de customform (form)
-         *
-         * @return {object}
-         */
-        getContext: function () {
-            return this.getElements().context;
-        },
-
-        /**
-         * Retourne l'élément select
-         *
-         * @return {object}
-         */
-        getInput: function () {
-            return this.getElements().input;
-        },
-
-        /**
-         * Retourne le type de l'élément
-         */
-        getInputType: function () {
-            return this.type;
-        },
-
-        /**
-         * Retourne le wrapper générique global (.customform)
-         *
-         * @param {object=undefined} children Permet de récupérer le wrapper à partir d'un enfant
-         *
-         * @return {object}
-         */
-        getWrapper: function (children) {
-            return children !== undefined ? children.closest('.' + this.settings.classes.prefix) : this.getElements().wrapper;
-        },
-
-        /**
-         * Retourne le wrapper générique du select (.customform-input)
-         *
-         * @return {object}
-         */
-        getWrapperInput: function () {
-            return this.getElements().wrapperInput;
         },
 
         /**
@@ -766,6 +692,15 @@
          */
         getDefaultValue: function () {
             return this.getValue(true);
+        },
+
+        /**
+         * Gestion d'une option
+         *
+         * @param {object|string} option
+         */
+        loadOption: function (option) {
+            return new $.CustomFormSelectOption(this, option);
         }
     };
 
@@ -838,11 +773,11 @@
                             });
 
                             if (self.customFormSelect.multipleOptions.length === 0) {
-                                setTimeout(function () {
+                                self.customFormSelect.onReady(function () {
                                     self.customFormSelect
                                         .loadOption(self.customFormSelect.getOptions('.' + self.customFormSelect.settings.classes.first))
                                         .select(settings);
-                                }, 0);
+                                });
                             }
                         } else {
                             self.customFormSelect.multipleOptions.push(self);
@@ -946,7 +881,12 @@
          */
         remove: function () {
             if (this.isSelected()) {
-                this.select({context: 'remove'});
+                if (this.customFormSelect.isMultiple()) {
+                    this.select({context: 'remove'});
+
+                } else {
+                    this.customFormSelect.reset();
+                }
             }
 
             return this;

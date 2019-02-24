@@ -62,9 +62,11 @@ Pour utiliser l'API, il y a 2 solutions :
         
         if (select instanceof $.CustomFormSelect) {
             select.getOptions().on('click', function (event) {
-                var option = select.loadOption(event.currentTarget);
-
-                option.disable();
+                select.onReady(function () {
+                    var option = select.loadOption(event.currentTarget);
+    
+                    option.disable();
+                });
             });
         }
         
@@ -240,6 +242,10 @@ Sélectionne une option
 
 * @param *{object=undefined}* **settings** Paramètres optionnels
 
+        // Select current option
+        option.select();
+        
+        // Select previous option
         option.select({
             context: 'auto-move',
             direction: 'up'
@@ -281,10 +287,10 @@ Détermine si l'option est désactivée
 
 Retourne le nom de l'option au format HTML
 
-* @return {string}
+* @return *{string}*
 
 ##### getValue()
 
 Retourne la valeur de l'option
 
-* @return {null|string}
+* @return *{null|string}*

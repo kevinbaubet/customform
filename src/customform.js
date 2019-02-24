@@ -14,7 +14,7 @@
         this.support = undefined;
 
         // Init
-        this.prepareOptions();
+        this.prepareUserOptions();
 
         return this;
     };
@@ -49,7 +49,7 @@
          *
          * @return boolean
          */
-        prepareOptions: function () {
+        prepareUserOptions: function () {
             // Classes
             this.replacePrefixClass();
 
@@ -212,6 +212,17 @@
         },
 
         /**
+         * Une fois customForm prêt
+         *
+         * @param {function} callback Fonction à exécuter
+         */
+        onReady: function (callback) {
+            setTimeout(function () {
+                callback();
+            }, 0);
+        },
+
+        /**
          * Créer un log
          *
          * @param {string} log
@@ -236,6 +247,78 @@
             });
 
             return self;
+        },
+
+        /**
+         * Détermine si la valeur de l'input est vide
+         *
+         * @return {boolean}
+         */
+        isEmpty: function () {
+            return this.getInput().val() === '';
+        },
+
+        /**
+         * Détermine si l'input est désactivée
+         *
+         * @return {boolean}
+         */
+        isDisabled: function () {
+            return this.getInput().prop('disabled');
+        },
+
+        /**
+         * Retourne tous les éléments de customform
+         *
+         * @return {object}
+         */
+        getElements: function () {
+            return this.elements;
+        },
+
+        /**
+         * Retourne le contexte de customform (form)
+         *
+         * @return {object}
+         */
+        getContext: function () {
+            return this.getElements().context;
+        },
+
+        /**
+         * Retourne l'élément select
+         *
+         * @return {object}
+         */
+        getInput: function () {
+            return this.getElements().input;
+        },
+
+        /**
+         * Retourne le type de l'élément
+         */
+        getInputType: function () {
+            return this.type;
+        },
+
+        /**
+         * Retourne le wrapper générique global (.customform)
+         *
+         * @param {object=undefined} children Permet de récupérer le wrapper à partir d'un enfant
+         *
+         * @return {object}
+         */
+        getWrapper: function (children) {
+            return children !== undefined ? children.closest('.' + this.settings.classes.prefix) : this.getElements().wrapper;
+        },
+
+        /**
+         * Retourne le wrapper générique du select (.customform-input)
+         *
+         * @return {object}
+         */
+        getWrapperInput: function () {
+            return this.getElements().wrapperInput;
         }
     };
 

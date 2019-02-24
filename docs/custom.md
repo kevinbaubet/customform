@@ -16,7 +16,14 @@ Il faut d'abord ajouter un sélecteur à la liste des supports :
 Puis créer la classe JS associée :
 
     $.CustomFormName(customForm, options) {
-        this.init();
+        this.customForm = customForm;
+        $.extend($.CustomFormName.prototype, $.CustomForm.prototype);
+    
+        if (this.prepareUserOptions()) {
+            this.init();
+        }
+        
+        return this;
     };
     
     $.CustomFormName.prototype = {
@@ -25,5 +32,7 @@ Puis créer la classe JS associée :
          */
         init: function() {
             console.log('in the support "name"');
+            
+            return this;
         }
     };
