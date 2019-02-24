@@ -40,6 +40,8 @@ Ce support permet de personnaliser les sélects classiques et multiples.
 
 ### API
 
+Hérite de l'API de CustomForm.
+
 #### Callback vs Instance
 
 Pour utiliser l'API, il y a 2 solutions :
@@ -136,43 +138,6 @@ Détermine si le select est multiple
 #### getSiblings()
 
 Retourne tous les autres selects du contexte actuel
-
-* @return *{object}*
-
-#### getElements()
-
-Retourne tous les éléments de customform
-
-* @return *{object}*
-
-#### getContext()
-
-Retourne le contexte de customform (form)
-
-* @return *{object}*
-
-#### getInput()
-
-Retourne l'élément select
-
-* @return *{object}*
-
-#### getInputType()
-
-Retourne le type de l'élément
-
-* @return *{string}*
-
-#### getWrapper()
-
-Retourne le wrapper générique global (.customform)
-
-* @param {object=undefined} **children** Permet de récupérer le wrapper à partir d'un enfant
-* @return *{object}*
-        
-#### getWrapperInput()
-
-Retourne le wrapper générique de l'élément select (.customform-input)
 
 * @return *{object}*
 

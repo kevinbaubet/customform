@@ -36,6 +36,8 @@ Ce support permet de personnaliser les inputs de type file.
 
 ### API
 
+Hérite de l'API de CustomForm.
+
 #### Callback vs Instance
 
 Pour utiliser l'API, il y a 2 solutions :
@@ -89,55 +91,6 @@ Retourne la valeur de l'input
 Modifie le label du fichier sélectionné
 
 * @param *{string}* **name**
-
-#### isEmpty()
-
-Détermine si la valeur de l'input est vide
-
-* @return *{boolean}*
-
-#### isDisabled()
-
-Détermine si l'input est désactivée
-
-* @return *{boolean}*
-
-#### getElements()
-
-Retourne tous les éléments de customform
-
-* @return *{object}*
-
-#### getContext()
-
-Retourne le contexte de customform (form)
-
-* @return *{object}*
-
-#### getInput()
-
-Retourne l'élément input
-
-* @return *{object}*
-
-#### getInputType()
-
-Retourne le type de l'élément input
-
-* @return *{string}*
-
-#### getWrapper()
-
-Retourne le wrapper générique global (.customform)
-
-* @param {object=undefined} **children** Permet de récupérer le wrapper à partir d'un enfant
-* @return *{object}*
-
-#### getWrapperInput()
-
-Retourne le wrapper générique de l'élément input (.customform-input)
-
-* @return *{object}*
 
 #### getWrapperLabel()
 

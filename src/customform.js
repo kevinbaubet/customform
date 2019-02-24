@@ -220,33 +220,8 @@
             setTimeout(function () {
                 callback();
             }, 0);
-        },
 
-        /**
-         * Créer un log
-         *
-         * @param {string} log
-         * @param {string=undefined} type
-         */
-        setLog: function (log, type) {
-            type = type || 'log';
-
-            console[type]('CustomForm: ' + log);
-        },
-
-        /**
-         * Remplace la chaine {prefix} par la classe de préfix dans toutes les classes
-         */
-        replacePrefixClass: function () {
-            var self = this;
-
-            $.each(self.settings.classes, function (key, value) {
-                if (typeof value === 'string') {
-                    self.settings.classes[key] = value.replace(/{prefix}/, self.settings.classes.prefix);
-                }
-            });
-
-            return self;
+            return this;
         },
 
         /**
@@ -259,7 +234,7 @@
         },
 
         /**
-         * Détermine si l'input est désactivée
+         * Détermine si l'input est désactivé
          *
          * @return {boolean}
          */
@@ -319,6 +294,33 @@
          */
         getWrapperInput: function () {
             return this.getElements().wrapperInput;
+        },
+
+        /**
+         * Créer un log
+         *
+         * @param {string} log
+         * @param {string=undefined} type
+         */
+        setLog: function (log, type) {
+            type = type || 'log';
+
+            console[type]('CustomForm: ' + log);
+        },
+
+        /**
+         * Remplace la chaine {prefix} par la classe de préfix dans toutes les classes
+         */
+        replacePrefixClass: function () {
+            var self = this;
+
+            $.each(self.settings.classes, function (key, value) {
+                if (typeof value === 'string') {
+                    self.settings.classes[key] = value.replace(/{prefix}/, self.settings.classes.prefix);
+                }
+            });
+
+            return self;
         }
     };
 

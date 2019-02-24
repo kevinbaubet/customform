@@ -35,6 +35,8 @@ Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 
 ### API
 
+Hérite de l'API de CustomForm.
+
 #### Callback vs Instance
 
 Pour utiliser l'API, il y a 2 solutions :
@@ -84,49 +86,6 @@ Désactive l'input
 Détermine si l'input est cochée
 
 * @return *{boolean}*
-
-#### isDisabled()
-
-Détermine si l'input est désactivée
-
-* @return *{boolean}*
-
-#### getElements()
-
-Retourne tous les éléments de customform
-
-* @return *{object}*
-
-#### getContext()
-
-Retourne le contexte de customform (form)
-
-* @return *{object}*
-
-#### getInput()
-
-Retourne l'élément input
-
-* @return *{object}*
-
-#### getInputType()
-
-Retourne le type de l'élément input
-
-* @return *{string}*
-
-#### getWrapper()
-
-Retourne le wrapper générique global (.customform)
-
-* @param {object=undefined} **children** Permet de récupérer le wrapper à partir d'un enfant
-* @return *{object}*
-
-#### getWrapperInput()
-
-Retourne le wrapper générique de l'élément input (.customform-input)
-
-* @return *{object}*
 
 #### getInputsRadio()
 
