@@ -1,4 +1,4 @@
-## Sélects
+# Sélects
 
 Ce support permet de personnaliser les sélects classiques et multiples.
 
@@ -7,14 +7,14 @@ Ce support permet de personnaliser les sélects classiques et multiples.
 * Nom de la classe : **$.CustomFormSelect**
 
 
-### Initialisation
+## Initialisation
 
     var customForm = $('form').customForm([options]);
 
     customForm.setSupport('select', [options]);
 
 
-### Options
+## Options
 
 | Option                                   | Type     | Valeur par défaut                 | Description                                                      |
 |------------------------------------------|----------|-----------------------------------|------------------------------------------------------------------|
@@ -38,11 +38,11 @@ Ce support permet de personnaliser les sélects classiques et multiples.
 | onReset                                  | function | undefined                         | Callback au reset du formulaire                                  |
 
 
-### API
+## API
 
 Hérite de l'API de CustomForm.
 
-#### Callback vs Instance
+### Callback vs Instance
 
 Pour utiliser l'API, il y a 2 solutions :
 
@@ -74,19 +74,19 @@ Pour utiliser l'API, il y a 2 solutions :
         
 Pour les exemples ci-dessous, **customFormSelect** sera equivalent à l'instance d'un select initialisé avec CustomForm.
 
-#### reset()
+### reset()
 
 Initialise l'état des éléments par défaut
 
-#### close()
+### close()
 
 Fermeture des options
 
-#### closeSiblings()
+### closeSiblings()
 
 Fermeture des autres selects
 
-#### setLabel()
+### setLabel()
 
 Modifie le label du select custom
 
@@ -106,7 +106,7 @@ Modifie le label du select custom
         var values = [1, 2];
         customFormSelect.setLabel(names, values);
 
-#### removeOptions()
+### removeOptions()
 
 Enlève la sélection des options définies
 
@@ -129,31 +129,31 @@ Enlève la sélection des options définies
         customFormSelect.removeOptions('.is-first', true);
         
 
-#### isMultiple()
+### isMultiple()
 
 Détermine si le select est multiple
 
 * @return *{boolean}*
 
-#### getSiblings()
+### getSiblings()
 
 Retourne tous les autres selects du contexte actuel
 
 * @return *{object}*
 
-#### getWrapperLabel()
+### getWrapperLabel()
 
 Retourne le wrapper du label (.customform-selectLabel)
 
 * @return *{object}*
 
-#### getWrapperOptions()
+### getWrapperOptions()
 
 Retourne le wrapper des options (.customform-selectOptions)
 
 * @return *{object}*
 
-#### getOptions()
+### getOptions()
 
 Retourne toutes les options ou en partie
 
@@ -164,31 +164,31 @@ Retourne toutes les options ou en partie
         var first = customFormSelect.getOptions('.is-first');
         var selected = customFormSelect.getOptions('.is-selected');
 
-#### getSourceOptions()
+### getSourceOptions()
 
 Retourne les options sur le select initial
 
 * @return *{object}*
 
-#### getSourceOptgroups()
+### getSourceOptgroups()
 
 Retourne les optgroups sur le select initial
 
 * @return *{object}*
 
-#### getCurrentValue()
+### getCurrentValue()
 
 Retourne la valeur courante
 
 * @return *{string|object}*
 
-#### getDefaultValue()
+### getDefaultValue()
 
 Retourne la valeur par défaut
 
 * @return *{string|object}*
 
-#### loadOption()
+### loadOption()
 
 Gestion d'une option
 
@@ -199,9 +199,9 @@ Gestion d'une option
         option.select();
         option.disable();
 
-##### Méthodes d'une option
+#### Méthodes d'une option
 
-##### select()
+#### select()
 
 Sélectionne une option
 
@@ -216,45 +216,45 @@ Sélectionne une option
             direction: 'up'
         });
 
-##### remove()
+#### remove()
 
 Enlève l'option si elle est sélectionnée
 
-##### disable()
+#### disable()
 
 Désactive une option
 
-##### isSelected()
+#### isSelected()
 
 Détermine si l'option est sélectionnée
 
 * @return *{boolean}*
 
-##### isFirst()
+#### isFirst()
 
 Détermine si l'option est la première
 
 * @return *{boolean}*
 
-##### isLast()
+#### isLast()
 
 Détermine si l'option est la dernière
 
 * @return *{boolean}*
 
-##### isDisabled()
+#### isDisabled()
 
 Détermine si l'option est désactivée
 
 * @return *{boolean}*
 
-##### getName()
+#### getName()
 
 Retourne le nom de l'option au format HTML
 
 * @return *{string}*
 
-##### getValue()
+#### getValue()
 
 Retourne la valeur de l'option
 
