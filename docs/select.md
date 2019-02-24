@@ -87,7 +87,6 @@ Fermeture des autres selects
 Modifie le label du select custom
 
 * @param *{string|object[]}* **name**
-* @param *{string|object[]=undefined}* **value**
 
         // Change current label
         customFormSelect.setLabel('2 selected options');
@@ -96,7 +95,10 @@ Modifie le label du select custom
         var names = ['Option 1, 'Option 2'];
         customFormSelect.setLabel(names);
         
+* @param *{string|object[]=undefined}* **value**
+        
         // Multiple names + values
+        var names = ['Option 1, 'Option 2'];
         var values = [1, 2];
         customFormSelect.setLabel(names, values);
 
@@ -105,12 +107,13 @@ Modifie le label du select custom
 Enlève la sélection des options définies
 
 * @param *{string|object=undefined}* **options** Sélecteur ou liste des options
-* @param *{boolean=undefined}*       **disable** Désactive l'option en même temps
 
         // Remove selection on current disabled options
         var options = customFormSelect.getOptions('.is-disabled');
         
         customFormSelect.removeOptions(options);
+        
+* @param *{boolean=undefined}*       **disable** Désactive l'option en même temps
         
         // Remove selection + disable option  
         var option = customFormSelect.getOptions('.is-first');
