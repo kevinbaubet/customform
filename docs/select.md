@@ -97,6 +97,11 @@ Gestion d'une option
         
         option.select();
 
+---
+
+##### Méthodes d'une option
+
+
 ##### select()
 
 Sélectionne une option
@@ -134,6 +139,8 @@ Retourne le nom de l'option au format HTML
 ##### getValue()
 
 Retourne la valeur de l'option
+
+---
 
 #### removeOptions()
 
