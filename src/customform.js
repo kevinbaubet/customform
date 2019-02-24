@@ -279,12 +279,10 @@
         /**
          * Retourne le wrapper générique global (.customform)
          *
-         * @param {object=undefined} children Permet de récupérer le wrapper à partir d'un enfant
-         *
          * @return {object}
          */
-        getWrapper: function (children) {
-            return children !== undefined ? children.closest('.' + this.settings.classes.prefix) : this.getElements().wrapper;
+        getWrapper: function () {
+            return this.getElements().wrapper;
         },
 
         /**

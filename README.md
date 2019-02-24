@@ -70,7 +70,10 @@ Met en place un support
 
 * @param *{string}* **type** Type de support
 * @param *{object=undefined}* **options** Options du support
-* @return *{object}* **support** infos
+* @return *{object}* support infos
+
+        customForm.setSupport('checkbox');
+        customForm.setSupport('radio');
 
 #### getSupportClassName()
 
@@ -87,6 +90,13 @@ Récupère l'instance via l'élément input
 * @param  *{object}* **input**     Élément input
 * @return *{object|boolean}*
 
+        var checkboxes = customForm.setSupport('checkbox');
+        var checkbox = customForm.getInstance(checkboxes, $('#checkbox1-1'));
+        
+        if (checkbox instanceof $.CustomFormCheck) {
+            
+        }
+
 #### getInstanceName()
 
 Récupère le nom formaté d'une instance via l'élément input
@@ -99,6 +109,17 @@ Récupère le nom formaté d'une instance via l'élément input
 Une fois customForm prêt
 
 * @param *{function}* **callback** Fonction à exécuter
+
+        var checkboxes = customForm.setSupport('checkbox');
+        var checkbox = customForm.getInstance(checkboxes, $('#checkbox1-1'));
+        
+        if (checkbox instanceof $.CustomFormCheck) {
+            checkbox.getInput().on('click', function () {
+                checkbox.onReady(function () {
+                    checkbox.reset();
+                });
+            });
+        }
 
 #### isEmpty()
 
@@ -140,7 +161,6 @@ Retourne le type de l'élément input
 
 Retourne le wrapper générique global (.customform)
 
-* @param {object=undefined} **children** Permet de récupérer le wrapper à partir d'un enfant
 * @return *{object}*
 
 #### getWrapperInput()
@@ -155,6 +175,12 @@ Créer un log
 
 * @param *{string}* **log**
 * @param *{string=undefined}* **type**
+
+        customForm.setLog('information message');
+        
+        customForm.setLog('warning!', 'warn');
+        
+        customForm.setLog('error message', 'error');
 
 #### replacePrefixClass()
 
