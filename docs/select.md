@@ -112,6 +112,8 @@ Enlève la sélection des options définies
         var options = customFormSelect.getOptions('.is-disabled');
         
         customFormSelect.removeOptions(options);
+        // or
+        customFormSelect.removeOptions('.is-disabled');
         
 * @param *{boolean=undefined}*       **disable** Désactive l'option en même temps
         
@@ -119,6 +121,9 @@ Enlève la sélection des options définies
         var option = customFormSelect.getOptions('.is-first');
        
         customFormSelect.removeOptions(option, true);
+        // or
+        customFormSelect.removeOptions('.is-first', true);
+        
 
 #### isMultiple()
 
@@ -225,7 +230,7 @@ Gestion d'une option
         var option = customFormSelect.loadOption(option);
         
         option.select();
-        
+        option.disable();
 
 ##### Méthodes d'une option
 
@@ -234,6 +239,11 @@ Gestion d'une option
 Sélectionne une option
 
 * @param *{object=undefined}* **settings** Paramètres optionnels
+
+        option.select({
+            context: 'auto-move',
+            direction: 'up'
+        });
 
 ##### remove()
 
@@ -247,22 +257,34 @@ Désactive une option
 
 Détermine si l'option est sélectionnée
 
+* @return *{boolean}*
+
 ##### isFirst()
 
 Détermine si l'option est la première
+
+* @return *{boolean}*
 
 ##### isLast()
 
 Détermine si l'option est la dernière
 
+* @return *{boolean}*
+
 ##### isDisabled()
 
 Détermine si l'option est désactivée
+
+* @return *{boolean}*
 
 ##### getName()
 
 Retourne le nom de l'option au format HTML
 
+* @return {string}
+
 ##### getValue()
 
 Retourne la valeur de l'option
+
+* @return {null|string}
