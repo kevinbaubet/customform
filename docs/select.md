@@ -67,6 +67,8 @@ Pour utiliser l'API, il y a 2 solutions :
                 option.disable();
             });
         }
+        
+Pour les exemples ci-dessous, **customFormSelect** sera equivalent à l'instance d'un select initialisé avec CustomForm.
 
 #### reset()
 
@@ -87,60 +89,16 @@ Modifie le label du select custom
 * @param *{string|object[]}* **name**
 * @param *{string|object[]=undefined}* **value**
 
-#### loadOption()
-
-Gestion d'une option
-
-* @param *{object|string}* **option**
-
-        var option = customFormSelect.loadOption(option);
+        // Change current label
+        customFormSelect.setLabel('2 selected options');
         
-        option.select();
-
----
-
-##### Méthodes d'une option
-
-
-##### select()
-
-Sélectionne une option
-
-* @param *{object=undefined}* **settings** Paramètres optionnels
-
-##### remove()
-
-Enlève l'option si elle est sélectionnée
-
-##### disable()
-
-Désactive une option
-
-##### isSelected()
-
-Détermine si l'option est sélectionnée
-
-##### isFirst()
-
-Détermine si l'option est la première
-
-##### isLast()
-
-Détermine si l'option est la dernière
-
-##### isDisabled()
-
-Détermine si l'option est désactivée
-
-##### getName()
-
-Retourne le nom de l'option au format HTML
-
-##### getValue()
-
-Retourne la valeur de l'option
-
----
+        // Multiple names
+        var names = ['Option 1, 'Option 2'];
+        customFormSelect.setLabel(names);
+        
+        // Multiple names + values
+        var values = [1, 2];
+        customFormSelect.setLabel(names, values);
 
 #### removeOptions()
 
@@ -148,6 +106,16 @@ Enlève la sélection des options définies
 
 * @param *{string|object=undefined}* **options** Sélecteur ou liste des options
 * @param *{boolean=undefined}*       **disable** Désactive l'option en même temps
+
+        // Remove selection on current disabled options
+        var options = customFormSelect.getOptions('.is-disabled');
+        
+        customFormSelect.removeOptions(options);
+        
+        // Remove selection + disable option  
+        var option = customFormSelect.getOptions('.is-first');
+       
+        customFormSelect.removeOptions(option, true);
 
 #### isMultiple()
 
@@ -191,7 +159,7 @@ Retourne le wrapper générique global (.customform)
 
 * @param {object=undefined} **children** Permet de récupérer le wrapper à partir d'un enfant
 * @return *{object}*
-
+        
 #### getWrapperInput()
 
 Retourne le wrapper générique de l'élément select (.customform-input)
@@ -214,8 +182,12 @@ Retourne le wrapper des options (.customform-selectOptions)
 
 Retourne toutes les options ou en partie
 
-* @param *{object}* **filter** Sélecteur de filtre pour les options à retourner
+* @param *{object=undefined}* **filter** Sélecteur de filtre pour les options à retourner
 * @return *{object}*
+
+        var all = customFormSelect.getOptions();
+        var first = customFormSelect.getOptions('.is-first');
+        var selected = customFormSelect.getOptions('.is-selected');
 
 #### getSourceOptions()
 
@@ -240,3 +212,54 @@ Retourne la valeur courante
 Retourne la valeur par défaut
 
 * @return *{string|object}*
+
+#### loadOption()
+
+Gestion d'une option
+
+* @param *{object|string}* **option**
+
+        var option = customFormSelect.loadOption(option);
+        
+        option.select();
+        
+
+##### Méthodes d'une option
+
+##### select()
+
+Sélectionne une option
+
+* @param *{object=undefined}* **settings** Paramètres optionnels
+
+##### remove()
+
+Enlève l'option si elle est sélectionnée
+
+##### disable()
+
+Désactive une option
+
+##### isSelected()
+
+Détermine si l'option est sélectionnée
+
+##### isFirst()
+
+Détermine si l'option est la première
+
+##### isLast()
+
+Détermine si l'option est la dernière
+
+##### isDisabled()
+
+Détermine si l'option est désactivée
+
+##### getName()
+
+Retourne le nom de l'option au format HTML
+
+##### getValue()
+
+Retourne la valeur de l'option
