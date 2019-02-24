@@ -2,9 +2,9 @@
 
 Ce support permet de personnaliser les sélects classiques et multiples.
 
-Nom du support : **select**
-Nom du fichier : **customform-select.js**
-Nom de la classe : **$.CustomFormSelect**
+* Nom du support : **select**
+* Nom du fichier : **customform-select.js**
+* Nom de la classe : **$.CustomFormSelect**
 
 
 ### Initialisation

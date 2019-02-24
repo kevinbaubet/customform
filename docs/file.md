@@ -2,9 +2,9 @@
 
 Ce support permet de personnaliser les inputs de type file.
 
-Nom du support : **file**
-Nom du fichier : **customform-file.js**
-Nom de la classe : **$.CustomFormFile**
+* Nom du support : **file**
+* Nom du fichier : **customform-file.js**
+* Nom de la classe : **$.CustomFormFile**
 
 
 ### Initialisation
