@@ -7,6 +7,9 @@ Nom des supports :
 * **checkbox**
 * **radio**
 
+Nom du fichier : **customform-check.js**
+Nom de la classe : **$.CustomFormCheck**
+
 
 ### Initialisation
 
@@ -38,7 +41,7 @@ Nom des supports :
 
 #### Callback vs Instance
 
-Pour utiliser l'api, il y a 2 solutions :
+Pour utiliser l'API, il y a 2 solutions :
 
 * **Callback** : Utiliser les options de type "function" ci-dessus. Cela va fonctionner pour tous les inputs présents dans le *form*.
 
@@ -64,7 +67,7 @@ Pour utiliser l'api, il y a 2 solutions :
 
 #### reset()
 
-Initialise l'état des éléments (coché, désactivé, etc) par défaut
+Initialise l'état des éléments par défaut
 
 #### select()
 
@@ -106,7 +109,7 @@ Retourne le contexte de customform (form)
 
 #### getInput()
 
-Retourne l'élément <input>
+Retourne l'élément input
 
 * @return *{object}*
 

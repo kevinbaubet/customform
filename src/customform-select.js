@@ -333,44 +333,7 @@
         },
 
         /**
-         * Fermeture des options
-         */
-        close: function (event) {
-            var self = (event !== undefined && event.data !== undefined && event.data.self !== undefined) ? event.data.self : this;
-
-            self.getWrapper().removeClass(self.settings.classes.open);
-            self.getWrapperLabel().off('click.customform.close');
-            self.getOptions().off('click.customform.option');
-            self.getElements().body.off('click.customform.close');
-
-            return self;
-        },
-
-        /**
-         * Fermeture des autres selects
-         */
-        closeSiblings: function () {
-            var self = this;
-            var siblings = self.getSiblings();
-
-            if (siblings.length) {
-                siblings.each(function (i, select) {
-                    $(select)
-                        .removeClass(self.settings.classes.open)
-                        .find('.' + self.settings.classes.label)
-                            .off('click.customform.close').end()
-                        .find('.' + self.settings.classes.option)
-                            .off('click.customform.option');
-                });
-
-                self.getElements().body.off('click.customform.close');
-            }
-
-            return self;
-        },
-
-        /**
-         * Lors du click sur le label
+         * Lors du clique sur le label
          *
          * @param {object} event
          */
@@ -417,7 +380,7 @@
         /**
          * Au clavier
          *
-         * @param {object} event Evenement
+         * @param {object} event
          */
         keyboardHandler: function (event) {
             var self = this;
@@ -545,6 +508,43 @@
         },
 
         /**
+         * Fermeture des options
+         */
+        close: function (event) {
+            var self = (event !== undefined && event.data !== undefined && event.data.self !== undefined) ? event.data.self : this;
+
+            self.getWrapper().removeClass(self.settings.classes.open);
+            self.getWrapperLabel().off('click.customform.close');
+            self.getOptions().off('click.customform.option');
+            self.getElements().body.off('click.customform.close');
+
+            return self;
+        },
+
+        /**
+         * Fermeture des autres selects
+         */
+        closeSiblings: function () {
+            var self = this;
+            var siblings = self.getSiblings();
+
+            if (siblings.length) {
+                siblings.each(function (i, select) {
+                    $(select)
+                        .removeClass(self.settings.classes.open)
+                        .find('.' + self.settings.classes.label)
+                        .off('click.customform.close').end()
+                        .find('.' + self.settings.classes.option)
+                        .off('click.customform.option');
+                });
+
+                self.getElements().body.off('click.customform.close');
+            }
+
+            return self;
+        },
+
+        /**
          * Modifie le label du select custom
          *
          * @param {string|object[]} name
@@ -581,8 +581,8 @@
         /**
          * Enlève la sélection des options définies
          * 
-         * @param  {string|object=undefined} options Sélecteur ou liste des options
-         * @param  {boolean=undefined}       disable Désactive l'option en même temps
+         * @param {string|object=undefined} options Sélecteur ou liste des options
+         * @param {boolean=undefined}       disable Désactive l'option en même temps
          */
         removeOptions: function (options, disable) {
             var self = this;
@@ -639,7 +639,7 @@
         },
 
         /**
-         * Retourne le contexte de customform (<form>)
+         * Retourne le contexte de customform (form)
          *
          * @return {object}
          */
@@ -648,7 +648,7 @@
         },
 
         /**
-         * Retourne l'élément <select>
+         * Retourne l'élément select
          *
          * @return {object}
          */
@@ -675,7 +675,7 @@
         },
 
         /**
-         * Retourne le wrapper générique du <select> (.customform-input)
+         * Retourne le wrapper générique du select (.customform-input)
          *
          * @return {object}
          */
@@ -704,18 +704,18 @@
         /**
          * Retourne toutes les options ou en partie
          *
-         * @param filter Sélecteur de filtre pour les options à retourner
+         * @param {object=undefined} filter Sélecteur de filtre pour les options à retourner
          *
          * @return {object}
          */
         getOptions: function (filter) {
             var options = this.getWrapperOptions().find('.' + this.settings.classes.option);
 
-            return (filter !== undefined) ? options.filter(filter) : options;
+            return filter !== undefined ? options.filter(filter) : options;
         },
 
         /**
-         * Retourne les <option> sur <select> initial
+         * Retourne les options sur le select initial
          *
          * @return {object}
          */
@@ -724,7 +724,7 @@
         },
 
         /**
-         * Retourne les <optgroup> sur <select> initial
+         * Retourne les optgroups sur le select initial
          *
          * @return {object}
          */

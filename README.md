@@ -5,6 +5,7 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 * Compatibilité : IE10+
 * Dépendance : jQuery
 
+
 ## Options
 
 | Option                           | Type     | Valeur par défaut | Description                                               |
@@ -16,6 +17,7 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 | tabindexStart                    | integer  | 0                 | Valeur de l'attribut tabindex au chargement de CustomForm |
 | supportBeforeLoad                | function | undefined         | Callback au début du chargement du support                |
 | supportComplete                  | function | undefined         | Callback à la fin du chargement du support                |
+
 
 ## Méthodes
 
@@ -29,15 +31,16 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 | getInstanceName     | **input** *jQuery object* Élément input                                                                         | Récupère le nom formaté d'une instance via l'élément input                                |
 
 
-## Supports
-
-Un *support* correspond à un type d'input à personnaliser (checkbox, radio, select, etc). Chaque support est une classe JS à part.
-
-### Initialiser un support
+## Initialiser CustomForm
 
     var customForm = $('form').customForm([options]);
     
-    customForm.setSupport('name', [options]);
+## Initialiser un support
+    
+Un *support* correspond à un type d'input à personnaliser (checkbox, radio, select, etc).
+    
+    customForm.setSupport('radio', [options]);
+
 
 ## Supports présents dans CustomForm
 

@@ -200,9 +200,8 @@
             if (name !== undefined) {
                 instanceName = name
                     .replace(/-/g, '')
-                    .replace('[]', '')
-                    .replace('[', '_')
-                    .replace(']', '');
+                    .replace(/\[/g, '')
+                    .replace(/]/g, '');
             }
 
             if (id !== undefined) {

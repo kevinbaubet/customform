@@ -97,7 +97,7 @@
         },
 
         /**
-         * Initialise l'état des éléments (coché, désactivé, etc) par défaut
+         * Initialise l'état des éléments par défaut
          */
         reset: function () {
             this.getWrapper().removeClass(this.settings.classes.checked + ' ' + this.settings.classes.disabled);
