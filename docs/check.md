@@ -1,4 +1,4 @@
-## Checkboxs & Radios
+# Checkboxs & Radios
 
 Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 
@@ -7,7 +7,7 @@ Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 * Nom de la classe : **$.CustomFormCheck**
 
 
-### Initialisation
+## Initialisation
 
     var customForm = $('form').customForm([options]);
     
@@ -19,7 +19,7 @@ Ce support permet de personnaliser 2 types d'input : checkbox et radio.
     customForm.setSupports(['checkbox', 'radio']);
 
 
-### Options
+## Options
 
 | Option                          | Type     | Valeur par défaut | Description                                     |
 |---------------------------------|----------|-------------------|-------------------------------------------------|
@@ -33,11 +33,11 @@ Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 | onReset                         | function | undefined         | Callback au reset du formulaire                 |
 
 
-### API
+## API
 
 Hérite de l'API de CustomForm.
 
-#### Callback vs Instance
+### Callback vs Instance
 
 Pour utiliser l'API, il y a 2 solutions :
 
@@ -63,31 +63,31 @@ Pour utiliser l'API, il y a 2 solutions :
             });
         }
 
-#### reset()
+### reset()
 
 Initialise l'état des éléments par défaut
 
-#### select()
+### select()
 
 Sélectionne une option
 
-#### remove()
+### remove()
 
 Enlève la sélection d'une checkbox
 
 * @param *{boolean=false}* **disable** Désactive la checkbox en même temps
 
-#### disable()
+### disable()
 
 Désactive l'input
 
-#### isChecked()
+### isChecked()
 
 Détermine si l'input est cochée
 
 * @return *{boolean}*
 
-#### getInputsRadio()
+### getInputsRadio()
 
 Retourne tous les inputs de type radio
 

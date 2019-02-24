@@ -1,4 +1,4 @@
-## Créer un support
+# Créer un support
 
 Il est possible d'ajouter autant de support que vous voulez.
 

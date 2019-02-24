@@ -1,4 +1,4 @@
-## File
+# File
 
 Ce support permet de personnaliser les inputs de type file.
 
@@ -7,14 +7,14 @@ Ce support permet de personnaliser les inputs de type file.
 * Nom de la classe : **$.CustomFormFile**
 
 
-### Initialisation
+## Initialisation
 
     var customForm = $('form').customForm([options]);
 
     customForm.setSupport('file', [options]);
 
 
-### Options
+## Options
 
 | Option                        | Type     | Valeur par défaut               | Description                                               |
 |-------------------------------|----------|---------------------------------|-----------------------------------------------------------|
@@ -34,11 +34,11 @@ Ce support permet de personnaliser les inputs de type file.
 | onReset                       | function | undefined                       | Callback au reset du formulaire                           |
 
 
-### API
+## API
 
 Hérite de l'API de CustomForm.
 
-#### Callback vs Instance
+### Callback vs Instance
 
 Pour utiliser l'API, il y a 2 solutions :
 
@@ -66,39 +66,39 @@ Pour utiliser l'API, il y a 2 solutions :
             });
         }
 
-#### reset()
+### reset()
 
 Initialise l'état des éléments par défaut
 
-#### select()
+### select()
 
 Affiche les fichiers sélectionnés
 
-#### getSelectedFiles()
+### getSelectedFiles()
 
 Retourne la liste des fichiers sélectionnés
 
 * @return *{FileList|Array}*
 
-#### getValue()
+### getValue()
 
 Retourne la valeur de l'input
 
 * @return *{null|string}*
 
-#### setLabel()
+### setLabel()
 
 Modifie le label du fichier sélectionné
 
 * @param *{string}* **name**
 
-#### getWrapperLabel()
+### getWrapperLabel()
 
 Retourne le wrapper du label
 
 * @return *{object}*
 
-#### getWrapperFile()
+### getWrapperFile()
 
 Retourne le wrapper du fichier
 
