@@ -619,46 +619,6 @@
         },
 
         /**
-         * Retourne le wrapper des options (.customform-selectOptions)
-         *
-         * @return {object}
-         */
-        getWrapperOptions: function () {
-            return this.getElements().wrapperOptions;
-        },
-
-        /**
-         * Retourne toutes les options ou en partie
-         *
-         * @param {object=undefined} filter Sélecteur de filtre pour les options à retourner
-         *
-         * @return {object}
-         */
-        getOptions: function (filter) {
-            var options = this.getWrapperOptions().find('.' + this.settings.classes.option);
-
-            return filter !== undefined ? options.filter(filter) : options;
-        },
-
-        /**
-         * Retourne les options sur le select initial
-         *
-         * @return {object}
-         */
-        getSourceOptions: function () {
-            return this.getElements().source.options;
-        },
-
-        /**
-         * Retourne les optgroups sur le select initial
-         *
-         * @return {object}
-         */
-        getSourceOptgroups: function () {
-            return this.getElements().source.optgroups;
-        },
-
-        /**
          * Retourne la valeur courante ou par défaut
          *
          * @param {boolean} defaultValue
@@ -695,6 +655,57 @@
         },
 
         /**
+         * Retourne le wrapper des options (.customform-selectOptions)
+         *
+         * @return {object}
+         */
+        getWrapperOptions: function () {
+            return this.getElements().wrapperOptions;
+        },
+
+        /**
+         * Retourne toutes les options ou en partie
+         *
+         * @param {object=undefined} filter Sélecteur de filtre pour les options à retourner
+         *
+         * @return {object}
+         */
+        getOptions: function (filter) {
+            var options = this.getWrapperOptions().find('.' + this.settings.classes.option);
+
+            return filter !== undefined ? options.filter(filter) : options;
+        },
+
+        /**
+         * Retourne une option à partir de sa valeur
+         *
+         * @param {string|number} value
+         *
+         * @return {object}
+         */
+        getOptionFromValue: function (value) {
+            return this.getOptions('[data-value="' + value + '"]');
+        },
+
+        /**
+         * Retourne les options sur le select initial
+         *
+         * @return {object}
+         */
+        getSourceOptions: function () {
+            return this.getElements().source.options;
+        },
+
+        /**
+         * Retourne les optgroups sur le select initial
+         *
+         * @return {object}
+         */
+        getSourceOptgroups: function () {
+            return this.getElements().source.optgroups;
+        },
+
+        /**
          * Gestion d'une option
          *
          * @param {object|string} option
@@ -723,6 +734,15 @@
     };
 
     $.CustomFormSelectOption.prototype = {
+        /**
+         * Retourne l'argument option
+         *
+         * @return {object}
+         */
+        getOption: function () {
+            return this.option;
+        },
+
         /**
          * Sélectionne une option
          *

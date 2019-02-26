@@ -147,6 +147,18 @@ Retourne le wrapper du label (.customform-selectLabel)
 
 * @return *{object}*
 
+### getCurrentValue()
+
+Retourne la valeur courante
+
+* @return *{string|object}*
+
+### getDefaultValue()
+
+Retourne la valeur par défaut
+
+* @return *{string|object}*
+
 ### getWrapperOptions()
 
 Retourne le wrapper des options (.customform-selectOptions)
@@ -164,6 +176,14 @@ Retourne toutes les options ou en partie
         var first = customFormSelect.getOptions('.is-first');
         var selected = customFormSelect.getOptions('.is-selected');
 
+### getOptionFromValue()
+
+Retourne une option à partir de sa valeur
+
+* @param *{string|number}* **value**
+
+* @return *{object}*
+
 ### getSourceOptions()
 
 Retourne les options sur le select initial
@@ -176,18 +196,6 @@ Retourne les optgroups sur le select initial
 
 * @return *{object}*
 
-### getCurrentValue()
-
-Retourne la valeur courante
-
-* @return *{string|object}*
-
-### getDefaultValue()
-
-Retourne la valeur par défaut
-
-* @return *{string|object}*
-
 ### loadOption()
 
 Gestion d'une option
@@ -199,7 +207,14 @@ Gestion d'une option
         option.select();
         option.disable();
 
+
 #### Méthodes d'une option
+
+#### getOption()
+
+Retourne l'argument option
+
+* @return *{object}*
 
 #### select()
 
