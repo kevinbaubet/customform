@@ -173,7 +173,8 @@
                 self.getInputsRadio()
                     .prop('checked', false)
                     .each(function (i, input) {
-                        self.getWrapper($(input)).removeClass(self.settings.classes.checked);
+                        input = $(input);
+                        input.closest('.' + self.settings.classes.prefix).removeClass(self.settings.classes.checked);
                     });
             }
             self.getWrapper()[isRadio ? 'addClass' : 'toggleClass'](self.settings.classes.checked);
