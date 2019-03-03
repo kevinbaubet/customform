@@ -106,7 +106,7 @@
             // Données du support
             self.support = {};
             self.support.type = type;
-            self.support.selector = $.CustomForm.supports[self.support.type];
+            self.support.selector = self.supports[self.support.type];
             self.support.className = self.getSupportClassName(self.support.type);
             self.support.instances = {};
 

@@ -7,8 +7,25 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
 
 ## Initialiser CustomForm
 
-    var customForm = $('form').customForm([options]);
+    var customForm = $('form').customForm([options], [supports]);
     
+    
+* @param *{object}* **options**  (optionnel) [Options de CustomForm](README.md#Options)
+
+        var customForm = $('form').customForm({
+            supportComplete: function () {
+                console.log(this.support.type + ' loaded');
+            }
+        });
+
+* @param *{object}* **supports** (optionnel) [Ajouter/modifier un ou plusieurs supports](README.md#Supports)
+
+        // Dans le form, ne customiser que le #select-1 pour les selects.
+        var customForm = $('form').customForm({}, {
+            select: '#select-1'
+        });
+        
+
 ## Initialiser un support
     
 Un *support* correspond à un type d'input à personnaliser (checkbox, radio, select, etc).
@@ -16,7 +33,20 @@ Un *support* correspond à un type d'input à personnaliser (checkbox, radio, se
     customForm.setSupport('radio', [options]);
 
 
-## Supports présents dans CustomForm
+## Supports
+
+Liste des supports présents dans CustomForm :
+
+##### type: 'selecteur'
+
+    $.CustomForm.supports = {
+        checkbox: 'input[type="checkbox"]',
+        radio: 'input[type="radio"]',
+        select: 'select',
+        file: 'input[type="file"]'
+    };
+    
+##### Documentations pour chaque support :
 
 * [Checkbox & Radio](docs/check.md)
 * [Select](docs/select.md)
