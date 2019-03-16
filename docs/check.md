@@ -35,7 +35,7 @@ Ce support permet de personnaliser 2 types d'input : checkbox et radio.
 
 ## API
 
-Hérite de l'API de CustomForm.
+[Hérite de l'API des supports CustomForm.](../README.md#api-supports)
 
 ### Callback vs Instance
 

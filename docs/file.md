@@ -36,7 +36,7 @@ Ce support permet de personnaliser les inputs de type file.
 
 ## API
 
-Hérite de l'API de CustomForm.
+[Hérite de l'API des supports CustomForm.](../README.md#api-supports)
 
 ### Callback vs Instance
 

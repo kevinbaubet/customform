@@ -71,7 +71,9 @@ Liste des supports présents dans CustomForm :
 | supportComplete                  | function | undefined         | Callback à la fin du chargement du support                |
 
 
-## API utilisable seulement avec CustomForm
+## API CustomForm
+
+**API utilisable seulement avec l'objet CustomForm.**
 
 #### setOptions()
 
@@ -136,7 +138,9 @@ Récupère le nom formaté d'une instance via l'élément input
 
 ---
 
-## API globale à tous les supports de CustomForm
+## API Supports
+
+**API globale à tous les supports de CustomForm.**
 
 #### onReady()
 
