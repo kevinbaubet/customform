@@ -1,6 +1,6 @@
 # Documentation CustomForm
 
-Ce script permet de personnaliser les éléments d'un formulaire. Éléments supportés : checkbox, radio, select et file (il est possible d'ajouter d'autres éléments).
+CustomForm permet de personnaliser les éléments d'un formulaire. Éléments supportés : checkbox, radio, select et file (il est possible d'ajouter d'autres éléments).
 
 * Compatibilité : IE10+
 * Dépendance : jQuery
@@ -10,7 +10,7 @@ Ce script permet de personnaliser les éléments d'un formulaire. Éléments sup
     var customForm = $('form').customForm([options], [supports]);
     
     
-* @param *{object}* **options**  (optionnel) [Options de CustomForm](README.md#Options)
+* @param *{object}* **options**  (optionnel) [Options de CustomForm](README.md#options-customform)
 
         var customForm = $('form').customForm({
             supportComplete: function () {
@@ -58,7 +58,7 @@ Liste des supports présents dans CustomForm :
 * [Créer un support](docs/custom.md)
 
 
-## Options
+## Options CustomForm
 
 | Option                           | Type     | Valeur par défaut | Description                                               |
 |----------------------------------|----------|-------------------|-----------------------------------------------------------|
