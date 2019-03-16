@@ -36,7 +36,8 @@
         classes: {
             prefix: 'customform',
             input : '{prefix}-input',
-            disabled: 'is-disabled'
+            disabled: 'is-disabled',
+            required: 'is-required'
         },
         tabindexStart: 0,
         supportBeforeLoad: undefined,
@@ -240,6 +241,15 @@
          */
         isDisabled: function () {
             return this.getInput().prop('disabled');
+        },
+
+        /**
+         * Détermine si l'input est requis
+         *
+         * @return {boolean}
+         */
+        isRequired: function () {
+            return this.getInput().prop('required');
         },
 
         /**

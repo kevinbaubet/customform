@@ -171,6 +171,12 @@ Détermine si l'input est désactivé
 
 * @return *{boolean}*
 
+#### isRequired()
+
+Détermine si l'input est requis
+
+* @return *{boolean}*
+
 #### getElements()
 
 Retourne tous les éléments de customform

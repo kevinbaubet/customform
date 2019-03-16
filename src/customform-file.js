@@ -126,13 +126,18 @@
          */
         reset: function () {
             // Reset
-            this.getWrapper().removeClass(this.settings.classes.disabled);
+            this.getWrapper().removeClass(this.settings.classes.disabled + ' ' + this.settings.classes.required);
             this.getWrapperFile().text(this.settings.emptyText);
 
-            // Désactivé ?
+            // Désactivé
             if (this.isDisabled()) {
                 this.getWrapper().addClass(this.settings.classes.disabled);
                 this.getWrapperLabel().removeAttr('tabindex');
+            }
+
+            // Requis
+            if (this.isRequired()) {
+                this.getWrapper().addClass(this.settings.classes.required);
             }
 
             // Valeur par défaut

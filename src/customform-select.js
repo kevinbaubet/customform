@@ -207,13 +207,18 @@
         reset: function () {
             var self = this;
             var defaultValue = self.getDefaultValue();
-            self.getWrapper().removeClass(self.settings.classes.disabled);
+            self.getWrapper().removeClass(self.settings.classes.disabled + ' ' + self.settings.classes.required);
 
-            // States
-            if (self.getInput().is(':disabled')) {
+            // Désactivé
+            if (self.isDisabled()) {
                 self.getWrapper().addClass(self.settings.classes.disabled);
                 self.getInput().removeAttr('tabindex');
                 self.getWrapperLabel().removeAttr('tabindex');
+            }
+
+            // Requis
+            if (self.isRequired()) {
+                self.getWrapper().addClass(self.settings.classes.required);
             }
 
             // Définition de la valeur par défaut

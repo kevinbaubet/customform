@@ -105,13 +105,21 @@
          * Initialise l'état des éléments par défaut
          */
         reset: function () {
-            this.getWrapper().removeClass(this.settings.classes.checked + ' ' + this.settings.classes.disabled);
+            this.getWrapper().removeClass(this.settings.classes.checked + ' ' + this.settings.classes.disabled + ' ' + this.settings.classes.required);
 
-            if (this.isChecked()) {
-                this.getWrapper().addClass(this.settings.classes.checked);
-            }
+            // Désactivé
             if (this.isDisabled()) {
                 this.disable();
+            }
+
+            // Requis
+            if (this.isRequired()) {
+                this.getWrapper().addClass(this.settings.classes.required);
+            }
+
+            // Valeur par défaut
+            if (this.isChecked()) {
+                this.getWrapper().addClass(this.settings.classes.checked);
             }
 
             return this;
