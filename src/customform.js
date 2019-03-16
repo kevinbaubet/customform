@@ -1,6 +1,15 @@
 (function ($) {
     'use strict';
 
+    /**
+     * CustomForm
+     *
+     * @param {object} context
+     * @param {object=undefined} options
+     * @param {object=undefined} supports
+     *
+     * @return {$.CustomForm}
+     */
     $.CustomForm = function (context, options, supports) {
         // Config
         $.extend(true, this.settings = {}, $.CustomForm.defaults, options);
@@ -335,8 +344,8 @@
     /**
      * Fonction utilisateur
      *
-     * @param  {object} options  Options utilisateur
-     * @param  {object} supports Supports de la personnalisation : {type: 'selecteur'}
+     * @param  {object=undefined} options  Options utilisateur
+     * @param  {object=undefined} supports Supports de la personnalisation : {type: 'selecteur'}
      */
     $.fn.customForm = function (options, supports) {
         return new $.CustomForm($(this), options, supports);

@@ -202,7 +202,9 @@ Gestion d'une option
 
 * @param *{object|string}* **option**
 
-        var option = customFormSelect.loadOption(option);
+        var option = customFormSelect.loadOption(option); // js object
+        var option = customFormSelect.loadOption($('option')); // jQuery object
+        var option = customFormSelect.loadOption('.is-first'); // jQuery selector
         
         option.select();
         option.disable();

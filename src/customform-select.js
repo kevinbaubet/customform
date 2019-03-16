@@ -1,6 +1,14 @@
 (function ($) {
     'use strict';
 
+    /**
+     * CustomFormSelect
+     *
+     * @param {object} customForm
+     * @param {object=undefined} options
+     *
+     * @return {$.CustomFormSelect}
+     */
     $.CustomFormSelect = function (customForm, options) {
         // Héritage
         this.customForm = customForm;
@@ -247,7 +255,7 @@
 
             // En multiple, on ne selectionne pas la valeur par défaut
             if (self.isMultiple()) {
-                var firstOption = self.loadOption(self.getOptions('.' + self.settings.classes.first));
+                var firstOption = self.loadOption('.' + self.settings.classes.first);
 
                 if (defaultValue === firstOption.getValue()) {
                     defaultValue = null;
@@ -270,7 +278,12 @@
 
                     $.each(defaultValue, function (i, defaultValue) {
                         if (optionValue === defaultValue) {
-                            option.select(settings);
+                            if (!option.isSelected()) {
+                                option.select(settings);
+                            }
+
+                        } else {
+                            option.remove();
                         }
                     });
 
@@ -716,6 +729,10 @@
          * @param {object|string} option
          */
         loadOption: function (option) {
+            if (typeof option === 'string') {
+                option = this.getOptions(option);
+            }
+
             return new $.CustomFormSelectOption(this, option);
         }
     };
@@ -758,10 +775,10 @@
             var callbackEvent = {};
             settings = settings || {};
 
-            if (self.option !== undefined && self.option !== null && self.option.length && self.getValue() !== undefined) {
+            if (self.getOption() !== undefined && self.getOption() !== null && self.getOption().length && self.getValue() !== undefined) {
                 // Si l'option est désactivée, on passe à la précédente/suivante
                 if (self.isDisabled() && settings.direction !== undefined) {
-                    self.option = self.option[settings.direction === 'up' ? 'prev' : 'next']();
+                    self.option = self.getOption()[settings.direction === 'up' ? 'prev' : 'next']();
 
                     self.select({
                         context: 'auto-move',
@@ -800,7 +817,7 @@
                             if (self.customFormSelect.multipleOptions.length === 0) {
                                 self.customFormSelect.onReady(function () {
                                     self.customFormSelect
-                                        .loadOption(self.customFormSelect.getOptions('.' + self.customFormSelect.settings.classes.first))
+                                        .loadOption('.' + self.customFormSelect.settings.classes.first)
                                         .select(settings);
                                 });
                             }

@@ -1,6 +1,14 @@
 (function ($) {
     'use strict';
 
+    /**
+     * CustomFormCheck
+     *
+     * @param {object} customForm
+     * @param {object=undefined} options
+     *
+     * @return {$.CustomFormCheck}
+     */
     $.CustomFormCheck = function (customForm, options) {
         // Héritage
         this.customForm = customForm;
