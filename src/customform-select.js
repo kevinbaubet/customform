@@ -276,14 +276,13 @@
                         defaultValue = defaultValue.split(',');
                     }
 
-                    $.each(defaultValue, function (i, defaultValue) {
-                        if (optionValue === defaultValue) {
-                            if (!option.isSelected()) {
-                                option.select(settings);
-                            }
+                    // Reset
+                    option.remove();
 
-                        } else {
-                            option.remove();
+                    // Add
+                    $.each(defaultValue, function (i, defaultOptionValue) {
+                        if (optionValue === defaultOptionValue) {
+                            option.select(settings);
                         }
                     });
 
@@ -814,7 +813,7 @@
                                 self.customFormSelect.multipleOptions.push(self.customFormSelect.loadOption(selectedOption));
                             });
 
-                            if (self.customFormSelect.multipleOptions.length === 0) {
+                            if (self.customFormSelect.multipleOptions.length === 0 && (settings.context === undefined || (settings.context !== undefined && settings.context !== 'remove'))) {
                                 self.customFormSelect.onReady(function () {
                                     self.customFormSelect
                                         .loadOption('.' + self.customFormSelect.settings.classes.first)

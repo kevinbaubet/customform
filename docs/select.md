@@ -232,6 +232,11 @@ Sélectionne une option
             context: 'auto-move',
             direction: 'up'
         });
+        
+        // Select with custom context
+        option.select({
+            context: 'my-custom-context'
+        });
 
 #### remove()
 

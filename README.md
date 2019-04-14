@@ -79,7 +79,7 @@ Liste des supports présents dans CustomForm :
 
 Enregistre les options pour un support
 
-* @param *{string}* **type**    Type de support
+* @param *{string}* **type** Type de support
 * @param *{object}* **options** Options du support
 
         customForm.setOptions('radio', {
@@ -221,9 +221,7 @@ Créer un log
 * @param *{string=undefined}* **type**
 
         customForm.setLog('information message');
-        
         customForm.setLog('warning!', 'warn');
-        
         customForm.setLog('error message', 'error');
 
 #### replacePrefixClass()
