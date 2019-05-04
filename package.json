@@ -1,8 +1,11 @@
 {
-  "name": "customform",
+  "name": "@kevinbaubet/customform",
   "version": "4.7.5",
   "main": "./dist/customform.min.js",
-  "repository": "https://github.com/kevinbaubet/customform.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinbaubet/customform.git"
+  },
   "author": "Kévin Baubet <contact@kevinbaubet.fr>",
   "license": "MIT",
   "dependencies": {

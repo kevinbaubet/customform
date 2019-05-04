@@ -177,7 +177,7 @@
          * Récupère l'instance via l'élément input
          * 
          * @param  {object} instances Retour de setSupport() ou liste des instances
-         * @param  {object} input     Élément input
+         * @param  {object} input Élément input
          *
          * @return {object|boolean}
          */
@@ -192,6 +192,7 @@
                 return instances[name];
             }
 
+            this.setLog('"' + name + '" instance not found.', 'error');
             return false;
         },
 
