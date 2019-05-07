@@ -24,8 +24,8 @@
   white-space: nowrap;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  -webkit-transition: .3s;
-  transition: .3s;
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 
 .customform-selectLabel:focus {
@@ -34,19 +34,14 @@
 }
 
 .customform-selectLabel:after {
-  content: "";
+  content: "+";
   position: absolute;
   top: 50%;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
   right: 15px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 5px 0 5px;
-  border-color: #ccc transparent transparent;
-  -webkit-transition: .3s;
-  transition: .3s;
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 
 .customform-selectOptions {
@@ -57,7 +52,7 @@
   width: 100%;
   max-height: 0;
   overflow: hidden;
-  border: 1px solid #ccc;
+  border: 1px solid #ff5a60;
   border-top: 0;
   border-radius: 0 0 0 0;
   background: #fff;
@@ -76,13 +71,13 @@
 
 .customform-selectOption {
   padding: 0.625rem 1.25rem;
-  -webkit-transition: .3s;
-  transition: .3s;
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 
 .customform-selectOption:not(.is-disabled):not(.is-selected):hover {
   color: #ff5a60;
-  background-color: #fff;
+  background-color: #f2f2f2;
 }
 
 .customform-selectOption.is-selected {
@@ -98,19 +93,19 @@
 }
 
 .customform-selectOptionGroup .customform-selectOption {
-  padding-left: 1.663rem;
+  padding-left: 1.625rem;
 }
 
 /* Main states
    ========================================================================== */
 .customform--select.is-open .customform-selectLabel,
-.customform--select:hover .customform-selectLabel {
+.customform--select:not(.is-disabled):hover .customform-selectLabel {
   border-color: #ff5a60;
 }
 
 .customform--select.is-open .customform-selectLabel:after,
-.customform--select:hover .customform-selectLabel:after {
-  opacity: .3;
+.customform--select:not(.is-disabled):hover .customform-selectLabel:after {
+  color: #ff5a60;
 }
 
 .customform--select.is-open .customform-selectOptions {
@@ -120,20 +115,27 @@
   overflow-y: auto;
 }
 
-.customform--select.is-multiple .customform-selectOption:before {
-  content: "";
-  position: relative;
-  display: inline-block;
-  top: 1px;
-  vertical-align: top;
-  width: 10px;
-  height: 10px;
-  margin-right: 0.625rem;
-  border: 1px solid #ccc;
+.customform--select.is-multiple .customform-selectOption {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
 }
 
-.customform--select.is-multiple .customform-selectOption:focus {
-  color: #ff5a60;
+.customform--select.is-multiple .customform-selectOption:before {
+  content: "\2714";
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  line-height: 10px;
+  margin-right: 0.813rem;
+  border: 1px solid #ccc;
+  color: transparent;
 }
 
 .customform--select.is-multiple .customform-selectOption.is-selected {
@@ -142,8 +144,7 @@
 }
 
 .customform--select.is-multiple .customform-selectOption.is-selected:before {
-  background: #ff5a60;
-  border-color: #ff5a60;
+  color: #ff5a60;
 }
 
 .customform--select.is-multiple .customform-selectOption.is-first {

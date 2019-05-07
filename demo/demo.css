@@ -8,8 +8,8 @@ body {
 .page {
     position: relative;
     z-index: 10;
-    width: 60%;
-    max-width: 1200px;
+    width: 90%;
+    max-width: 800px;
     margin: 50px auto;
 }
 body:after {
@@ -49,7 +49,7 @@ h2 {
 /* Items */
 .demo-item form {
     clear: both;
-    padding: 42px 55px;
+    padding: 42px 8%;
     background: #fff;
     border-radius: 10px;
 }
@@ -57,11 +57,16 @@ h2 {
     margin-top: 50px;
 }
 .form-col {
-    float: left;
-    width: 48%;
+    margin-bottom: 50px;
 }
-.form-col + .form-col {
-    margin-left: 4%;
+@media screen and (min-width: 800px) {
+    .form-col {
+        float: left;
+        width: 48%;
+    }
+    .form-col + .form-col {
+        margin-left: 4%;
+    }
 }
 
 /* Forms */
@@ -78,11 +83,9 @@ label {
 }
 .form-actions {
     clear: both;
-    padding-top: 25px;
+    text-align: right;
 }
 .form-submit {
-    float: right;
-    margin: 0;
     padding: 10px 20px;
     color: #fff;
     font-weight: bold;
@@ -109,4 +112,10 @@ label {
 input:focus,
 textarea:focus {
     outline: 0;
+}
+
+.description {
+    margin: 6px 0;
+    font-size: .9em;
+    opacity: .7;
 }
