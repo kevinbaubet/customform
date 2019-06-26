@@ -54,7 +54,11 @@
   outline: 0;
 }
 
+.customform--checkbox:not(.is-disabled) .customform-input:focus,
+.customform--checkbox:not(.is-disabled).is-checked .customform-input:focus,
 .customform--checkbox:not(.is-disabled):hover .customform-input,
+.customform--radio:not(.is-disabled) .customform-input:focus,
+.customform--radio:not(.is-disabled).is-checked .customform-input:focus,
 .customform--radio:not(.is-disabled):hover .customform-input {
   border-color: #ff5a60;
 }

@@ -116,8 +116,7 @@
                 'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.getInputType()
             });
             self.elements.wrapperInput = $('<span>', {
-                'class': self.settings.classes.input,
-                tabindex: self.settings.tabindexStart
+                'class': self.settings.classes.input
             });
 
             // User callback
@@ -152,8 +151,9 @@
             self.elements.wrapperOptions = self.getWrapperLabel().next();
 
             // Tabindex
-            self.getWrapperInput().removeAttr('tabindex');
-            self.getWrapperLabel().attr('tabindex', self.settings.tabindexStart);
+            if (!self.isDisabled()) {
+                self.getWrapperLabel().attr('tabindex', self.settings.tabindexStart);
+            }
 
             // Multiple
             if (self.isMultiple()) {
@@ -220,7 +220,6 @@
             // Désactivé
             if (self.isDisabled()) {
                 self.getWrapper().addClass(self.settings.classes.disabled);
-                self.getInput().removeAttr('tabindex');
                 self.getWrapperLabel().removeAttr('tabindex');
             }
 
@@ -397,11 +396,13 @@
             var fastDirection = (event.keyCode === 35) ? 'last' : (event.keyCode === 36) ? 'first' : undefined;
             var isClose = (event.keyCode === 27 || event.keyCode === 13 || event.keyCode === 9);
             var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
-            var isSpace = (event.keyCode === 32);
+            var isSpace = event.keyCode === 32;
 
             // Stop scroll
             if (isSpace) {
                 event.preventDefault();
+                self.clickHandler(event);
+
                 return;
             }
 

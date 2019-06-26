@@ -98,7 +98,6 @@
             });
             this.elements.wrapperLabel = $('<span>', {
                 'class': this.settings.classes.label,
-                tabindex: this.settings.tabindexStart,
                 html: this.settings.labelText
             });
             this.elements.wrapperFile = $('<span>', {
@@ -125,6 +124,11 @@
             // WrapperLabel et file
             this.elements.wrapperLabel.appendTo(this.getWrapperInput());
             this.elements.wrapperFile.appendTo(this.getWrapperInput());
+
+            // Tabindex
+            if (!this.isDisabled()) {
+                this.elements.wrapperLabel.attr('tabindex', this.settings.tabindexStart);
+            }
 
             return this;
         },

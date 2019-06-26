@@ -42,8 +42,10 @@
         }
     }
 
-    &:not(.is-disabled):hover {
-        .customform-input {
+    &:not(.is-disabled) {
+        .customform-input:focus,
+        &.is-checked .customform-input:focus,
+        &:hover .customform-input {
             border-color: $color--primary;
         }
     }

@@ -86,9 +86,13 @@
                 'class': this.settings.classes.prefix + ' ' + this.settings.classes.prefix + '--' + this.getInputType()
             });
             this.elements.wrapperInput = $('<span>', {
-                'class': this.settings.classes.input,
-                tabindex: this.settings.tabindexStart
+                'class': this.settings.classes.input
             });
+
+            // Tabindex
+            if (!this.isDisabled()) {
+                this.elements.wrapperInput.attr('tabindex', this.settings.tabindexStart);
+            }
 
             // User callback
             if (this.settings.beforeWrap !== undefined) {
