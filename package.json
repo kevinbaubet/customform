@@ -1,6 +1,6 @@
 {
   "name": "@kevinbaubet/customform",
-  "version": "4.7.6",
+  "version": "4.7.7",
   "main": "./dist/customform.min.js",
   "repository": {
     "type": "git",
@@ -12,26 +12,24 @@
     "jquery": ">=1.7.0"
   },
   "devDependencies": {
-    "autoprefixer": "^9.4.7",
+    "autoprefixer": "^9.0.0",
     "gulp": "^4.0.0",
     "gulp-load-plugins": "^1.5.0",
     "gulp-pixrem": "^1.0.0",
     "gulp-postcss": "^8.0.0",
     "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^3.0.1",
-    "postcss-pxtorem": "^4.0.1",
+    "gulp-sass": "^4.0.0",
+    "gulp-uglify": "^3.0.0",
+    "postcss-pxtorem": "^4.0.0",
     "pump": "^3.0.0"
   },
   "sass": {
     "outputStyle": "expanded"
   },
-  "autoprefixer": {
-    "browsers": [
-      "last 2 versions",
-      "IE 10"
-    ]
-  },
+  "browserslist":[
+    "last 2 versions",
+    "IE 11"
+  ],
   "pxtorem": {
     "replace": true,
     "unitPrecision": 3,

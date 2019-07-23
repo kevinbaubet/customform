@@ -146,8 +146,11 @@
             // Check
             self.getWrapper().on('click.customform keydown.customform', function (event) {
                 if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 32)) {
-                    event.preventDefault();
+                    if (event.type === 'click' && !$(event.target).is('label')) {
+                        return;
+                    }
 
+                    event.preventDefault();
                     self.select();
                 }
             });

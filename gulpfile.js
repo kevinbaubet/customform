@@ -10,7 +10,7 @@ function sass(pumpCallback) {
         plugins.gulp.src('./src/**/*.scss'),
         plugins.sass(packagejson.sass),
         plugins.postcss([
-            plugins.autoprefixer(packagejson.autoprefixer),
+            plugins.autoprefixer(),
             plugins.postcssPxtorem(packagejson.pxtorem)
         ]),
         plugins.gulp.dest('./dist/')
