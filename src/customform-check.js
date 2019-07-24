@@ -146,7 +146,7 @@
             // Check
             self.getWrapper().on('click.customform keydown.customform', function (event) {
                 if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 32)) {
-                    if (event.type === 'click' && !$(event.target).is('label')) {
+                    if (event.type === 'click' && $(event.target).is('a')) {
                         return;
                     }
 
