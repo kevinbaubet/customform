@@ -850,7 +850,7 @@
                                 self.customFormSelect.multipleOptions.push(self.customFormSelect.loadOption(selectedOption));
                             });
 
-                            if (self.customFormSelect.multipleOptions.length === 0 && (settings.context === undefined || (settings.context !== undefined && settings.context !== 'remove'))) {
+                            if (self.customFormSelect.multipleOptions.length === 0 && (settings.context === undefined || (settings.context !== undefined && settings.context !== 'unselect'))) {
                                 self.customFormSelect.onReady(function () {
                                     self.customFormSelect
                                         .loadOption('.' + self.customFormSelect.settings.classes.first)
@@ -968,7 +968,7 @@
         unselect: function () {
             if (this.isSelected()) {
                 if (this.customFormSelect.isMultiple()) {
-                    this.select({context: 'remove'});
+                    this.select({context: 'unselect'});
 
                 } else {
                     this.customFormSelect.reset();
