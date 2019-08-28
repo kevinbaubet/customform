@@ -276,7 +276,7 @@
                     }
 
                     // Reset
-                    option.remove();
+                    option.unselect();
 
                     // Add
                     $.each(defaultValue, function (i, defaultOptionValue) {
@@ -718,13 +718,17 @@
                     option = self.loadOption(option);
 
                     if (option.isSelected()) {
-                        option.remove();
+                        option.unselect();
                     }
 
                     if (disable) {
                         option.disable();
                     }
                 });
+            }
+
+            if (self.getOptions('.is-selected').length === 0) {
+                self.reset();
             }
 
             return self;
