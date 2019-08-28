@@ -106,29 +106,6 @@ Modifie le label du select custom
         var values = [1, 2];
         customFormSelect.setLabel(names, values);
 
-### removeOptions()
-
-Enlève la sélection des options définies
-
-* @param *{string|object=undefined}* **options** Sélecteur ou liste des options
-
-        // Remove selection on current disabled options
-        var options = customFormSelect.getOptions('.is-disabled');
-        
-        customFormSelect.removeOptions(options);
-        // or
-        customFormSelect.removeOptions('.is-disabled');
-        
-* @param *{boolean=undefined}*       **disable** Désactive l'option en même temps
-        
-        // Remove selection + disable option  
-        var option = customFormSelect.getOptions('.is-first');
-       
-        customFormSelect.removeOptions(option, true);
-        // or
-        customFormSelect.removeOptions('.is-first', true);
-        
-
 ### isMultiple()
 
 Détermine si le select est multiple
@@ -175,6 +152,38 @@ Retourne toutes les options ou en partie
         var all = customFormSelect.getOptions();
         var first = customFormSelect.getOptions('.is-first');
         var selected = customFormSelect.getOptions('.is-selected');
+
+### selectOptions()
+
+Sélectionne les options définies
+
+* @param *{string|object=undefined}* **options** Sélecteur ou liste des options
+
+        customFormSelect.selectOptions(options);
+        // or
+        customFormSelect.selectOptions(':not(.is-disabled)');
+
+### unselectOptions()
+
+Enlève la sélection des options définies
+
+* @param *{string|object=undefined}* **options** Sélecteur ou liste des options
+
+        // Remove selection on current disabled options
+        var options = customFormSelect.getOptions('.is-disabled');
+        
+        customFormSelect.unselectOptions(options);
+        // or
+        customFormSelect.unselectOptions('.is-disabled');
+        
+* @param *{boolean=undefined}*       **disable** Désactive l'option en même temps
+        
+        // Remove selection + disable option  
+        var option = customFormSelect.getOptions('.is-first');
+       
+        customFormSelect.unselectOptions(option, true);
+        // or
+        customFormSelect.unselectOptions('.is-first', true);
 
 ### getOptionFromValue()
 
@@ -281,3 +290,9 @@ Retourne le nom de l'option au format HTML
 Retourne la valeur de l'option
 
 * @return *{null|string}*
+
+#### setValue()
+
+Défini la valeur de l'option
+
+* @param *{string|number}* **value**

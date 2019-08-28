@@ -577,39 +577,6 @@
         },
 
         /**
-         * Enlève la sélection des options définies
-         *
-         * @param {string|object=undefined} options Sélecteur ou liste des options
-         * @param {boolean=undefined}       disable Désactive l'option en même temps
-         */
-        removeOptions: function (options, disable) {
-            var self = this;
-            options = (options === undefined || typeof options === 'string') ? self.getOptions(options) : options;
-            disable = disable || false;
-
-            if (!self.isMultiple()) {
-                self.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
-                return;
-            }
-
-            if (options.length) {
-                $.each(options, function (i, option) {
-                    option = self.loadOption(option);
-
-                    if (option.isSelected()) {
-                        option.remove();
-                    }
-
-                    if (disable) {
-                        option.disable();
-                    }
-                });
-            }
-
-            return self;
-        },
-
-        /**
          * Détermine si le select est multiple
          *
          * @return boolean
@@ -692,6 +659,75 @@
             var options = this.getWrapperOptions().find('.' + this.settings.classes.option);
 
             return filter !== undefined ? options.filter(filter) : options;
+        },
+
+        /**
+         * Sélectionne les options définies
+         *
+         * @param {string|object=undefined} options Sélecteur ou liste des options
+         */
+        selectOptions: function (options) {
+            var self = this;
+            options = (options === undefined || typeof options === 'string') ? self.getOptions(options) : options;
+
+            if (!self.isMultiple()) {
+                self.setLog('selectOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
+                return;
+            }
+
+            if (options.length) {
+                options.each(function (i, option) {
+                    option = self.loadOption(option);
+
+                    option.select();
+                });
+            }
+
+            return self;
+        },
+
+        /**
+         * @deprecated Uses unselectOptions()
+         *
+         * @param options
+         * @param disable
+         */
+        removeOptions: function (options, disable) {
+            this.unselectOptions(options, disable);
+            this.setLog('removeOptions() is deprecated. Uses unselectOptions()', 'warn');
+        },
+
+        /**
+         * Enlève la sélection des options définies
+         *
+         * @param {string|object=undefined} options Sélecteur ou liste des options
+         * @param {boolean=undefined}       disable Désactive l'option en même temps
+         */
+        unselectOptions: function (options, disable) {
+            var self = this;
+            options = (options === undefined || typeof options === 'string') ? self.getOptions(options) : options;
+            disable = disable || false;
+
+            if (!self.isMultiple()) {
+                self.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
+                return;
+            }
+
+            if (options.length) {
+                $.each(options, function (i, option) {
+                    option = self.loadOption(option);
+
+                    if (option.isSelected()) {
+                        option.remove();
+                    }
+
+                    if (disable) {
+                        option.disable();
+                    }
+                });
+            }
+
+            return self;
         },
 
         /**
@@ -1030,6 +1066,17 @@
             }
 
             return null;
+        },
+
+        /**
+         * Défini la valeur de l'option
+         *
+         * @param {string|number} value
+         */
+        setValue: function (value) {
+            this.option.attr('data-value', value);
+
+            return this;
         }
     };
 })(jQuery);
