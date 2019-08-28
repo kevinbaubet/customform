@@ -247,9 +247,9 @@ Sélectionne une option
             context: 'my-custom-context'
         });
 
-#### remove()
+#### unselect()
 
-Enlève l'option si elle est sélectionnée
+Enlève la sélection de l'option
 
 #### disable()
 

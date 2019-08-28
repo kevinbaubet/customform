@@ -955,9 +955,17 @@
         },
 
         /**
-         * Enlève l'option si elle est sélectionnée
+         * @deprecated
          */
         remove: function () {
+            this.unselect();
+            console.warn('remove() is deprecated. Uses unselect().');
+        },
+
+        /**
+         * Enlève la sélection de l'option
+         */
+        unselect: function () {
             if (this.isSelected()) {
                 if (this.customFormSelect.isMultiple()) {
                     this.select({context: 'remove'});
