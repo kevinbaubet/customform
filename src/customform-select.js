@@ -671,7 +671,7 @@
             options = (options === undefined || typeof options === 'string') ? self.getOptions(options) : options;
 
             if (!self.isMultiple()) {
-                self.setLog('selectOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
+                self.setLog('selectOptions() works only with "multiple" attribute. Use loadOption().select() for classic <select>.', 'warn');
                 return;
             }
 
@@ -687,14 +687,16 @@
         },
 
         /**
-         * @deprecated Uses unselectOptions()
+         * @deprecated Use unselectOptions()
          *
          * @param options
          * @param disable
          */
         removeOptions: function (options, disable) {
             this.unselectOptions(options, disable);
-            this.setLog('removeOptions() is deprecated. Uses unselectOptions()', 'warn');
+            this.setLog('removeOptions() is deprecated. Use unselectOptions()', 'warn');
+
+            return this;
         },
 
         /**
@@ -709,7 +711,7 @@
             disable = disable || false;
 
             if (!self.isMultiple()) {
-                self.setLog('removeOptions() works only with "multiple" attribute. Uses loadOption().select() for classic <select>.', 'warn');
+                self.setLog('removeOptions() works only with "multiple" attribute. Use loadOption().select() for classic <select>.', 'warn');
                 return;
             }
 
@@ -963,7 +965,7 @@
          */
         remove: function () {
             this.unselect();
-            console.warn('remove() is deprecated. Uses unselect().');
+            console.warn('remove() is deprecated. Use unselect().');
         },
 
         /**
@@ -1065,6 +1067,17 @@
          */
         getName: function () {
             return this.option.html();
+        },
+
+        /**
+         * Défini le nom de l'option
+         *
+         * @param {string|html} name
+         */
+        setName: function (name) {
+            this.option.html(name);
+
+            return this;
         },
 
         /**

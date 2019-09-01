@@ -71,7 +71,7 @@ Initialise l'état des éléments par défaut
 
 Sélectionne une option
 
-### remove()
+### unselect()
 
 Enlève la sélection d'une checkbox
 

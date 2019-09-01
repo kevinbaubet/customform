@@ -221,16 +221,28 @@
         },
 
         /**
+         * @deprecated Use unselect()
+         *
+         * @param disable
+         */
+        remove: function (disable) {
+            this.unselect(disable);
+            this.setLog('remove() is deprecated. Use unselect()', 'warn');
+
+            return this;
+        },
+
+        /**
          * Enlève la sélection d'une checkbox
          *
          * @param {boolean=false} disable Désactive la checkbox en même temps
          */
-        remove: function (disable) {
+        unselect: function (disable) {
             disable = disable || false;
 
             if (this.isChecked()) {
                 if (this.getInputType() === 'radio') {
-                    this.customForm.setLog('remove() works only with checkbox. Uses select() on another radio.', 'warn');
+                    this.customForm.setLog('unselect() works only with checkbox. Use select() on an another radio.', 'warn');
 
                 } else {
                     this.select();

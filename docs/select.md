@@ -285,6 +285,12 @@ Retourne le nom de l'option au format HTML
 
 * @return *{string}*
 
+#### setName()
+
+Défini le nom de l'option
+
+* @param *{string|html}* **name**
+
 #### getValue()
 
 Retourne la valeur de l'option
