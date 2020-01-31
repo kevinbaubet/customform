@@ -67,7 +67,7 @@
     padding: 10px $input--padding-horizontal;
     transition: .2s;
 
-    &:not(.is-disabled):not(.is-selected ):hover {
+    &:not(.is-disabled):not(.is-selected):hover {
         color: $color--primary;
         background-color: darken($input--background, 5%);
     }
@@ -132,6 +132,9 @@
             &:before {
                 color: $color--primary;
             }
+        }
+        &.is-preselected {
+            color: $color--primary;
         }
         &.is-first {
             display: none;

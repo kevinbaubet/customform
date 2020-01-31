@@ -63,6 +63,7 @@
             first: 'is-first',
             last: 'is-last',
             selected: 'is-selected',
+            preselected: 'is-preselected',
             multiple: 'is-multiple',
             open: 'is-open'
         },
@@ -364,8 +365,8 @@
             self.getWrapper().addClass(self.settings.classes.open);
 
             // Ajout d'un événement sur les options
-            self.getOptions().on('click.customform.option', function (option) {
-                self.loadOption(option.currentTarget).select({context: 'click'});
+            self.getOptions().on('click.customform.option', function (event) {
+                self.loadOption(event.currentTarget).select({context: event.type});
             });
 
             // Trigger click
@@ -390,7 +391,7 @@
         keyboardHandler: function (event) {
             var self = this;
             var option = null;
-            var currentOptionIndex = null;
+            var currentOptionIndex = 0;
             var optionsLength = 0;
             var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
             var fastDirection = (event.keyCode === 35) ? 'last' : (event.keyCode === 36) ? 'first' : undefined;
@@ -398,10 +399,27 @@
             var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
             var isSpace = event.keyCode === 32;
 
-            // Stop scroll
             if (isSpace) {
+                // Stop scroll
                 event.preventDefault();
-                self.clickHandler(event);
+
+                // Space selection
+                if (self.isMultiple()) {
+                    option = self.getOptions('.' + self.settings.classes.preselected);
+
+                    if (self.getWrapper().hasClass(self.settings.classes.open)) {
+                        if (option.length) {
+                            option = self.loadOption(option);
+                            option.select();
+                        }
+
+                    } else {
+                        self.clickHandler(event);
+                    }
+
+                } else {
+                    self.clickHandler(event);
+                }
 
                 return;
             }
@@ -417,7 +435,12 @@
                 option = self.loadOption(option);
                 self.keyboard.options[i] = option;
 
-                if (option.isSelected()) {
+                if (self.isMultiple()) {
+                    if (option.hasState('preselected')) {
+                        currentOptionIndex = i;
+                    }
+                    
+                } else if (option.isSelected()) {
                     currentOptionIndex = i;
                 }
 
@@ -429,10 +452,6 @@
                 event.preventDefault();
                 self.closeSiblings();
 
-                if (self.isMultiple()) {
-                    return;
-                }
-
                 if (direction === 'up') {
                     option = self.keyboard.options[currentOptionIndex - 1];
 
@@ -443,8 +462,8 @@
                     option = (fastDirection === 'last') ? self.keyboard.options[optionsLength - 1] : self.keyboard.options[0];
                 }
 
-                if (option !== null) {
-                    option.select({
+                if (option !== undefined && option !== null) {
+                    option[(self.isMultiple() ? 'preselect' : 'select')]({
                         context: 'keydown',
                         direction: direction
                     });
@@ -684,19 +703,6 @@
             }
 
             return self;
-        },
-
-        /**
-         * @deprecated Use unselectOptions()
-         *
-         * @param options
-         * @param disable
-         */
-        removeOptions: function (options, disable) {
-            this.unselectOptions(options, disable);
-            this.setLog('removeOptions() is deprecated. Use unselectOptions()', 'warn');
-
-            return this;
         },
 
         /**
@@ -961,14 +967,6 @@
         },
 
         /**
-         * @deprecated
-         */
-        remove: function () {
-            this.unselect();
-            console.warn('remove() is deprecated. Use unselect().');
-        },
-
-        /**
          * Enlève la sélection de l'option
          */
         unselect: function () {
@@ -985,12 +983,47 @@
         },
 
         /**
+         * Presélectionne une option pour le mode multiple
+         *
+         * @param {object=undefined} settings Paramètres optionnels
+         */
+        preselect: function (settings) {
+            var self = this;
+            settings = settings || {};
+
+            if (self.getOption() !== undefined && self.getOption() !== null && self.getOption().length && self.getValue() !== undefined) {
+                // Si l'option est désactivée, on passe à la précédente/suivante
+                if (self.isDisabled() && settings.direction !== undefined) {
+                    self.option = self.getOption()[settings.direction === 'up' ? 'prev' : 'next']();
+
+                    self.preselect({
+                        context: 'auto-move',
+                        direction: settings.direction
+                    });
+
+                    return;
+                }
+
+                // Si l'option la dernière option trouvée est désactivée, on stop
+                if (self.isDisabled()) {
+                    return;
+
+                } else {
+                    self.customFormSelect.getOptions().removeClass(self.customFormSelect.settings.classes.preselected);
+                    self.addState('preselected');
+                }
+            }
+
+            return self;
+        },
+
+        /**
          * Ajoute une classe d'état sur l'option
          *
          * @param {string} state
          */
         addState: function (state) {
-            this.option.addClass(this.customFormSelect.settings.classes[state]);
+            this.getOption().addClass(this.customFormSelect.settings.classes[state]);
 
             return this;
         },
@@ -1003,7 +1036,7 @@
          * @return {boolean}
          */
         hasState: function (state) {
-            return this.option.hasClass(this.customFormSelect.settings.classes[state]);
+            return this.getOption().hasClass(this.customFormSelect.settings.classes[state]);
         },
 
         /**
@@ -1012,7 +1045,7 @@
          * @param {string} state
          */
         removeState: function (state) {
-            this.option.removeClass(this.customFormSelect.settings.classes[state]);
+            this.getOption().removeClass(this.customFormSelect.settings.classes[state]);
 
             return this;
         },
@@ -1066,7 +1099,7 @@
          * @return {string}
          */
         getName: function () {
-            return this.option.html();
+            return this.getOption().html();
         },
 
         /**
@@ -1075,7 +1108,7 @@
          * @param {string|html} name
          */
         setName: function (name) {
-            this.option.html(name);
+            this.getOption().html(name);
 
             return this;
         },
@@ -1086,8 +1119,8 @@
          * @return {null|string}
          */
         getValue: function () {
-            if (this.option !== undefined) {
-                return this.option.attr('data-value');
+            if (this.getOption() !== undefined) {
+                return this.getOption().attr('data-value');
             }
 
             return null;
@@ -1099,7 +1132,7 @@
          * @param {string|number} value
          */
         setValue: function (value) {
-            this.option.attr('data-value', value);
+            this.getOption().attr('data-value', value);
 
             return this;
         }

@@ -251,6 +251,12 @@ Sélectionne une option
 
 Enlève la sélection de l'option
 
+#### preselect()
+
+Presélectionne une option pour le mode multiple
+
+* @param *{object=undefined}* **settings** Paramètres optionnels
+
 #### disable()
 
 Désactive une option

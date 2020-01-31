@@ -147,6 +147,10 @@
   color: #ff5a60;
 }
 
+.customform--select.is-multiple .customform-selectOption.is-preselected {
+  color: #ff5a60;
+}
+
 .customform--select.is-multiple .customform-selectOption.is-first {
   display: none;
 }
