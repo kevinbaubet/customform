@@ -26,6 +26,7 @@ Ce support permet de personnaliser les sélects classiques et multiples.
 | &nbsp;&nbsp;&nbsp;&nbsp;optionGroupLabel | string   | '{prefix}-selectOptionGroupLabel' | Classe autour du nom du groupoption                              |
 | &nbsp;&nbsp;&nbsp;&nbsp;first            | string   | 'is-first'                        | Classe pour la 1ère option                                       |
 | &nbsp;&nbsp;&nbsp;&nbsp;selected         | string   | 'is-selected'                     | Classe quand une option est sélectionnée                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;preselecte       | string   | 'is-preselected'                  | Classe quand une option est pre-sélectionnée en mode multiple    |
 | &nbsp;&nbsp;&nbsp;&nbsp;multiple         | string   | 'is-multiple'                     | Classe si le select est de type multiple                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;open             | string   | 'is-open'                         | Classe quand la liste des options est ouverte                    |
 | multipleOptionsSeparator                 | string   | ', '                              | Séparateur entre les options affichées dans le label             |
