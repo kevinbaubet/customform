@@ -438,6 +438,10 @@
                 if (self.isMultiple()) {
                     if (option.hasState('preselected')) {
                         currentOptionIndex = i;
+
+                        if (currentOptionIndex === 1) {
+                            currentOptionIndex++;
+                        }
                     }
                     
                 } else if (option.isSelected()) {
@@ -454,7 +458,7 @@
 
                 if (fastDirection !== undefined) {
                     direction = fastDirection;
-                    option = (direction === 'last') ? self.keyboard.options[optionsLength - 1] : self.keyboard.options[0];
+                    option = direction === 'last' ? self.keyboard.options[optionsLength - 1] : (self.isMultiple() ? self.keyboard.options[1] : self.keyboard.options[0]);
 
                 } else if (direction === 'up') {
                     option = self.keyboard.options[currentOptionIndex - 1];
