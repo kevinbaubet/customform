@@ -438,12 +438,8 @@
                 if (self.isMultiple()) {
                     if (option.hasState('preselected')) {
                         currentOptionIndex = i;
-
-                        if (currentOptionIndex === 1) {
-                            currentOptionIndex++;
-                        }
                     }
-                    
+
                 } else if (option.isSelected()) {
                     currentOptionIndex = i;
                 }
@@ -1053,7 +1049,7 @@
                 }
 
                 // Si l'option la dernière option trouvée est désactivée, on stop
-                if (self.isDisabled()) {
+                if (self.isDisabled() || self.isFirst()) {
                     return;
 
                 } else {
