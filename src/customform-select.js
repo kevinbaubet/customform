@@ -394,11 +394,11 @@
             var currentOptionIndex = 0;
             var optionsLength = 0;
             var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
-            var fastDirection = (event.keyCode === 35) ? 'last' : (event.keyCode === 36) ? 'first' : undefined;
+            var fastDirection = (event.keyCode === 35 || event.metaKey && direction === 'down') ? 'last' : (event.keyCode === 36 || event.metaKey && direction === 'up') ? 'first' : undefined;
             var isClose = (event.keyCode === 27 || event.keyCode === 13 || event.keyCode === 9);
             var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
             var isSpace = event.keyCode === 32;
-
+            
             if (isSpace) {
                 // Stop scroll
                 event.preventDefault();
@@ -452,21 +452,26 @@
                 event.preventDefault();
                 self.closeSiblings();
 
-                if (direction === 'up') {
+                if (fastDirection !== undefined) {
+                    direction = fastDirection;
+                    option = (direction === 'last') ? self.keyboard.options[optionsLength - 1] : self.keyboard.options[0];
+
+                } else if (direction === 'up') {
                     option = self.keyboard.options[currentOptionIndex - 1];
 
                 } else if (direction === 'down') {
                     option = self.keyboard.options[currentOptionIndex + 1];
-
-                } else if (fastDirection !== undefined) {
-                    option = (fastDirection === 'last') ? self.keyboard.options[optionsLength - 1] : self.keyboard.options[0];
                 }
 
                 if (option !== undefined && option !== null) {
+                    // Selection/préselection
                     option[(self.isMultiple() ? 'preselect' : 'select')]({
                         context: 'keydown',
                         direction: direction
                     });
+
+                    // Auto-scroll
+                    self.autoscrollWrapperOptions(option, direction);
                 }
             }
 
@@ -531,6 +536,45 @@
             this.keyboard.search = [];
 
             return out;
+        },
+
+        /**
+         * Auto-scroll du wrapper des options
+         *
+         * @param {object} option
+         * @param {string} direction
+         */
+        autoscrollWrapperOptions: function (option, direction) {
+            var self = this;
+
+            // En fonction des directions
+            if (direction === 'first' || direction === 'last') {
+                self.getWrapperOptions().scrollTop(direction === 'first' ? 0 : self.getWrapperOptions()[0].scrollHeight);
+
+            } else {
+                var currentSelectionTop = parseInt(option.getOption().position().top);
+                var currentScrollTop = parseInt(self.getWrapperOptions().scrollTop());
+                var wrapperHeight = Math.round(self.getWrapperOptions().outerHeight());
+                var optionHeight = Math.round(option.getOption().outerHeight());
+                var hasScrolled = false;
+
+                if (currentSelectionTop > (wrapperHeight - optionHeight)) {
+                    self.getWrapperOptions().scrollTop(currentScrollTop + optionHeight);
+                    hasScrolled = true;
+                } else if (currentSelectionTop < 0) {
+                    self.getWrapperOptions().scrollTop(currentScrollTop - optionHeight);
+                    hasScrolled = true;
+                }
+
+                // Si la prochaine option est désactivée, on rappelle la fonction
+                if (hasScrolled) {
+                    var futureOption = self.loadOption(option.getOption()[direction === 'up' ? 'prev' : 'next']());
+
+                    if (futureOption.getOption().length && futureOption.isDisabled()) {
+                        self.autoscrollWrapperOptions(futureOption, direction);
+                    }
+                }
+            }
         },
 
         /**
