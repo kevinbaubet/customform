@@ -152,6 +152,7 @@
             self.elements.wrapperOptions = self.getWrapperLabel().next();
 
             // Tabindex
+            self.getInput().attr('tabindex', '-1');
             if (!self.isDisabled()) {
                 self.getWrapperLabel().attr('tabindex', self.settings.tabindexStart);
             }
