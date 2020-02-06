@@ -1,6 +1,6 @@
 {
   "name": "@kevinbaubet/customform",
-  "version": "4.9.4",
+  "version": "4.9.5",
   "main": "./dist/customform.min.js",
   "repository": {
     "type": "git",

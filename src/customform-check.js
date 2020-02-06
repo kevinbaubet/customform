@@ -90,8 +90,9 @@
             });
 
             // Tabindex
+            this.getInput().attr('tabindex', '-1');
             if (!this.isDisabled()) {
-                this.elements.wrapperInput.attr('tabindex', this.settings.tabindexStart);
+                this.getWrapperInput().attr('tabindex', this.settings.tabindexStart);
             }
 
             // User callback
