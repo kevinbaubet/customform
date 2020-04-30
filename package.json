@@ -9,7 +9,7 @@
   "author": "Kévin Baubet <contact@kevinbaubet.fr>",
   "license": "MIT",
   "dependencies": {
-    "jquery": ">=1.7.0"
+    "jquery": ">=3.5.0"
   },
   "devDependencies": {
     "autoprefixer": "^9.0.0",
