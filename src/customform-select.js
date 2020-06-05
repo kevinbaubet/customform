@@ -394,13 +394,14 @@
             var option = null;
             var currentOptionIndex = 0;
             var optionsLength = 0;
+            var isEnter = event.key === 'Enter';
+            var isSpace = event.keyCode === 32;
             var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
             var fastDirection = (event.keyCode === 35 || event.metaKey && direction === 'down') ? 'last' : (event.keyCode === 36 || event.metaKey && direction === 'up') ? 'first' : undefined;
-            var isClose = (event.keyCode === 27 || event.keyCode === 13 || event.keyCode === 9);
+            var isClose = (event.keyCode === 27 || isEnter || event.keyCode === 9);
             var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
-            var isSpace = event.keyCode === 32;
             
-            if (isSpace) {
+            if (isSpace || isEnter) {
                 // Stop scroll
                 event.preventDefault();
 
