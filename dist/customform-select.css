@@ -8,11 +8,19 @@
   width: 100%;
 }
 
-.customform-selectLabel {
+.customform--select .customform-select-option-input {
+  display: none;
+}
+
+.customform-select-label {
   position: relative;
+}
+
+.customform-select-toggle {
   display: block;
   width: 100%;
   padding: 0 3.125rem 0 1.25rem;
+  text-align: left;
   text-overflow: ellipsis;
   font-size: 1rem;
   line-height: 38px;
@@ -28,12 +36,11 @@
   transition: .2s;
 }
 
-.customform-selectLabel:focus {
+.customform-select-toggle:focus {
   border-color: #ff5a60;
-  outline: 0;
 }
 
-.customform-selectLabel:after {
+.customform-select-toggle:after {
   content: "+";
   position: absolute;
   top: 50%;
@@ -44,11 +51,13 @@
   transition: .2s;
 }
 
-.customform-selectOptions {
+.customform-select-options {
   position: absolute;
   z-index: -1;
   top: 100%;
   left: 0;
+  margin: 0;
+  padding: 0;
   width: 100%;
   max-height: 0;
   overflow: hidden;
@@ -63,59 +72,69 @@
           box-sizing: border-box;
 }
 
-.customform-selectOptionGroupLabel,
-.customform-selectOptionGroup,
-.customform-selectOption {
+.customform-select-optiongroup-label,
+.customform-select-optiongroup,
+.customform-select-option {
   display: block;
 }
 
-.customform-selectOption {
+.customform-select-option {
   padding: 0.625rem 1.25rem;
   -webkit-transition: .2s;
   transition: .2s;
+  outline: 0;
 }
 
-.customform-selectOption:not(.is-disabled):not(.is-selected):hover {
+.customform-select-option:not(.is-disabled):not(.is-selected):hover {
   color: #ff5a60;
   background-color: #f2f2f2;
 }
 
-.customform-selectOption.is-selected {
+.customform-select-option.is-selected {
   color: #fff;
   background-color: #ff5a60;
 }
 
-.customform-selectOptionGroupLabel {
+.customform-select-option-label {
+  color: inherit;
+}
+
+.customform-select-optiongroup {
+  padding: 0;
+}
+
+.customform-select-optiongroup-label {
   padding: 0.625rem 1.25rem;
   font-style: italic;
   background-color: #f2f2f2;
   cursor: default;
 }
 
-.customform-selectOptionGroup .customform-selectOption {
+.customform-select-optiongroup .customform-select-option {
   padding-left: 1.625rem;
 }
 
 /* Main states
    ========================================================================== */
-.customform--select.is-open .customform-selectLabel,
-.customform--select:not(.is-disabled):hover .customform-selectLabel {
+.customform--select.is-open .customform-select-toggle,
+.customform--select:not(.is-disabled):hover .customform-select-toggle {
+  cursor: pointer;
   border-color: #ff5a60;
 }
 
-.customform--select.is-open .customform-selectLabel:after,
-.customform--select:not(.is-disabled):hover .customform-selectLabel:after {
+.customform--select.is-open .customform-select-toggle:after,
+.customform--select:not(.is-disabled):hover .customform-select-toggle:after {
   color: #ff5a60;
 }
 
-.customform--select.is-open .customform-selectOptions {
+.customform--select.is-open .customform-select-options {
   z-index: 50;
   max-height: 280px;
   opacity: 1;
   overflow-y: auto;
 }
 
-.customform--select.is-multiple .customform-selectOption {
+.customform--select.is-multiple .customform-select-option {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -126,7 +145,7 @@
   padding-right: 1.25rem;
 }
 
-.customform--select.is-multiple .customform-selectOption:before {
+.customform--select.is-multiple .customform-select-option:before {
   content: "\2714";
   -ms-flex-negative: 0;
       flex-shrink: 0;
@@ -138,23 +157,23 @@
   color: transparent;
 }
 
-.customform--select.is-multiple .customform-selectOption.is-selected {
+.customform--select.is-multiple .customform-select-option.is-selected {
   color: black;
   background: transparent;
 }
 
-.customform--select.is-multiple .customform-selectOption.is-selected:before {
+.customform--select.is-multiple .customform-select-option.is-selected:before {
   color: #ff5a60;
 }
 
-.customform--select.is-multiple .customform-selectOption.is-preselected {
+.customform--select.is-multiple .customform-select-option.is-focused {
   color: #ff5a60;
 }
 
-.customform--select.is-multiple .customform-selectOption.is-first {
+.customform--select.is-multiple .customform-select-option.is-first {
   display: none;
 }
 
-.customform--select.is-disabled .customform-selectLabel:hover {
+.customform--select.is-disabled .customform-select-toggle:hover {
   border-color: #ccc;
 }

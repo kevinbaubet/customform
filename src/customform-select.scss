@@ -8,13 +8,20 @@
     display: inline-block;
     vertical-align: top;
     width: 100%;
+
+    .customform-select-option-input {
+        display: none;
+    }
 }
 
-.customform-selectLabel {
+.customform-select-label {
     position: relative;
+}
+.customform-select-toggle {
     display: block;
     width: 100%;
     padding: 0 50px 0 $input--padding-horizontal;
+    text-align: left;
     text-overflow: ellipsis;
     font-size: $input--fontsize;
     line-height: $input--height - $input--border-width*2;
@@ -29,7 +36,6 @@
 
     &:focus {
         border-color: $color--primary;
-        outline: 0;
     }
 
     &:after {
@@ -42,11 +48,13 @@
     }
 }
 
-.customform-selectOptions {
+.customform-select-options {
     position: absolute;
     z-index: -1;
     top: 100%;
     left: 0;
+    margin: 0;
+    padding: 0;
     width: 100%;
     max-height: 0;
     overflow: hidden;
@@ -58,14 +66,15 @@
     transition: .2s;
     box-sizing: border-box;
 }
-.customform-selectOptionGroupLabel,
-.customform-selectOptionGroup,
-.customform-selectOption {
+.customform-select-optiongroup-label,
+.customform-select-optiongroup,
+.customform-select-option {
     display: block;
 }
-.customform-selectOption {
+.customform-select-option {
     padding: 10px $input--padding-horizontal;
     transition: .2s;
+    outline: 0;
 
     &:not(.is-disabled):not(.is-selected):hover {
         color: $color--primary;
@@ -76,13 +85,19 @@
         background-color: $color--primary;
     }
 }
-.customform-selectOptionGroupLabel {
+.customform-select-option-label {
+    color: inherit;
+}
+.customform-select-optiongroup {
+    padding: 0;
+}
+.customform-select-optiongroup-label {
     padding: $input--padding-vertical $input--padding-horizontal;
     font-style: italic;
     background-color: darken($input--background, 5%);
     cursor: default;
 }
-.customform-selectOptionGroup .customform-selectOption {
+.customform-select-optiongroup .customform-select-option {
     padding-left: floor($input--padding-horizontal * 1.33);
 }
 
@@ -91,7 +106,8 @@
    ========================================================================== */
 .customform--select.is-open,
 .customform--select:not(.is-disabled):hover {
-    .customform-selectLabel {
+    .customform-select-toggle {
+        cursor: pointer;
         border-color: $color--primary;
 
         &:after {
@@ -100,7 +116,7 @@
     }
 }
 .customform--select.is-open {
-    .customform-selectOptions {
+    .customform-select-options {
         z-index: 50;
         max-height: 280px;
         opacity: 1;
@@ -109,7 +125,7 @@
 }
 
 .customform--select.is-multiple {
-    .customform-selectOption {
+    .customform-select-option {
         display: flex;
         align-items: center;
         padding-left: $input--padding-horizontal;
@@ -133,7 +149,7 @@
                 color: $color--primary;
             }
         }
-        &.is-preselected {
+        &.is-focused {
             color: $color--primary;
         }
         &.is-first {
@@ -143,7 +159,7 @@
 }
 
 .customform--select.is-disabled {
-    .customform-selectLabel:hover {
+    .customform-select-toggle:hover {
         border-color: $input--border-color;
     }
 }

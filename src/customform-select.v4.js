@@ -38,6 +38,9 @@
         this.multipleOptions = [];
         this.keyboard = {
             timeout: null,
+            keyCodeToKey: {
+                48: '0', 49: '1', 50: '2', 51: '3', 52: '4', 53: '5', 54: '6', 55: '7', 56: '8', 57: '9', 65: 'a', 66: 'b', 67: 'c', 68: 'd', 69: 'e', 70: 'f', 71: 'g', 72: 'h', 73: 'i', 74: 'j', 75: 'k', 76: 'l', 77: 'm', 78: 'n', 79: 'o', 80: 'p', 81: 'q', 82: 'r', 83: 's', 84: 't', 85: 'u', 86: 'v', 87: 'w', 88: 'x', 89: 'y', 90: 'z', 96: '0', 97: '1', 98: '2', 99: '3', 100: '4', 101: '5', 102: '6', 103: '7', 104: '8', 105: '9'
+            },
             search: [],
             options: {}
         };
@@ -52,17 +55,15 @@
 
     $.CustomFormSelect.defaults = {
         classes: {
-            label: '{prefix}-select-label',
-            toggle: '{prefix}-select-toggle',
-            content: '{prefix}-select-content',
-            options: '{prefix}-select-options',
-            option: '{prefix}-select-option',
-            optionGroup: '{prefix}-select-optiongroup',
-            optionGroupLabel: '{prefix}-select-optiongroup-label',
+            label: '{prefix}-selectLabel',
+            options: '{prefix}-selectOptions',
+            option: '{prefix}-selectOption',
+            optionGroup: '{prefix}-selectOptionGroup',
+            optionGroupLabel: '{prefix}-selectOptionGroupLabel',
             first: 'is-first',
             last: 'is-last',
             selected: 'is-selected',
-            focused: 'is-focused',
+            preselected: 'is-preselected',
             multiple: 'is-multiple',
             open: 'is-open'
         },
@@ -112,10 +113,10 @@
             var self = this;
 
             // Wrappers génériques
-            self.elements.wrapper = $('<div>', {
+            self.elements.wrapper = $('<span>', {
                 'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.getInputType()
             });
-            self.elements.wrapperInput = $('<div>', {
+            self.elements.wrapperInput = $('<span>', {
                 'class': self.settings.classes.input
             });
 
@@ -139,65 +140,39 @@
             self.elements.source.options = self.getInput().children('option');
             self.elements.source.optgroups = self.getInput().children('optgroup');
 
-            // Label
-            self.getWrapperInput().append($('<div>', {
+            // Wrappers
+            self.getWrapperInput().append($('<span>', {
                 'class': self.settings.classes.label
             }));
             self.elements.wrapperLabel = self.getInput().next();
 
-            // Toggle
-            self.elements.toggle = $('<button>', {
-                'class': self.settings.classes.toggle,
-                type: 'button',
-                'aria-expanded': true,
-            });
-            if (!self.isDisabled()) {
-                self.elements.toggle.attr('tabindex', self.settings.tabindexStart);
-            }
-            self.getWrapperLabel().append(self.elements.toggle);
-
-            // Content
-            self.getWrapperInput().append($('<div>', {
-                'class': self.settings.classes.content
+            self.getWrapperInput().append($('<span>', {
+                'class': self.settings.classes.options
             }));
-            self.elements.wrapperContent = self.getWrapperLabel().next();
+            self.elements.wrapperOptions = self.getWrapperLabel().next();
 
-            // Options
-            self.elements.wrapperOptions = $('<ul>', {
-                'class': self.settings.classes.options,
-                tabindex: -1
-            }).appendTo(self.elements.wrapperContent);
-
-            // Replace input
-            var inputId = self.getInput().attr('id');
-            var inputName = self.getInput().attr('name');
-            var inputAttributes = {};
-            if (inputId !== undefined) {
-                inputAttributes.id = inputId;
+            // Tabindex
+            self.getInput().attr('tabindex', '-1');
+            if (!self.isDisabled()) {
+                self.getWrapperLabel().attr('tabindex', self.settings.tabindexStart);
             }
-            if (inputName !== undefined) {
-                inputAttributes.name = inputName;
-            }
-            var defaultInputAttributes = {
-                'type': 'hidden',
-                'tabindex': -1,
-                'aria-hidden': true
-            };
-
-            self.getInput().remove();
-            self.elements.defaultInput = $('<input>', defaultInputAttributes);
-            self.elements.defaultInput.prependTo(self.getWrapperInput());
 
             // Multiple
             if (self.isMultiple()) {
                 self.getWrapper().addClass(self.settings.classes.multiple);
             }
 
-            // Option
+            // Options
             if (self.getSourceOptions().length) {
                 $.each(self.getSourceOptions(), function (indexOption, option) {
                     option = $(option);
-                    self.getWrapperOptions().append(self.wrapOption(indexOption, option, inputAttributes));
+                    var optionClasses = option.attr('class');
+
+                    self.getWrapperOptions().append($('<span>', {
+                        'class': self.settings.classes.option + (optionClasses !== undefined ? ' ' + optionClasses : '') + (option.attr('disabled') !== undefined ? ' ' + self.settings.classes.disabled : ''),
+                        'data-value': option.val(),
+                        html: option.html()
+                    }));
                 });
             }
 
@@ -205,18 +180,23 @@
             if (self.getSourceOptgroups().length) {
                 $.each(self.getSourceOptgroups(), function (indexOptgroup, optgroup) {
                     optgroup = $(optgroup);
-                    var selectOptionGroup = $('<ul>', {
+                    var selectOptionGroup = $('<span>', {
                         'class': self.settings.classes.optionGroup
                     });
-                    $('<li>', {
+                    $('<span>', {
                         'class': self.settings.classes.optionGroupLabel,
                         html: optgroup.attr('label')
                     }).appendTo(selectOptionGroup);
 
-                    // Option
                     optgroup.children('option').each(function (indexOptgroupOption, option) {
                         option = $(option);
-                        selectOptionGroup.append(self.wrapOption(indexOptgroupOption, option, inputAttributes));
+                        var optionClasses = option.attr('class');
+
+                        $('<span>', {
+                            'class': self.settings.classes.option + (optionClasses !== undefined ? ' ' + optionClasses : '') + (option.attr('disabled') !== undefined ? ' ' + self.settings.classes.disabled : ''),
+                            'data-value': option.val(),
+                            html: option.html()
+                        }).appendTo(selectOptionGroup);
                     });
 
                     self.getWrapperOptions().append(selectOptionGroup);
@@ -232,35 +212,6 @@
         },
 
         /**
-         * Wrap une option
-         *
-         * @param {int} index
-         * @param {CustomFormSelectOption} option
-         * @param {object} inputAttributes
-         * @returns {jQuery|HTMLElement}
-         */
-        wrapOption: function (index, option, inputAttributes) {
-            var optionClasses = option.attr('class');
-            var optionDisabled = option.attr('disabled') !== undefined;
-            var optionWrapper = $('<li>', {
-                'class': this.settings.classes.option + (optionClasses !== undefined ? ' ' + optionClasses : '') + (optionDisabled ? ' ' + this.settings.classes.disabled : '')
-            });
-
-            inputAttributes.class = this.settings.classes.option + '-input';
-            inputAttributes.value = option.val();
-            inputAttributes.type = this.isMultiple() ? 'checkbox' : 'radio';
-            inputAttributes.tabindex = -1;
-            $('<input>', inputAttributes).appendTo(optionWrapper);
-
-            $('<label>', {
-                'class': this.settings.classes.option + '-label',
-                html: option.html()
-            }).appendTo(optionWrapper);
-
-            return optionWrapper;
-        },
-
-        /**
          * Initialise l'état des éléments par défaut
          */
         reset: function () {
@@ -271,6 +222,7 @@
             // Désactivé
             if (self.isDisabled()) {
                 self.getWrapper().addClass(self.settings.classes.disabled);
+                self.getWrapperLabel().removeAttr('tabindex');
             }
 
             // Requis
@@ -296,14 +248,13 @@
                     defaultValue = defaultValues.join(',');
 
                 } else {
-                    self.setLabel(defaultValue.html());
                     defaultValue = defaultValue.val();
                 }
 
-                self.getDefaultInput().val(defaultValue);
+                self.getInput().attr('data-default-value', defaultValue);
             }
 
-            // En multiple, on ne selectionne pas la valeur de la 1ère option
+            // En multiple, on ne selectionne pas la valeur par défaut
             if (self.isMultiple()) {
                 var firstOption = self.loadOption('.' + self.settings.classes.first);
 
@@ -351,26 +302,17 @@
             var self = this;
 
             // Sélection
-            var toggleTimeout = undefined;
-            self.getToggleBtn().on('click.customform.open keydown.customform.open', function (event) {
-                if (self.isDisabled()) {
+            self.getWrapperLabel().on('click.customform.open keydown.customform.open', function (event) {
+                if (self.getInput().is(':disabled')) {
                     return;
                 }
 
-                clearTimeout(toggleTimeout);
-                toggleTimeout = setTimeout(function () {
-                    if (event.type === 'click' || event.type === 'keydown' && event.key === 'Enter') {
-                        self.clickHandler(event);
+                if (event.type === 'click') {
+                    self.clickHandler(event);
 
-                    } else if (event.type === 'keydown') {
-                        self.keyboardHandler(event);
-                    }
-                }, 100);
-            });
-
-            // Options
-            self.getWrapperOptions().on('keydown.customform.options', function (event) {
-                self.keyboardHandler(event);
+                } else if (event.type === 'keydown') {
+                    self.keyboardHandler(event);
+                }
             });
 
             // Reset
@@ -404,26 +346,18 @@
          */
         clickHandler: function (event) {
             var self = this;
-            var toggleTimeout = undefined;
 
             // Fermeture des autres selects
             self.closeSiblings();
 
             // Fermeture au click sur le label
-            self.getToggleBtn().focus().on('click.customform.close keydown.customform.close', function (event) {
-                clearTimeout(toggleTimeout);
-                toggleTimeout = setTimeout(function () {
-                    if (event.type === 'click' || event.type === 'keydown' && event.key === 'Enter') {
-                        self.close();
-                    }
-                }, 100);
-            });
+            self.getWrapperLabel().one('click.customform.close', {self: self}, self.close);
 
-            // Fermeture au click en dehors du select
+            // Fermeture au click en dehors du select (mais pas sur un autre select)
             self.getElements().body.on('click.customform.close', function (event) {
                 var target = $(event.target);
 
-                if ((!self.isMultiple() && target.hasClass(self.settings.classes.option)) || (!target.hasClass(self.settings.classes.toggle) && !target.hasClass(self.settings.classes.option) && !target.hasClass(self.settings.classes.option + '-input') && !target.hasClass(self.settings.classes.option + '-label'))) {
+                if ((!self.isMultiple() && target.hasClass(self.settings.classes.option)) || (!target.hasClass(self.settings.classes.label) && !target.hasClass(self.settings.classes.option))) {
                     self.close();
                 }
             });
@@ -434,13 +368,10 @@
             // Ajout d'un événement sur les options
             self.getOptions().on('click.customform.option', function (event) {
                 self.loadOption(event.currentTarget).select({context: event.type});
-            }).each(function (i, option) {
-                option = self.loadOption(option);
-
-                if (!self.isDisabled() && !option.isDisabled()) {
-                    option.getOption().attr('tabindex', self.settings.tabindexStart);
-                }
             });
+
+            // Trigger click
+            self.getInput().triggerHandler('click');
 
             // User callback
             if (self.settings.onClick !== undefined) {
@@ -464,28 +395,32 @@
             var currentOptionIndex = 0;
             var optionsLength = 0;
             var isEnter = event.key === 'Enter';
-            var isSpace = event.key === 'Space' || event.key === ' ' || (event.keyCode !== undefined && event.keyCode === 32);
-            var isTabUp = event.shiftKey && event.key === 'Tab' && self.isOpen();
-            var isTabDown = !event.shiftKey && event.key === 'Tab' && self.isOpen();
-            var direction = (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || isTabUp) ? 'up' : (event.key === 'ArrowDown' || event.key === 'ArrowRight' || isTabDown) ? 'down' : undefined;
-            var fastDirection = (event.key === 'PageDown' || event.metaKey && direction === 'down') ? 'last' : (event.key === 'PageUp' || event.metaKey && direction === 'up') ? 'first' : undefined;
-            var isClose = (event.key === 'Escape' || isEnter) && self.isOpen();
-            var isLetter = /[a-z0-9\-_]/i.test(event.key);
-
+            var isSpace = event.keyCode === 32;
+            var direction = (event.keyCode === 37 || event.keyCode === 38) ? 'up' : (event.keyCode === 39 || event.keyCode === 40) ? 'down' : undefined;
+            var fastDirection = (event.keyCode === 35 || event.metaKey && direction === 'down') ? 'last' : (event.keyCode === 36 || event.metaKey && direction === 'up') ? 'first' : undefined;
+            var isClose = (event.keyCode === 27 || isEnter || event.keyCode === 9);
+            var isLetter = (event.keyCode >= 48 && event.keyCode <= 105);
+            
             if (isSpace || isEnter) {
                 // Stop scroll
                 event.preventDefault();
 
                 // Space selection
                 if (self.isMultiple()) {
-                    option = self.getOptions('.' + self.settings.classes.focused);
+                    option = self.getOptions('.' + self.settings.classes.preselected);
 
-                    if (self.isOpen()) {
+                    if (self.getWrapper().hasClass(self.settings.classes.open)) {
                         if (option.length) {
                             option = self.loadOption(option);
                             option.select();
                         }
+
+                    } else {
+                        self.clickHandler(event);
                     }
+
+                } else {
+                    self.clickHandler(event);
                 }
 
                 return;
@@ -493,10 +428,7 @@
 
             // Fermeture
             if (isClose) {
-                setTimeout(function () {
-                    self.close();
-                }, 100);
-
+                self.close();
                 return;
             }
 
@@ -506,7 +438,7 @@
                 self.keyboard.options[i] = option;
 
                 if (self.isMultiple()) {
-                    if (option.hasState('focused')) {
+                    if (option.hasState('preselected')) {
                         currentOptionIndex = i;
                     }
 
@@ -541,26 +473,29 @@
                     });
 
                     // Auto-scroll
-                    if (self.isOpen()) {
-                        self.autoscrollWrapperOptions(option, direction);
-                    } else if (self.isMultiple()) {
-                        self.clickHandler();
-                    }
+                    self.autoscrollWrapperOptions(option, direction);
                 }
             }
 
             if (isLetter) {
-                clearTimeout(self.keyboard.timeout);
-                self.keyboard.search.push(event.key);
+                var letter = event.key !== undefined ? event.key : self.keyboard.keyCodeToKey[event.keyCode];
 
-                self.keyboard.timeout = setTimeout(function () {
-                    option = self.getOptionOnkeyboard();
+                if (letter !== undefined) {
+                    clearTimeout(self.keyboard.timeout);
+                    self.keyboard.search.push(letter);
 
-                    if (option !== null) {
-                        option.select({context: 'keydown'});
-                    }
-                }, 250);
+                    self.keyboard.timeout = setTimeout(function () {
+                        option = self.getOptionOnkeyboard();
+
+                        if (option !== null) {
+                            option.select({context: 'keydown'});
+                        }
+                    }, 250);
+                }
             }
+
+            // Trigger event
+            self.getInput().triggerHandler(event.type);
         },
 
         /**
@@ -576,7 +511,7 @@
             var searchIndexResult = [];
 
             // Résultats
-            self.getOptions().each(function (i, option) {
+            this.getOptions().each(function (i, option) {
                 option = self.loadOption(option);
                 seachResults.push(option.getName().toLowerCase().indexOf(searchString));
             });
@@ -594,13 +529,13 @@
             if (searchIndexResult.length) {
                 searchIndexResult = searchIndexResult.shift();
 
-                if (typeof self.keyboard.options[searchIndexResult] === 'object') {
-                    out = self.keyboard.options[searchIndexResult];
+                if (typeof this.keyboard.options[searchIndexResult] === 'object') {
+                    out = this.keyboard.options[searchIndexResult];
                 }
             }
 
             // Reset search
-            self.keyboard.search = [];
+            this.keyboard.search = [];
 
             return out;
         },
@@ -651,11 +586,8 @@
             var self = (event !== undefined && event.data !== undefined && event.data.self !== undefined) ? event.data.self : this;
 
             self.getWrapper().removeClass(self.settings.classes.open);
-            self.getToggleBtn().focus().off('click.customform.close keydown.customform.close');
-            self.getOptions().off('click.customform.option').each(function (i, option) {
-                option = self.loadOption(option);
-                option.getOption().attr('tabindex', -1);
-            });
+            self.getWrapperLabel().off('click.customform.close');
+            self.getOptions().off('click.customform.option');
             self.getElements().body.off('click.customform.close');
 
             return self;
@@ -672,13 +604,13 @@
                 siblings.each(function (i, select) {
                     $(select)
                         .removeClass(self.settings.classes.open)
-                        .find('.' + self.settings.classes.toggle)
-                        .off('click.customform.close keydown.customform.close').end()
+                        .find('.' + self.settings.classes.label)
+                        .off('click.customform.close').end()
                         .find('.' + self.settings.classes.option)
                         .off('click.customform.option');
                 });
 
-                // self.getElements().body.off('click.customform.close');
+                self.getElements().body.off('click.customform.close');
             }
 
             return self;
@@ -688,13 +620,23 @@
          * Modifie le label du select custom
          *
          * @param {string|object[]} name
+         * @param {string|object[]=undefined} value
          */
-        setLabel: function (name) {
-            if (this.isMultiple() && typeof name === 'object') {
-                name = name.join(this.settings.multipleOptionsSeparator);
+        setLabel: function (name, value) {
+            if (this.isMultiple()) {
+                if (typeof value === 'object') {
+                    value = value.join(',');
+                }
+                if (typeof name === 'object') {
+                    name = name.join(this.settings.multipleOptionsSeparator);
+                }
             }
 
-            this.getToggleBtn().html(name);
+            if (value !== undefined) {
+                this.getWrapperLabel().attr('data-value', value);
+            }
+
+            this.getWrapperLabel().html(name);
 
             return this;
         },
@@ -706,15 +648,6 @@
          */
         isMultiple: function () {
             return this.multiple;
-        },
-
-        /**
-         * Détermine si le select est ouvert
-         *
-         * @return boolean
-         */
-        isOpen: function () {
-            return this.getWrapper().hasClass(this.settings.classes.open);
         },
 
         /**
@@ -736,42 +669,30 @@
         },
 
         /**
-         * Retourne le bouton toggle
+         * Retourne la valeur courante ou par défaut
          *
-         * @return {object}
+         * @param {boolean} defaultValue
+         *
+         * @return {string|object}
          */
-        getToggleBtn: function () {
-            return this.getElements().toggle;
-        },
+        getValue: function (defaultValue) {
+            defaultValue = defaultValue || false;
+            var value = defaultValue ? this.getInput().attr('data-default-value') : this.getWrapperLabel().attr('data-value');
 
-        /**
-         * Retourne l'input contenant la valeur par défaut
-         *
-         * @return {object}
-         */
-        getDefaultInput: function () {
-            return this.getElements().defaultInput;
+            if (value !== undefined && this.isMultiple()) {
+                return value.split(',');
+            }
+
+            return value;
         },
 
         /**
          * Retourne la valeur courante
          *
-         * @return {array}
+         * @return {string|object}
          */
         getCurrentValue: function () {
-            var self = this;
-            var values = [];
-            var options = self.getOptions('.' + self.settings.classes.selected);
-
-            if (options.length) {
-                options.each(function (i, option) {
-                    option = self.loadOption(option);
-
-                    values.push(option.getValue());
-                });
-            }
-
-            return values;
+            return this.getValue();
         },
 
         /**
@@ -780,17 +701,11 @@
          * @return {string|object}
          */
         getDefaultValue: function () {
-            var value = this.getDefaultInput().attr('val');
-
-            if (value !== undefined && this.isMultiple()) {
-                value = value.split(',');
-            }
-
-            return value;
+            return this.getValue(true);
         },
 
         /**
-         * Retourne le wrapper des options (.customform-select-options)
+         * Retourne le wrapper des options (.customform-selectOptions)
          *
          * @return {object}
          */
@@ -878,23 +793,10 @@
          *
          * @param {string|number} value
          *
-         * @return {object|boolean}
+         * @return {object}
          */
         getOptionFromValue: function (value) {
-            var self = this;
-            var options = self.getOptions();
-
-            if (options.length) {
-                $.each(options, function (i, option) {
-                    option = self.loadOption(option);
-
-                    if (option.getValue() === value) {
-                        return option;
-                    }
-                });
-            }
-
-            return false;
+            return this.getOptions('[data-value="' + value + '"]');
         },
 
         /**
@@ -957,14 +859,6 @@
             return this.option;
         },
 
-        getInput: function () {
-            return this.getOption().children('input');
-        },
-
-        getLabel: function () {
-            return this.getOption().children('label');
-        },
-
         /**
          * Sélectionne une option
          *
@@ -995,11 +889,12 @@
                 } else {
                     // Si on est en mode multiple
                     if (self.customFormSelect.isMultiple()) {
+                        var optionsValues = [];
                         var optionsNames = [];
 
                         // Si l'option "none" est cochée, on l'enlève
                         if (self.customFormSelect.multipleOptions.length === 1 && self.customFormSelect.multipleOptions[0].isFirst()) {
-                            self.customFormSelect.multipleOptions[0].getInput().prop('checked', false);
+                            self.customFormSelect.getInput().empty();
                             self.customFormSelect.multipleOptions[0].removeState('selected');
                             self.customFormSelect.multipleOptions = [];
                         }
@@ -1007,7 +902,6 @@
                         // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
                         if (self.isSelected()) {
                             self.customFormSelect.multipleOptions = [];
-                            self.getInput().prop('checked', false);
                             self.removeState('selected');
 
                             self.customFormSelect.getOptions('.' + self.customFormSelect.settings.classes.selected).each(function (i, selectedOption) {
@@ -1038,20 +932,30 @@
                         });
 
                         // Reset
+                        self.customFormSelect.getInput().empty();
                         self.customFormSelect.getOptions().removeClass(self.customFormSelect.settings.classes.selected);
 
                         // Add
                         $.each(self.customFormSelect.multipleOptions, function (i, option) {
                             if (!option.isDisabled()) {
-                                optionsNames.push(option.getName());
+                                var optionValue = option.getValue();
+                                var optionName = option.getName();
+                                optionsValues.push(optionValue);
+                                optionsNames.push(optionName);
 
-                                option.getInput().prop('checked', true);
+                                // <select>
+                                self.customFormSelect.getInput().append($('<option>', {
+                                    value: optionValue,
+                                    html: optionName
+                                }).prop('selected', true));
+
+                                // Option
                                 option.addState('selected');
                             }
                         });
 
                         // Label
-                        self.customFormSelect.setLabel(optionsNames);
+                        self.customFormSelect.setLabel(optionsNames, optionsValues);
 
                         // User callback
                         if (self.customFormSelect.settings.onChange !== undefined) {
@@ -1063,12 +967,20 @@
 
                     // Mode classique
                     else {
+                        var optionValue = self.getValue();
+                        var optionName  = self.getName();
+
+                        // <select>
+                        self.customFormSelect.getInput().html($('<option>', {
+                            value: optionValue,
+                            html: optionName
+                        }).prop('selected', true));
+
                         // Label
-                        self.customFormSelect.setLabel(self.getName());
+                        self.customFormSelect.setLabel(optionName, optionValue);
 
                         // Option
                         self.customFormSelect.getOptions().removeClass(self.customFormSelect.settings.classes.selected);
-                        self.getInput().prop('checked', true);
                         self.addState('selected');
 
                         // User callback
@@ -1080,6 +992,9 @@
                     }
 
                     if (settings.context !== 'init') {
+                        // Trigger change
+                        self.customFormSelect.getInput().triggerHandler('change');
+
                         // User callback
                         if (self.customFormSelect.settings.onChange !== undefined) {
                             callbackEvent = $.extend({
@@ -1114,7 +1029,7 @@
         },
 
         /**
-         * Focus une option pour le mode multiple
+         * Presélectionne une option pour le mode multiple
          *
          * @param {object=undefined} settings Paramètres optionnels
          */
@@ -1136,19 +1051,12 @@
                 }
 
                 // Si l'option la dernière option trouvée est désactivée, on stop
-                if (self.isDisabled()) {
+                if (self.isDisabled() || self.isFirst()) {
                     return;
 
                 } else {
-                    self.customFormSelect.getOptions().removeClass(self.customFormSelect.settings.classes.focused);
-
-                    if (self.isFirst()) {
-                        self.customFormSelect.getToggleBtn().focus();
-                        
-                    } else {
-                        self.addState('focused');
-                        self.getOption().focus();
-                    }
+                    self.customFormSelect.getOptions().removeClass(self.customFormSelect.settings.classes.preselected);
+                    self.addState('preselected');
                 }
             }
 
@@ -1237,7 +1145,7 @@
          * @return {string}
          */
         getName: function () {
-            return this.getLabel().html();
+            return this.getOption().html();
         },
 
         /**
@@ -1246,7 +1154,7 @@
          * @param {string|html} name
          */
         setName: function (name) {
-            this.getLabel().html(name);
+            this.getOption().html(name);
 
             return this;
         },
@@ -1257,8 +1165,8 @@
          * @return {null|string}
          */
         getValue: function () {
-            if (this.getInput() !== undefined) {
-                return this.getInput().val();
+            if (this.getOption() !== undefined) {
+                return this.getOption().attr('data-value');
             }
 
             return null;
@@ -1270,7 +1178,7 @@
          * @param {string|number} value
          */
         setValue: function (value) {
-            this.getInput().val(value);
+            this.getOption().attr('data-value', value);
 
             return this;
         }
