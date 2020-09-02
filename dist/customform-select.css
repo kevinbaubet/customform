@@ -85,6 +85,10 @@
   outline: 0;
 }
 
+.customform-select-option:not(.is-disabled) .customform-select-option-label {
+  cursor: pointer;
+}
+
 .customform-select-option:not(.is-disabled):not(.is-selected):hover {
   color: #ff5a60;
   background-color: #f2f2f2;

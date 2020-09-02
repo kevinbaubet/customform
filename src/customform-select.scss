@@ -76,6 +76,11 @@
     transition: .2s;
     outline: 0;
 
+    &:not(.is-disabled) {
+        .customform-select-option-label {
+            cursor: pointer;
+        }
+    }
     &:not(.is-disabled):not(.is-selected):hover {
         color: $color--primary;
         background-color: darken($input--background, 5%);

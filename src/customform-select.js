@@ -366,6 +366,11 @@
                         self.keyboardHandler(event);
                     }
                 }, 100);
+
+                // Stop scroll
+                if (event.type === 'keydown' && (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'Space')) {
+                    event.preventDefault();
+                }
             });
 
             // Options
@@ -398,7 +403,7 @@
         },
 
         /**
-         * Lors du clique sur le label
+         * Lors du clique sur le bouton toggle
          *
          * @param {object} event
          */
@@ -677,8 +682,6 @@
                         .find('.' + self.settings.classes.option)
                         .off('click.customform.option');
                 });
-
-                // self.getElements().body.off('click.customform.close');
             }
 
             return self;
@@ -957,10 +960,20 @@
             return this.option;
         },
 
+        /**
+         * Retourne l'input de l'option
+         *
+         * @return {object}
+         */
         getInput: function () {
             return this.getOption().children('input');
         },
 
+        /**
+         * Retourne le label de l'option
+         *
+         * @return {object}
+         */
         getLabel: function () {
             return this.getOption().children('label');
         },

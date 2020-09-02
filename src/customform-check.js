@@ -146,7 +146,7 @@
 
             // Check
             self.getWrapper().on('click.customform keydown.customform', function (event) {
-                if (event.type === 'click' || (event.type === 'keydown' && event.keyCode === 32)) {
+                if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === 'Space' || event.key === ' ' || (event.keyCode !== undefined && event.keyCode === 32)))) {
                     if (event.type === 'click' && $(event.target).is('a')) {
                         return;
                     }
@@ -219,18 +219,6 @@
             }
 
             return self;
-        },
-
-        /**
-         * @deprecated Use unselect()
-         *
-         * @param disable
-         */
-        remove: function (disable) {
-            this.unselect(disable);
-            this.setLog('remove() is deprecated. Use unselect()', 'warn');
-
-            return this;
         },
 
         /**
