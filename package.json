@@ -1,6 +1,6 @@
 {
   "name": "@kevinbaubet/customform",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "main": "./dist/customform.min.js",
   "repository": {
     "type": "git",
@@ -9,7 +9,8 @@
   "author": "Kévin Baubet <contact@kevinbaubet.fr>",
   "license": "MIT",
   "dependencies": {
-    "jquery": ">=1.7.0"
+    "jquery": ">=1.7.0",
+    "npm": "^6.14.8"
   },
   "devDependencies": {
     "autoprefixer": "^9.0.0",

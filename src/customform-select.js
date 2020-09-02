@@ -427,8 +427,9 @@
             // Fermeture au click en dehors du select
             self.getElements().body.on('click.customform.close', function (event) {
                 var target = $(event.target);
+                var isOption = target.hasClass(self.settings.classes.option) || target.hasClass(self.settings.classes.option + '-input') || target.hasClass(self.settings.classes.option + '-label');
 
-                if ((!self.isMultiple() && target.hasClass(self.settings.classes.option)) || (!target.hasClass(self.settings.classes.toggle) && !target.hasClass(self.settings.classes.option) && !target.hasClass(self.settings.classes.option + '-input') && !target.hasClass(self.settings.classes.option + '-label'))) {
+                if ((!self.isMultiple() && isOption) || (!target.hasClass(self.settings.classes.toggle) && !isOption)) {
                     self.close();
                 }
             });
