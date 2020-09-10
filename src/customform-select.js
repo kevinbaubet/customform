@@ -1094,6 +1094,10 @@
                     }
 
                     if (settings.context !== 'init') {
+                        // Trigger change
+                        self.getInput().triggerHandler('click');
+                        self.getInput().triggerHandler('change');
+
                         // User callback
                         if (self.customFormSelect.settings.onChange !== undefined) {
                             callbackEvent = $.extend({
