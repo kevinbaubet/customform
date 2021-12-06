@@ -219,7 +219,7 @@
                         selectOptionGroup.append(self.wrapOption(indexOptgroupOption, option, inputAttributes));
                     });
 
-                    self.getWrapperOptions().append(selectOptionGroup);
+                    self.getWrapperOptions().append($('<li>', {html: selectOptionGroup}));
                 });
             }
 
@@ -663,6 +663,13 @@
                 option.getOption().attr('tabindex', -1);
             });
             self.getElements().body.off('click.customform.close');
+
+            // User callback
+            if (self.settings.onClose !== undefined) {
+                self.settings.onClose.call({
+                    customFormSelect: self
+                });
+            }
 
             return self;
         },

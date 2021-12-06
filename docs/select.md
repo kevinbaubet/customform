@@ -37,6 +37,7 @@ Ce support permet de personnaliser les sélects classiques et multiples.
 | afterEventsHandler                       | function | undefined                            | Callback après la déclaration des événements                     |
 | onComplete                               | function | undefined                            | Callback à la fin du chargement                                  |
 | onClick                                  | function | undefined                            | Callback au click sur le select pour ouvrir la liste des options |
+| onClose                                  | function | undefined                            | Callback au close du select                                      |
 | onChange                                 | function | undefined                            | Callback au changement d'option                                  |
 | onReset                                  | function | undefined                            | Callback au reset du formulaire                                  |
 

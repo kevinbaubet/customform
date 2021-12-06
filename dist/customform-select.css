@@ -101,6 +101,7 @@
 
 .customform-select-option-label {
   color: inherit;
+  cursor: inherit;
 }
 
 .customform-select-optiongroup {
