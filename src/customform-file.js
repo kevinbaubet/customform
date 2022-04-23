@@ -7,14 +7,14 @@
      * @param {object} customForm
      * @param {object=undefined} options
      *
-     * @return {$.CustomFormFile}
+     * @return {jQuery.CustomFormFile}
      */
     $.CustomFormFile = function (customForm, options) {
-        // Héritage
+        // HEritage
         this.customForm = customForm;
         $.extend($.CustomFormFile.prototype, $.CustomForm.prototype);
 
-        // Élements
+        // Elements
         this.elements = {
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
@@ -24,7 +24,7 @@
             wrapperFile: null
         };
 
-        // Config
+        // Options
         $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormFile.defaults, options);
 
         // Variables
@@ -38,6 +38,11 @@
         return this;
     };
 
+    /**
+     * Default options
+     *
+     * @type {{beforeWrap: undefined, beforeLoad: undefined, onClick: undefined, multipleText: string, onChange: undefined, emptyText: string, labelText: string, classes: {file: string, label: string, open: string, selected: string}, onComplete: undefined, onReset: undefined, afterEventsHandler: undefined}}
+     */
     $.CustomFormFile.defaults = {
         labelText: 'Browse...',
         emptyText: 'No file selected.',
@@ -57,6 +62,11 @@
         onReset: undefined
     };
 
+    /**
+     * Methods
+     *
+     * @type {{init: (function(): $.CustomFormFile), getValue: ((function(): (string|null))|*), select: (function(): $.CustomFormFile), getWrapperLabel: (function(): null|jQuery|HTMLElement|*), reset: (function(): $.CustomFormFile), setLabel: (function(string): $.CustomFormFile), eventsHandler: $.CustomFormFile.eventsHandler, wrap: (function(): $.CustomFormFile), getSelectedFiles: ((function(): (FileList|Array))|*), getWrapperFile: (function(): null|jQuery|HTMLElement|*)}}
+     */
     $.CustomFormFile.prototype = {
         /**
          * Initialisation
@@ -87,7 +97,7 @@
         },
 
         /**
-         * Création des wrappers
+         * Build wrappers
          */
         wrap: function () {
             this.elements.wrapper = $('<span>', {
@@ -113,15 +123,15 @@
                 });
             }
 
-            // Wrapper
+            // Main wrapper
             this.getInput().parent().wrapInner(this.getWrapper());
             this.elements.wrapper = this.getInput().parent();
 
-            // WrapperInput
+            // Input wrapper
             this.getInput().wrap(this.getWrapperInput());
             this.elements.wrapperInput = this.getInput().parent();
 
-            // WrapperLabel et file
+            // Label and file wrappers
             this.elements.wrapperLabel.appendTo(this.getWrapperInput());
             this.elements.wrapperFile.appendTo(this.getWrapperInput());
 
@@ -134,25 +144,25 @@
         },
 
         /**
-         * Initialise l'état des éléments par défaut
+         * Reset elements state
          */
         reset: function () {
             // Reset
             this.getWrapper().removeClass(this.settings.classes.disabled + ' ' + this.settings.classes.required);
             this.getWrapperFile().text(this.settings.emptyText);
 
-            // Désactivé
+            // Disabled
             if (this.isDisabled()) {
                 this.getWrapper().addClass(this.settings.classes.disabled);
                 this.getWrapperLabel().removeAttr('tabindex');
             }
 
-            // Requis
+            // Required
             if (this.isRequired()) {
                 this.getWrapper().addClass(this.settings.classes.required);
             }
 
-            // Valeur par défaut
+            // Default value
             if (!this.isEmpty()) {
                 this.select();
             }
@@ -161,12 +171,12 @@
         },
 
         /**
-         * Gestionnaire d'événements
+         * Events handler
          */
         eventsHandler: function () {
             var self = this;
 
-            // Sélection du fichier
+            // Select button
             self.getWrapperLabel().on('click.customform keydown.customform', function (event) {
                 if (event.type === 'click' || (event.type === 'keydown' && (event.keyCode === 32 || event.keyCode === 13))) {
                     event.preventDefault();
@@ -193,12 +203,12 @@
                 }
             });
 
-            // Une fois une valeur sélectionnée
+            // On change value
             self.getInput().on('change.customform', function () {
-                // État
+                // State
                 self.getWrapper().removeClass(self.settings.classes.open);
 
-                // Ajout de la valeur
+                // Add value
                 self.select();
 
                 // User callback
@@ -235,20 +245,20 @@
         },
 
         /**
-         * Affiche les fichiers sélectionnés
+         * Set selected files
          */
         select: function () {
-            var filename = null;
+            var filename;
             var files = this.getSelectedFiles();
 
-            // Nom du fichier
+            // Filename
             if (files.length > 1) {
                 filename = this.settings.multipleText.replace(/{count}/, files.length);
             } else {
                 filename = this.getValue();
             }
 
-            // Ajout du label
+            // Add label
             this.setLabel(filename);
             this.getWrapper().addClass(this.settings.classes.selected);
 
@@ -256,7 +266,7 @@
         },
 
         /**
-         * Retourne la liste des fichiers sélectionnés
+         * Return selected files
          *
          * @return {FileList|Array}
          */
@@ -271,7 +281,7 @@
         },
 
         /**
-         * Retourne la valeur de l'input
+         * Return input value
          *
          * @return {null|string}
          */
@@ -286,7 +296,7 @@
         },
 
         /**
-         * Modifie le label du fichier sélectionné
+         * Set label of the selected file
          *
          * @param {string} name
          */
@@ -297,7 +307,7 @@
         },
 
         /**
-         * Retourne le wrapper du label
+         * Return label wrapper
          *
          * @return {object}
          */
@@ -306,7 +316,7 @@
         },
 
         /**
-         * Retourne le wrapper du fichier
+         * Return file wrapper
          *
          * @return {object}
          */

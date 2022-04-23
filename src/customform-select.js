@@ -10,11 +10,11 @@
      * @return {$.CustomFormSelect}
      */
     $.CustomFormSelect = function (customForm, options) {
-        // Héritage
+        // Heritage
         this.customForm = customForm;
         $.extend($.CustomFormSelect.prototype, $.CustomForm.prototype);
 
-        // Élements
+        // Elements
         this.elements = {
             body: $('body'),
             context: this.customForm.elementContext,
@@ -29,7 +29,7 @@
             wrapperOptions: null
         };
 
-        // Config
+        // Options
         $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormSelect.defaults, options);
 
         // Variables
@@ -50,6 +50,11 @@
         return this;
     };
 
+    /**
+     * Default options
+     *
+     * @type {{beforeWrap: undefined, beforeLoad: undefined, onClick: undefined, onChange: undefined, classes: {last: string, optionGroup: string, multiple: string, toggle: string, label: string, content: string, options: string, focused: string, optionGroupLabel: string, first: string, selected: string, open: string, option: string}, onComplete: undefined, multipleOptionsSeparator: string, onReset: undefined, afterEventsHandler: undefined}}
+     */
     $.CustomFormSelect.defaults = {
         classes: {
             label: '{prefix}-select-label',
@@ -76,6 +81,11 @@
         onReset: undefined
     };
 
+    /**
+     * Methods
+     *
+     * @type {{getSourceOptgroups: (function(): null|*), clickHandler: $.CustomFormSelect.clickHandler, getSourceOptions: (function(): null|*), getOptionFromValue: (function((string|number)): boolean), wrapOption: (function(int, jQuery.CustomFormSelectOption, Object): *|jQuery|HTMLElement), getDefaultInput: (function(): jQuery|HTMLElement|*), getWrapperOptions: (function(): null|*), getDefaultValue: (function(): *), getCurrentValue: (function(): *[]), closeSiblings: (function(): $.CustomFormSelect), close: (function(*): *|$.CustomFormSelect), autoscrollWrapperOptions: $.CustomFormSelect.autoscrollWrapperOptions, init: (function(): $.CustomFormSelect), loadOption: (function((Object|string)): jQuery.CustomFormSelectOption), getOptionOnkeyboard: (function(): null), selectOptions: (function((string|Object)=): $.CustomFormSelect), isMultiple: (function(): string|boolean|string|*), getSiblings: (function(): *), getToggleBtn: (function(): *), unselectOptions: (function((string|Object)=, boolean=): $.CustomFormSelect), isOpen: (function(): *), keyboardHandler: $.CustomFormSelect.keyboardHandler, getWrapperLabel: (function(): null|jQuery|HTMLElement|*), reset: (function(): $.CustomFormSelect), setLabel: (function((string|Object[])): $.CustomFormSelect), eventsHandler: $.CustomFormSelect.eventsHandler, getOptions: (function(Object=): *), wrap: (function(): $.CustomFormSelect)}}
+     */
     $.CustomFormSelect.prototype = {
         /**
          * Initialisation
@@ -106,15 +116,16 @@
         },
 
         /**
-         * Création des wrappers
+         * Build wrappers
          */
         wrap: function () {
             var self = this;
 
-            // Wrappers génériques
+            // Main wrapper
             self.elements.wrapper = $('<div>', {
                 'class': self.settings.classes.prefix + ' ' + self.settings.classes.prefix + '--' + self.getInputType()
             });
+            // Input wrapper
             self.elements.wrapperInput = $('<div>', {
                 'class': self.settings.classes.input
             });
@@ -127,15 +138,15 @@
                 });
             }
 
-            // Wrapper
+            // Update main wrapper
             self.getInput().parent().wrapInner(self.getWrapper());
             self.elements.wrapper = self.getInput().parent();
 
-            // Wrapper input
+            // Update input wrapper
             self.getInput().wrap(self.getWrapperInput());
             self.elements.wrapperInput = self.getInput().parent();
 
-            // Récupération des données du <select>
+            // Get <select> data
             self.elements.source.options = self.getInput().children('option');
             self.elements.source.optgroups = self.getInput().children('optgroup');
 
@@ -145,7 +156,7 @@
             }));
             self.elements.wrapperLabel = self.getInput().next();
 
-            // Toggle
+            // Toggle button
             self.elements.toggle = $('<button>', {
                 'class': self.settings.classes.toggle,
                 type: 'button',
@@ -232,7 +243,7 @@
         },
 
         /**
-         * Wrap une option
+         * Option wrapper
          *
          * @param {int} index
          * @param {CustomFormSelectOption} option
@@ -261,24 +272,24 @@
         },
 
         /**
-         * Initialise l'état des éléments par défaut
+         * Reset elements state
          */
         reset: function () {
             var self = this;
             var defaultValue = self.getDefaultValue();
             self.getWrapper().removeClass(self.settings.classes.disabled + ' ' + self.settings.classes.required);
 
-            // Désactivé
+            // Disabled
             if (self.isDisabled()) {
                 self.getWrapper().addClass(self.settings.classes.disabled);
             }
 
-            // Requis
+            // Required
             if (self.isRequired()) {
                 self.getWrapper().addClass(self.settings.classes.required);
             }
 
-            // Définition de la valeur par défaut
+            // Default value(s)
             if (defaultValue === undefined) {
                 defaultValue = self.getSourceOptions().filter('[selected]');
 
@@ -303,7 +314,7 @@
                 self.getDefaultInput().val(defaultValue);
             }
 
-            // En multiple, on ne selectionne pas la valeur de la 1ère option
+            // In multiple mode, we skip the first option
             if (self.isMultiple()) {
                 var firstOption = self.loadOption('.' + self.settings.classes.first);
 
@@ -313,7 +324,7 @@
                 }
             }
 
-            // Ajout des options
+            // Add options
             self.getOptions().each(function (i, option) {
                 option = self.loadOption(option);
                 var optionValue = option.getValue();
@@ -345,12 +356,12 @@
         },
 
         /**
-         * Gestionnaire d'événements
+         * Events handler
          */
         eventsHandler: function () {
             var self = this;
 
-            // Sélection
+            // Select option
             var toggleTimeout = undefined;
             self.getToggleBtn().on('click.customform.open keydown.customform.open', function (event) {
                 if (self.isDisabled()) {
@@ -373,7 +384,7 @@
                 }
             });
 
-            // Options
+            // Keyboard option
             self.getWrapperOptions().on('keydown.customform.options', function (event) {
                 self.keyboardHandler(event);
             });
@@ -403,7 +414,7 @@
         },
 
         /**
-         * Lors du clique sur le bouton toggle
+         * Toggle button event handler
          *
          * @param {object} event
          */
@@ -411,10 +422,10 @@
             var self = this;
             var toggleTimeout = undefined;
 
-            // Fermeture des autres selects
+            // Close siblings CustomFormSelect
             self.closeSiblings();
 
-            // Fermeture au click sur le label
+            // Close on second click
             self.getToggleBtn().focus().on('click.customform.close keydown.customform.close', function (event) {
                 clearTimeout(toggleTimeout);
                 toggleTimeout = setTimeout(function () {
@@ -424,20 +435,20 @@
                 }, 100);
             });
 
-            // Fermeture au click en dehors du select
+            // Close on click outside
             self.getElements().body.on('click.customform.close', function (event) {
                 var target = $(event.target);
-                var isOption = target.hasClass(self.settings.classes.option) || target.hasClass(self.settings.classes.option + '-input') || target.hasClass(self.settings.classes.option + '-label');
+                var isOption = target.hasClass(self.settings.classes.option) || target.hasClass(self.settings.classes.option + '-input') || target.hasClass(self.settings.classes.option + '-label');
 
                 if ((!self.isMultiple() && isOption) || (!target.hasClass(self.settings.classes.toggle) && !isOption)) {
                     self.close();
                 }
             });
 
-            // Ouverture des options
+            // Open options list
             self.getWrapper().addClass(self.settings.classes.open);
 
-            // Ajout d'un événement sur les options
+            // Add options event
             self.getOptions().on('click.customform.option', function (event) {
                 self.loadOption(event.currentTarget).select({context: event.type});
             }).each(function (i, option) {
@@ -460,7 +471,7 @@
         },
 
         /**
-         * Au clavier
+         * Keyboard event handler
          *
          * @param {object} event
          */
@@ -470,11 +481,11 @@
             var currentOptionIndex = 0;
             var optionsLength = 0;
             var isEnter = event.key === 'Enter';
-            var isSpace = event.key === 'Space' || event.key === ' ' || (event.keyCode !== undefined && event.keyCode === 32);
+            var isSpace = event.key === 'Space' || event.key === ' ' || (event.keyCode !== undefined && event.keyCode === 32);
             var isTabUp = event.shiftKey && event.key === 'Tab' && self.isOpen();
             var isTabDown = !event.shiftKey && event.key === 'Tab' && self.isOpen();
             var direction = (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || isTabUp) ? 'up' : (event.key === 'ArrowDown' || event.key === 'ArrowRight' || isTabDown) ? 'down' : undefined;
-            var fastDirection = (event.key === 'PageDown' || event.metaKey && direction === 'down') ? 'last' : (event.key === 'PageUp' || event.metaKey && direction === 'up') ? 'first' : undefined;
+            var fastDirection = (event.key === 'PageDown' || event.metaKey && direction === 'down') ? 'last' : (event.key === 'PageUp' || event.metaKey && direction === 'up') ? 'first' : undefined;
             var isClose = (event.key === 'Escape' || isEnter) && self.isOpen();
             var isLetter = /[a-z0-9\-_]/i.test(event.key);
 
@@ -497,7 +508,7 @@
                 return;
             }
 
-            // Fermeture
+            // Close
             if (isClose) {
                 setTimeout(function () {
                     self.close();
@@ -506,7 +517,7 @@
                 return;
             }
 
-            // Sélection de l'option
+            // Select option
             self.getOptions().each(function (i, option) {
                 option = self.loadOption(option);
                 self.keyboard.options[i] = option;
@@ -523,7 +534,7 @@
                 optionsLength++;
             });
 
-            // Changement d'option
+            // Switch option
             if (direction !== undefined || fastDirection !== undefined) {
                 event.preventDefault();
                 self.closeSiblings();
@@ -540,7 +551,7 @@
                 }
 
                 if (option !== undefined && option !== null) {
-                    // Selection/préselection
+                    // Select/preselect
                     option[(self.isMultiple() ? 'focus' : 'select')]({
                         context: 'keydown',
                         direction: direction
@@ -570,7 +581,7 @@
         },
 
         /**
-         * Récupère l'option en fonction de la saisie
+         * Get the best option from keyboard input
          *
          * @return {object|string}
          */
@@ -581,13 +592,13 @@
             var seachResults = [];
             var searchIndexResult = [];
 
-            // Résultats
+            // Results
             self.getOptions().each(function (i, option) {
                 option = self.loadOption(option);
                 seachResults.push(option.getName().toLowerCase().indexOf(searchString));
             });
 
-            // Index des résultats
+            // Index results
             if (seachResults.length) {
                 $.each(seachResults, function (seachIndex, searchStringIndex) {
                     if (searchStringIndex !== -1) {
@@ -596,7 +607,7 @@
                 });
             }
 
-            // Association de l'option au premet index des résultats
+            // Get first result
             if (searchIndexResult.length) {
                 searchIndexResult = searchIndexResult.shift();
 
@@ -612,7 +623,7 @@
         },
 
         /**
-         * Auto-scroll du wrapper des options
+         * Auto-scroll options wrapper
          *
          * @param {object} option
          * @param {string} direction
@@ -620,7 +631,7 @@
         autoscrollWrapperOptions: function (option, direction) {
             var self = this;
 
-            // En fonction des directions
+            // Directions
             if (direction === 'first' || direction === 'last') {
                 self.getWrapperOptions().scrollTop(direction === 'first' ? 0 : self.getWrapperOptions()[0].scrollHeight);
 
@@ -639,7 +650,7 @@
                     hasScrolled = true;
                 }
 
-                // Si la prochaine option est désactivée, on rappelle la fonction
+                // Skip disabled options
                 if (hasScrolled) {
                     var futureOption = self.loadOption(option.getOption()[direction === 'up' ? 'prev' : 'next']());
 
@@ -651,7 +662,7 @@
         },
 
         /**
-         * Fermeture des options
+         * Close options wrapper
          */
         close: function (event) {
             var self = (event !== undefined && event.data !== undefined && event.data.self !== undefined) ? event.data.self : this;
@@ -675,7 +686,7 @@
         },
 
         /**
-         * Fermeture des autres selects
+         * Close siblings CustomFormSelect
          */
         closeSiblings: function () {
             var self = this;
@@ -696,7 +707,7 @@
         },
 
         /**
-         * Modifie le label du select custom
+         * Set a custom label
          *
          * @param {string|object[]} name
          */
@@ -711,25 +722,25 @@
         },
 
         /**
-         * Détermine si le select est multiple
+         * Return true if <select> is multiple
          *
-         * @return boolean
+         * @return {boolean}
          */
         isMultiple: function () {
             return this.multiple;
         },
 
         /**
-         * Détermine si le select est ouvert
+         * Return true if options wrapper is open
          *
-         * @return boolean
+         * @return {boolean}
          */
         isOpen: function () {
             return this.getWrapper().hasClass(this.settings.classes.open);
         },
 
         /**
-         * Retourne tous les autres selects du contexte actuel
+         * Return others CustomFormSelect into the current context
          *
          * @return {object}
          */
@@ -738,7 +749,7 @@
         },
 
         /**
-         * Retourne le wrapper du label (.customform-selectLabel)
+         * Return label wrapper (.customform-select-label)
          *
          * @return {object}
          */
@@ -747,7 +758,7 @@
         },
 
         /**
-         * Retourne le bouton toggle
+         * Return toggle button
          *
          * @return {object}
          */
@@ -756,7 +767,7 @@
         },
 
         /**
-         * Retourne l'input contenant la valeur par défaut
+         * Return default input
          *
          * @return {object}
          */
@@ -765,7 +776,7 @@
         },
 
         /**
-         * Retourne la valeur courante
+         * Return current value
          *
          * @return {array}
          */
@@ -786,7 +797,7 @@
         },
 
         /**
-         * Retourne la valeur par défaut
+         * Return default value
          *
          * @return {string|object}
          */
@@ -801,7 +812,7 @@
         },
 
         /**
-         * Retourne le wrapper des options (.customform-select-options)
+         * Return options wrapper (.customform-select-options)
          *
          * @return {object}
          */
@@ -810,9 +821,9 @@
         },
 
         /**
-         * Retourne toutes les options ou en partie
+         * Return all or filtered options
          *
-         * @param {object=undefined} filter Sélecteur de filtre pour les options à retourner
+         * @param {object=undefined} filter Filter selector
          *
          * @return {object}
          */
@@ -823,16 +834,16 @@
         },
 
         /**
-         * Sélectionne les options définies
+         * Select specified options
          *
-         * @param {string|object=undefined} options Sélecteur ou liste des options
+         * @param {string|object=undefined} options Selector or options list
          */
         selectOptions: function (options) {
             var self = this;
             options = (options === undefined || typeof options === 'string') ? self.getOptions(options) : options;
 
             if (!self.isMultiple()) {
-                self.setLog('selectOptions() works only with "multiple" attribute. Use loadOption().select() for classic <select>.', 'warn');
+                self.setLog('selectOptions() works only with "multiple" attribute. Use loadOption().select() for a classic <select>.', 'warn');
                 return;
             }
 
@@ -848,10 +859,10 @@
         },
 
         /**
-         * Enlève la sélection des options définies
+         * Unselect specified options
          *
-         * @param {string|object=undefined} options Sélecteur ou liste des options
-         * @param {boolean=undefined}       disable Désactive l'option en même temps
+         * @param {string|object=undefined} options Selector or options list
+         * @param {boolean=undefined} disable Disable option in same time
          */
         unselectOptions: function (options, disable) {
             var self = this;
@@ -859,7 +870,7 @@
             disable = disable || false;
 
             if (!self.isMultiple()) {
-                self.setLog('removeOptions() works only with "multiple" attribute. Use loadOption().select() for classic <select>.', 'warn');
+                self.setLog('removeOptions() works only with "multiple" attribute. Use loadOption().select() for a classic <select>.', 'warn');
                 return;
             }
 
@@ -885,7 +896,7 @@
         },
 
         /**
-         * Retourne une option à partir de sa valeur
+         * Return an option from a specified value
          *
          * @param {string|number} value
          *
@@ -909,7 +920,7 @@
         },
 
         /**
-         * Retourne les options sur le select initial
+         * Return <option> from the <select> source
          *
          * @return {object}
          */
@@ -918,7 +929,7 @@
         },
 
         /**
-         * Retourne les optgroups sur le select initial
+         * Return <optgroup> from the <select> source
          *
          * @return {object}
          */
@@ -927,7 +938,7 @@
         },
 
         /**
-         * Gestion d'une option
+         * Load a child option class
          *
          * @param {object|string} option
          */
@@ -958,9 +969,14 @@
         return this;
     };
 
+    /**
+     * Methods
+     *
+     * @type {{setName: (function((string|html)): $.CustomFormSelectOption), getLabel: (function(): *), select: (function(Object=): $.CustomFormSelectOption), unselect: (function(): $.CustomFormSelectOption), getName: (function(): *), isLast: (function(): boolean), focus: (function(Object=): $.CustomFormSelectOption), getOption: (function(): *), getInput: (function(): *), hasState: (function(string): *), isFirst: (function(): boolean), getValue: ((function(): (string|null))|*), disable: (function(): $.CustomFormSelectOption), setValue: (function((string|number)): $.CustomFormSelectOption), isSelected: (function(): boolean), removeState: (function(string): $.CustomFormSelectOption), isDisabled: (function(): boolean), addState: (function(string): $.CustomFormSelectOption)}}
+     */
     $.CustomFormSelectOption.prototype = {
         /**
-         * Retourne l'argument option
+         * Return the specified option
          *
          * @return {object}
          */
@@ -969,7 +985,7 @@
         },
 
         /**
-         * Retourne l'input de l'option
+         * Return <input> option
          *
          * @return {object}
          */
@@ -978,7 +994,7 @@
         },
 
         /**
-         * Retourne le label de l'option
+         * Return label option
          *
          * @return {object}
          */
@@ -987,9 +1003,9 @@
         },
 
         /**
-         * Sélectionne une option
+         * Select this option
          *
-         * @param {object=undefined} settings Paramètres optionnels
+         * @param {object=undefined} settings Optional parameters
          */
         select: function (settings) {
             var self = this;
@@ -997,7 +1013,7 @@
             settings = settings || {};
 
             if (self.getOption() !== undefined && self.getOption() !== null && self.getOption().length && self.getValue() !== undefined) {
-                // Si l'option est désactivée, on passe à la précédente/suivante
+                // Skip option if it is disabled
                 if (self.isDisabled() && settings.direction !== undefined) {
                     self.option = self.getOption()[settings.direction === 'up' ? 'prev' : 'next']();
 
@@ -1009,23 +1025,23 @@
                     return;
                 }
 
-                // Si l'option la dernière option trouvée est désactivée, on stop
+                // Stop if the last option is disabled, skip
                 if (self.isDisabled()) {
                     return;
 
                 } else {
-                    // Si on est en mode multiple
+                    // Multiple mode
                     if (self.customFormSelect.isMultiple()) {
                         var optionsNames = [];
 
-                        // Si l'option "none" est cochée, on l'enlève
+                        // Clear "none" option
                         if (self.customFormSelect.multipleOptions.length === 1 && self.customFormSelect.multipleOptions[0].isFirst()) {
                             self.customFormSelect.multipleOptions[0].getInput().prop('checked', false);
                             self.customFormSelect.multipleOptions[0].removeState('selected');
                             self.customFormSelect.multipleOptions = [];
                         }
 
-                        // Si l'option est déjà sélectionnée on reconstruit la sélection, sinon on ajoute l'option
+                        // If option is already selected we rebuild selection list, otherwise we just add the option
                         if (self.isSelected()) {
                             self.customFormSelect.multipleOptions = [];
                             self.getInput().prop('checked', false);
@@ -1046,7 +1062,7 @@
                             self.customFormSelect.multipleOptions.push(self);
                         }
 
-                        // Reorder
+                        // Sort options
                         self.customFormSelect.multipleOptions.sort(function (a, b) {
                             var options = self.customFormSelect.getOptions();
                             a = options.index(a);
@@ -1082,7 +1098,7 @@
                         }
                     }
 
-                    // Mode classique
+                    // Classic mode
                     else {
                         // Label
                         self.customFormSelect.setLabel(self.getName());
@@ -1123,7 +1139,7 @@
         },
 
         /**
-         * Enlève la sélection de l'option
+         * Unselect this option
          */
         unselect: function () {
             if (this.isSelected()) {
@@ -1139,16 +1155,16 @@
         },
 
         /**
-         * Focus une option pour le mode multiple
+         * Focus this option
          *
-         * @param {object=undefined} settings Paramètres optionnels
+         * @param {object=undefined} settings Optional parameters
          */
         focus: function (settings) {
             var self = this;
             settings = settings || {};
 
             if (self.getOption() !== undefined && self.getOption() !== null && self.getOption().length && self.getValue() !== undefined) {
-                // Si l'option est désactivée, on passe à la précédente/suivante
+                // Skip option if it is disabled
                 if (self.isDisabled() && settings.direction !== undefined) {
                     self.option = self.getOption()[settings.direction === 'up' ? 'prev' : 'next']();
 
@@ -1160,7 +1176,7 @@
                     return;
                 }
 
-                // Si l'option la dernière option trouvée est désactivée, on stop
+                // Stop if the last option is disabled, skip
                 if (self.isDisabled()) {
                     return;
 
@@ -1181,7 +1197,7 @@
         },
 
         /**
-         * Ajoute une classe d'état sur l'option
+         * Add a class state
          *
          * @param {string} state
          */
@@ -1192,7 +1208,7 @@
         },
 
         /**
-         * Détermine si l'option à la classe d'état
+         * Return true if the state is on this option
          *
          * @param {string} state
          *
@@ -1203,7 +1219,7 @@
         },
 
         /**
-         * Enlève une classe d'état sur l'option
+         * Remove a class state
          *
          * @param {string} state
          */
@@ -1214,14 +1230,14 @@
         },
 
         /**
-         * Désactive une option
+         * Disable this option
          */
         disable: function () {
             return this.addState('disabled');
         },
 
         /**
-         * Détermine si l'option est sélectionnée
+         * Return true if this option is selected
          *
          * @return {boolean}
          */
@@ -1230,7 +1246,7 @@
         },
 
         /**
-         * Détermine si l'option est la première
+         * Return true if this option is the first one
          *
          * @return {boolean}
          */
@@ -1239,7 +1255,7 @@
         },
 
         /**
-         * Détermine si l'option est la dernière
+         * Return true if this option is the last one
          *
          * @return {boolean}
          */
@@ -1248,7 +1264,7 @@
         },
 
         /**
-         * Détermine si l'option est désactivée
+         * Return true if this option is disabled
          *
          * @return {boolean}
          */
@@ -1257,7 +1273,7 @@
         },
 
         /**
-         * Retourne le nom de l'option au format HTML
+         * Return option name in HTML
          *
          * @return {string}
          */
@@ -1266,7 +1282,7 @@
         },
 
         /**
-         * Défini le nom de l'option
+         * Set option name
          *
          * @param {string|html} name
          */
@@ -1277,7 +1293,7 @@
         },
 
         /**
-         * Retourne la valeur de l'option
+         * Return option value
          *
          * @return {null|string}
          */
@@ -1290,7 +1306,7 @@
         },
 
         /**
-         * Défini la valeur de l'option
+         * Set option value
          *
          * @param {string|number} value
          */

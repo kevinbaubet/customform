@@ -8,13 +8,13 @@
      * @param {object=undefined} options
      * @param {object=undefined} supports
      *
-     * @return {$.CustomForm}
+     * @return {jQuery.CustomForm}
      */
     $.CustomForm = function (context, options, supports) {
-        // Config
+        // Options
         $.extend(true, this.settings = {}, $.CustomForm.defaults, options);
 
-        // Support
+        // Supports
         $.extend(this.supports = {}, $.CustomForm.supports, supports);
 
         // Variables
@@ -29,7 +29,9 @@
     };
 
     /**
-     * Supports
+     * Default supports
+     *
+     * @type {{select: string, file: string, checkbox: string, radio: string}}
      */
     $.CustomForm.supports = {
         checkbox: 'input[type="checkbox"]',
@@ -39,7 +41,9 @@
     };
 
     /**
-     * Config par défaut
+     * Default options
+     *
+     * @type {{supportComplete: undefined, supportBeforeLoad: undefined, classes: {input: string, prefix: string, disabled: string, required: string}, tabindexStart: number}}
      */
     $.CustomForm.defaults = {
         classes: {
@@ -53,11 +57,16 @@
         supportComplete: undefined
     };
 
+    /**
+     * Methods
+     *
+     * @type {{setLog: $.CustomForm.setLog, prepareUserOptions: (function(): boolean), getInstanceName: (function(Object): null), isRequired: (function(): *), getInputType: (function(): *), getSupportClassName: (function(string): string), isEmpty: (function(): boolean), getInput: (function(): *), replacePrefixClass: (function(): $.CustomForm), getWrapperInput: (function(): *), setSupports: (function(Array): $.CustomForm), getElements: (function(): *), setOptions: (function(string, Object): $.CustomForm), getInstance: ((function(Object, Object): (Object|boolean))|*), isDisabled: (function(): *), getWrapper: (function(): *), setSupport: (function(string, Object=): *|{}), getContext: (function(): *), onReady: (function(Function): $.CustomForm)}}
+     */
     $.CustomForm.prototype = {
         /**
-         * Préparation des options utilisateur
+         * Prepare user options
          *
-         * @return boolean
+         * @return {boolean}
          */
         prepareUserOptions: function () {
             // Classes
@@ -67,10 +76,10 @@
         },
 
         /**
-         * Enregistre les options pour un support
+         * Set options for a specified type
          *
-         * @param {string} type    Type de support
-         * @param {object} options Options du support
+         * @param {string} type    Support type
+         * @param {object} options Support options
          */
         setOptions: function (type, options) {
             this.options[type] = options;
@@ -79,9 +88,9 @@
         },
 
         /**
-         * Met en place tous les supports
+         * Set all or a list of supports
          *
-         * @param {array} types Liste des types de support à exécuter
+         * @param {array} types Types list to set
          */
         setSupports: function (types) {
             var self = this;
@@ -103,17 +112,17 @@
         },
 
         /**
-         * Met en place un support
+         * Initialise a support
          *
-         * @param {string} type    Type de support
-         * @param {object=undefined} options Options du support
+         * @param {string} type Support type
+         * @param {object=undefined} options Support options
          *
-         * @return {object} support infos
+         * @return {object} support data
          */
         setSupport: function (type, options) {
             var self = this;
 
-            // Données du support
+            // Support defaults
             self.support = {};
             self.support.type = type;
             self.support.selector = self.supports[self.support.type];
@@ -125,14 +134,14 @@
                 self.settings.supportBeforeLoad.call(self);
             }
 
-            // Si le support est chargé, on l'init
+            // If support exists
             if ($[self.support.className] !== undefined) {
-                // Options définies ?
+                // Defined options?
                 if (options === undefined && self.options[self.support.type] !== undefined) {
                     options = self.options[self.support.type];
                 }
 
-                // Instanciation
+                // Initialisation
                 self.context.each(function () {
                     self.elementContext = $(this);
 
@@ -140,9 +149,9 @@
                         self.elementInput = $(input);
                         var instanceName = self.getInstanceName(self.elementInput);
 
-                        // Si l'input est déjà initialisé, on stop
+                        // Don't repeat initialisation
                         if (self.elementInput.closest('.' + self.settings.classes.prefix).length) {
-                            self.setLog('Support "' + self.support.type + '" is already initialized!', 'warn');
+                            self.setLog('Support "' + self.support.type + '" is already initialised.', 'warn');
                             return;
                         }
 
@@ -151,7 +160,7 @@
                 });
 
             } else {
-                self.setLog('Support "' + self.support.type + '" not found.', 'error');
+                self.setLog('Support "' + self.support.type + '" is not found.', 'error');
             }
 
             // User Callback
@@ -163,9 +172,9 @@
         },
 
         /**
-         * Récupère le nom de la classe du support correspondant
+         * Return the class name of a specified support
          *
-         * @param  {string} support Nom du support
+         * @param {string} support Support name
          *
          * @return {string}
          */
@@ -174,10 +183,10 @@
         },
 
         /**
-         * Récupère l'instance via l'élément input
+         * Return CustomForm... instance from input element
          * 
-         * @param  {object} instances Retour de setSupport() ou liste des instances
-         * @param  {object} input Élément input
+         * @param {object} instances Instances list or result of setSupport()
+         * @param {object} input Input element
          *
          * @return {object|boolean}
          */
@@ -186,20 +195,20 @@
             var name = this.getInstanceName(input);
 
             if (!name) {
-                this.setLog('"name" attribute not found in input parameter.', 'error');
+                this.setLog('"name" attribute is not found in input element.', 'error');
 
             } else if (instances !== undefined && instances[name] !== undefined) {
                 return instances[name];
             }
 
-            this.setLog('"' + name + '" instance not found.', 'error');
+            this.setLog('"' + name + '" instance is not found.', 'error');
             return false;
         },
 
         /**
-         * Récupère le nom formaté d'une instance via l'élément input
+         * Return formatted instance name from input element
          * 
-         * @param  {object} input Élément input
+         * @param  {object} input Input element
          *
          * @return {boolean}
          */
@@ -216,16 +225,20 @@
             }
 
             if (id !== undefined) {
-                instanceName += '--' + id.replace(/-/g, '');
+                if (instanceName !== null) {
+                    instanceName += '--';
+                }
+
+                instanceName += id.replace(/-/g, '');
             }
 
             return instanceName;
         },
 
         /**
-         * Une fois customForm prêt
+         * Once CustomForm is ready
          *
-         * @param {function} callback Fonction à exécuter
+         * @param {function} callback Function
          */
         onReady: function (callback) {
             setTimeout(function () {
@@ -236,7 +249,7 @@
         },
 
         /**
-         * Détermine si la valeur de l'input est vide
+         * Return true if the input value is empty
          *
          * @return {boolean}
          */
@@ -245,7 +258,7 @@
         },
 
         /**
-         * Détermine si l'input est désactivé
+         * Return true if the input is disabled
          *
          * @return {boolean}
          */
@@ -254,7 +267,7 @@
         },
 
         /**
-         * Détermine si l'input est requis
+         * Return true if the input is required
          *
          * @return {boolean}
          */
@@ -263,7 +276,7 @@
         },
 
         /**
-         * Retourne tous les éléments de customform
+         * Return all elements registred in CustomForm
          *
          * @return {object}
          */
@@ -272,7 +285,7 @@
         },
 
         /**
-         * Retourne le contexte de customform (form)
+         * Return CustomForm context (usually <form>)
          *
          * @return {object}
          */
@@ -281,7 +294,7 @@
         },
 
         /**
-         * Retourne l'élément select
+         * Return <input> element
          *
          * @return {object}
          */
@@ -290,14 +303,14 @@
         },
 
         /**
-         * Retourne le type de l'élément
+         * Return input type
          */
         getInputType: function () {
             return this.type;
         },
 
         /**
-         * Retourne le wrapper générique global (.customform)
+         * Return the main wrapper (.customform)
          *
          * @return {object}
          */
@@ -306,7 +319,7 @@
         },
 
         /**
-         * Retourne le wrapper générique du select (.customform-input)
+         * Return the input wrapper (.customform-input)
          *
          * @return {object}
          */
@@ -315,20 +328,13 @@
         },
 
         /**
-         * Créer un log
-         *
-         * @param {string} log
-         * @param {string=undefined} type
+         * Utils
          */
         setLog: function (log, type) {
             type = type || 'log';
 
             console[type]('CustomForm: ' + log);
         },
-
-        /**
-         * Remplace la chaine {prefix} par la classe de préfix dans toutes les classes
-         */
         replacePrefixClass: function () {
             var self = this;
 
@@ -342,12 +348,6 @@
         }
     };
 
-    /**
-     * Fonction utilisateur
-     *
-     * @param  {object=undefined} options  Options utilisateur
-     * @param  {object=undefined} supports Supports de la personnalisation : {type: 'selecteur'}
-     */
     $.fn.customForm = function (options, supports) {
         return new $.CustomForm($(this), options, supports);
     };

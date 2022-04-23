@@ -7,14 +7,14 @@
      * @param {object} customForm
      * @param {object=undefined} options
      *
-     * @return {$.CustomFormCheck}
+     * @return {jQuery.CustomFormCheck}
      */
     $.CustomFormCheck = function (customForm, options) {
-        // Héritage
+        // Heritage
         this.customForm = customForm;
         $.extend($.CustomFormCheck.prototype, $.CustomForm.prototype);
 
-        // Élements
+        // Elements
         this.elements = {
             context: this.customForm.elementContext,
             input: this.customForm.elementInput,
@@ -22,7 +22,7 @@
             wrapperInput: null
         };
 
-        // Config
+        // Options
         $.extend(true, this.settings = {}, this.customForm.settings, $.CustomFormCheck.defaults, options);
 
         // Variables
@@ -37,6 +37,11 @@
         return this;
     };
 
+    /**
+     * Default options
+     *
+     * @type {{beforeWrap: undefined, beforeLoad: undefined, onClick: undefined, classes: {checked: string}, onComplete: undefined, onReset: undefined, afterEventsHandler: undefined}}
+     */
     $.CustomFormCheck.defaults = {
         classes: {
             checked: 'is-checked'
@@ -49,6 +54,11 @@
         onReset: undefined
     };
 
+    /**
+     * Methods
+     *
+     * @type {{init: (function(): $.CustomFormCheck), getInputsRadio: (function(): *), select: (function(): $.CustomFormCheck), unselect: (function(boolean=): $.CustomFormCheck), disable: (function(): $.CustomFormCheck), reset: (function(): $.CustomFormCheck), eventsHandler: (function(): $.CustomFormCheck), wrap: (function(): $.CustomFormCheck), isChecked: (function(): *)}}
+     */
     $.CustomFormCheck.prototype = {
         /**
          * Initialisation
@@ -79,7 +89,7 @@
         },
 
         /**
-         * Création des wrappers
+         * Build wrappers
          */
         wrap: function () {
             this.elements.wrapper = $('<span>', {
@@ -103,11 +113,11 @@
                 });
             }
 
-            // Wrapper
+            // Main wrapper
             this.getInput().parent().wrapInner(this.getWrapper());
             this.elements.wrapper = this.getInput().parent();
 
-            // Wrapper this.element.wrapperInput
+            // Input wrapper
             this.getInput().wrap(this.getWrapperInput());
             this.elements.wrapperInput = this.getInput().parent();
 
@@ -115,22 +125,22 @@
         },
 
         /**
-         * Initialise l'état des éléments par défaut
+         * Reset elements state
          */
         reset: function () {
             this.getWrapper().removeClass(this.settings.classes.checked + ' ' + this.settings.classes.disabled + ' ' + this.settings.classes.required);
 
-            // Désactivé
+            // Disabled
             if (this.isDisabled()) {
                 this.disable();
             }
 
-            // Requis
+            // Required
             if (this.isRequired()) {
                 this.getWrapper().addClass(this.settings.classes.required);
             }
 
-            // Valeur par défaut
+            // Default value
             if (this.isChecked()) {
                 this.getWrapper().addClass(this.settings.classes.checked);
             }
@@ -139,14 +149,14 @@
         },
 
         /**
-         * Gestionnaire d'événements
+         * Events handler
          */
         eventsHandler: function () {
             var self = this;
 
             // Check
             self.getWrapper().on('click.customform keydown.customform', function (event) {
-                if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === 'Space' || event.key === ' ' || (event.keyCode !== undefined && event.keyCode === 32)))) {
+                if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === 'Space' || event.key === ' ' || (event.keyCode !== undefined && event.keyCode === 32)))) {
                     if (event.type === 'click' && $(event.target).is('a')) {
                         return;
                     }
@@ -183,7 +193,7 @@
         },
 
         /**
-         * Sélectionne une option
+         * Select an option
          */
         select: function () {
             var self = this;
@@ -222,16 +232,16 @@
         },
 
         /**
-         * Enlève la sélection d'une checkbox
+         * Unselect an option
          *
-         * @param {boolean=false} disable Désactive la checkbox en même temps
+         * @param {boolean=false} disable Disabled the option in same time
          */
         unselect: function (disable) {
             disable = disable || false;
 
             if (this.isChecked()) {
                 if (this.getInputType() === 'radio') {
-                    this.customForm.setLog('unselect() works only with checkbox. Use select() on an another radio.', 'warn');
+                    this.customForm.setLog('unselect() works only with checkbox. Use select() on radio input.', 'warn');
 
                 } else {
                     this.select();
@@ -246,7 +256,7 @@
         },
 
         /**
-         * Désactive l'input
+         * Disable an option
          */
         disable: function () {
             this.getInput()
@@ -259,7 +269,7 @@
         },
 
         /**
-         * Détermine si l'input est cochée
+         * Return true if the option is checked
          *
          * @return {boolean}
          */
@@ -268,7 +278,7 @@
         },
 
         /**
-         * Retourne tous les <inputs> de type radio
+         * Return all radio inputs
          *
          * @return {object}
          */
